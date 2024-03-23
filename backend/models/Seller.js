@@ -55,7 +55,10 @@ const sellerSchema=new mongoose.Schema({
      type:Date
     },
 
-    accountType:'seller'
+    accountType:{
+        type:String,
+        default:'seller'
+    }
 },
  {timestamps:true}
 )

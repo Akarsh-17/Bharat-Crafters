@@ -37,10 +37,6 @@ const buyerSchema=new mongoose.Schema({
         ref:'Product'
     }],
 
-    phoneNumber:{
-        type:Number,
-        required:true
-    },
 
     token:{
         type:String
@@ -50,7 +46,10 @@ const buyerSchema=new mongoose.Schema({
      type:Date
     },
 
-    accountType:'buyer'
+    accountType:{
+        type:String,
+        default:'buyer'
+    }
 },
  {timestamps:true}
 )

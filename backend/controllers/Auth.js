@@ -4,7 +4,8 @@ const OTP=require('../models/OTP');
 const SellerProfile=require('../models/SellerProfile')
 const BuyerProfile=require('../models/BuyerProfile')
 const otpGenerator=require('otp-generator')
-
+const bcrypt=require('bcrypt');
+const jwt=require('jsonwebtoken');
 
 exports.sendOTP= async(req,res)=>{
     try{
@@ -15,16 +16,25 @@ exports.sendOTP= async(req,res)=>{
         {
            return res.status(400).json({
                success:false,
-               message: "UserAlready exists"
+               message: "User Already exists"
            })
         }
 
         var otp= otpGenerator.generate(6,{
             upperCaseAlphabets:false,
-            lowweCaseAlphabets:false,
+            lowerCaseAlphabets:false,
             specialChars:false
         })
+        
+        let result=await OTP.findOne({otp});
 
+        while(result){
+            otp= otpGenerator.generate(6,{
+                upperCaseAlphabets:false,
+                lowweCaseAlphabets:false,
+                specialChars:false
+            })
+        }
         
 
         const otpPayload={email,otp};
@@ -43,5 +53,521 @@ exports.sendOTP= async(req,res)=>{
             success:false,
             message:error.message
         })
+    }
+}
+
+/*
+......
+  BUYER SIGNUP .......
+.....
+*/
+exports.signupBuyer=async (req,res)=>{
+    try{
+        
+        const {
+            firstName,
+            lastName,
+            email,
+            password,
+            confirmPassword,
+            otp
+        }=req.body
+
+        // The HTTP status code '403 forbidden—you don't have permission to access this resource' 
+
+        if(!firstName || !lastName || !email || !password || !confirmPassword || !otp)
+        {
+            return res.status(403).json({
+              success:false,
+              message:'All fields are mandetory'
+            })
+        }
+
+        // The 401 (Unauthorized) status code indicates that the request has not been 
+        // applied because it lacks valid authentication credentials for the target resource.
+
+        if(password!==confirmPassword)
+        {
+            return res.status(401).json({
+                succes:false,
+                message:'Confirm Password and Password does not not match'
+            })
+        }
+
+        const existingBuyer=await Buyer.findOne({email})
+        const existingSeller=await Seller.findOne({email})
+        if(existingBuyer)
+        {
+            return res.status(401).json({
+                success:false,
+                message:'User already exists buyer'
+            })
+        }
+
+        if(existingSeller)
+        {
+            return res.status(401).json({
+                success:false,
+                message:'User already exists as seller'
+            })
+        }
+
+
+        const recentOtp=await OTP.find({email}).sort({createdAt:-1}).limit(1);
+        
+        // scope of error 
+        if(recentOtp.length===0)
+        {
+            return res.status(400).json({
+                success:false,
+                message:'otp not found'
+            })
+        }
+        else if(otp!==recentOtp[0].otp)
+        {
+            return res.status(400).json({
+                success:false,
+                message:'otp invalid'
+            })
+        }
+
+        const hashPass=await bcrypt.hash(password,10);
+        const profileDetails=await BuyerProfile.create({
+            gender:null,
+            dateOfBirth:null,
+            address:null,
+            phoneNumber:null
+        })
+
+        const user=await Buyer.create({
+           firstName,
+           lastName,
+            email,
+            password:hashPass,
+            // accountType:'buyer',
+            additionalDetail:profileDetails._id,
+            image:`https://api.dicebear.com/5.x/initials/svg?seed=${firstName}${lastName}`
+        })
+
+        return res.status(200).json({
+            success:true,
+            message:'User is successfully registerd as BUYER',
+            user
+        })
+    }
+    catch(error)
+    {
+      console.log(error)
+      return res.status(500).json({
+        success:false,
+        message:'user can not be registered'
+      })
+    }
+}
+
+
+/*
+.......
+.....
+
+    LOGIN FOR BUYER
+.....
+.......
+*/
+
+
+exports.loginBuyer= async(req,res)=>{
+    try{
+        const {email,password}= req.body;
+
+        if(!email || !password)
+        {
+            return res.status(400).json({
+                success:false,
+                message:'Please fill all details'
+            })
+        }
+
+        let user=await Buyer.findOne({email}).populate("additionalDetail")
+
+        if(!user)
+        {
+            return res.status(401).json({
+                success:false,
+                message:'user not found'
+            })
+        }
+
+
+        const payload={
+            email:user.email,
+            id:user._id,
+            accountType:user.accountType
+        }
+
+        if(await bcrypt.compare(password,user.password))
+        {
+            const token=jwt.sign(payload,
+                process.env.JWT_SECRET,{
+                    expiresIn:'48h'
+                }
+            )
+
+            console.log('printing token',token)
+            // review later
+            user.token=token;
+            user.password=undefined
+
+            // plsease this article of more clearity
+            // https://gemini.google.com/app/9ab264853e8d2f45
+            const options={
+                httpOnly:true,
+                expiresIN:new Date(Date.now()+3*24*60*60*1000)
+            }
+
+            res.cookie("token",token,options).status(200).json({
+                success:true,
+                message:'User looged in successfully',
+                token,
+                user
+            })
+        }
+        else{
+            return res.status(401).json({
+                success:false,
+                message:"password incorrect"
+            })
+        }
+    }
+    catch(error){
+        console.log(error)
+        return res.status(500).json({
+            success:false,
+            message:'login failure'
+        })
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+.......
+  SELLER SIGNUP .......
+.....
+*/
+
+exports.signupSeller=async (req,res)=>{
+    try{
+        
+        const {
+            firstName,
+            lastName,
+            email,
+            password,
+            confirmPassword,
+            phoneNumber,
+            otp
+        }=req.body
+
+        // The HTTP status code '403 forbidden—you don't have permission to access this resource' 
+
+        if(!firstName || !lastName || !email || !password || !confirmPassword || !otp || !phoneNumber)
+        {
+            return res.status(403).json({
+              success:false,
+              message:'All fields are mandetory'
+            })
+        }
+
+        // The 401 (Unauthorized) status code indicates that the request has not been 
+        // applied because it lacks valid authentication credentials for the target resource.
+
+        if(password!==confirmPassword)
+        {
+            return res.status(401).json({
+                succes:false,
+                message:'Confirm Password and Password does not not match'
+            })
+        }
+
+        const existingBuyer=await Buyer.findOne({email})
+        const existingSeller=await Seller.findOne({email})
+        if(existingBuyer)
+        {
+            return res.status(401).json({
+                success:false,
+                message:'User already exists as buyer'
+            })
+        }
+
+        if(existingSeller)
+        {
+            return res.status(401).json({
+                success:false,
+                message:'User already exists as seller'
+            })
+        }
+
+
+        const recentOtp=await OTP.find({email}).sort({createdAt:-1}).limit(1);
+        console.log('printing recent otp ',recentOtp)
+        // scope of error 
+        if(recentOtp.length===0)
+        {
+            return res.status(400).json({
+                success:false,
+                message:'otp not found'
+            })
+        }
+        else if(otp!==recentOtp[0].otp)
+        {
+            return res.status(400).json({
+                success:false,
+                message:'otp invalid'
+            })
+        }
+        // console.log('before hass pass');
+        const hashPass=await bcrypt.hash(password,10);
+        // console.log('after hass pass');
+
+        const profileDetails=await SellerProfile.create({
+            gender:null,
+            dateOfBirth:null,
+            address:null,
+        })
+
+        // console.log('after profile ');
+
+        const user=await Seller.create({
+           firstName,
+           lastName,
+           email,
+           phoneNumber,
+           password:hashPass,
+        //    accountType:'seller',
+           additionalDetail:profileDetails._id,
+           image:`https://api.dicebear.com/5.x/initials/svg?seed=${firstName}${lastName}`
+        })
+        // console.log('after user ');
+
+        return res.status(200).json({
+            success:true,
+            message:'User is suucessfully as Seller',
+            user
+        }) 
+    }
+    catch(error)
+    {
+      console.log(error)
+      return res.status(500).json({
+        success:false,
+        message:'user can not be registered'
+      })
+    }
+}
+
+
+/*
+......
+ CHANGE PASSWORD FOR BUYER
+ ..........
+*/
+
+exports.buyerChangePassword=async(req,res)=>{
+    try{
+        const {oldPassword, newPassword, confirmPassword}=req.body;
+        const user=await Buyer.findById(req.user.id);
+
+        if(!oldPassword || !newPassword || !confirmPassword)
+        {
+            return res.status(403).json({
+                success:false,
+                message:'All fields are mandetory'
+              }) 
+        }
+        
+        if(newPassword!==confirmPassword)
+        {
+            return res.status(401).json({
+                succes:false,
+                message:'Confirm Password and Password does not not match'
+            })
+        }
+
+        if(bcrypt.compare(oldPassword,user.password))
+        {
+            const hashedPass = await bcrypt.hash(newPassword,10)
+            const updateBuyer=await Buyer.findByIdAndUpdate(
+                     req.Buyer.id,
+                     {password:hashedPass},
+                     {new:true}
+            )
+        }
+        else{
+            return res
+				.status(401)
+				.json({ success: false, message: "The existing password is incorrect" }); 
+        }
+
+        return res.status(200).json({
+            message:"password updated successfully",
+            success:true
+        })
+    }
+    catch(error)
+    {
+        console.error("Error occurred while updating password:", error);
+		return res.status(500).json({
+			success: false,
+			message: "Error occurred while updating password",
+			error: error.message,
+		});
+    }
+}
+
+
+/*
+.......
+SELLER LOGIN.....
+.......
+*/
+
+
+exports.loginSeller= async(req,res)=>{
+    try{
+        
+        const {email,password}=req.body
+
+        if(!email || !password)
+        {
+            return res.status(403).json({
+                success:false,
+                message:'please fill all details'
+            })
+        }
+
+        const user=await Seller.findOne({email}).populate("additionalDetail");
+        if(!user)
+        {
+            return res.status(401).json({
+                success:false,
+                message:'user not registered'
+            })
+        }
+
+        const payload={
+            email:user.email,
+            accountType:user.accountType,
+            id:user._id
+        }
+        if(bcrypt.compare(password,user.password))
+        {
+            const token=jwt.sign(payload,
+                process.env.JWT_SECRET,
+                {
+                    expiresIn:'48h'
+                }
+            )
+
+            user.token=token
+            user.password=undefined;
+
+            const options={
+                httpOnly:true,
+                expiresIN:new Date(Date.now()+3*24*60*60*1000)
+            }
+
+
+            res.cookie("token",token,options).status(200).json({
+                success:true,
+                message:'user looged in successfully',
+                user,
+                token
+            })
+        }
+        else{
+            return res.status(401).json({
+                success:false,
+                message:"password incorrect"
+            })
+        }
+
+    }
+    catch(error){
+        console.log(error)
+        return res.status(500).json({
+            success:false,
+            message:'login failure'
+        })
+    }
+}
+
+
+
+/*
+......
+ CHANGE PASSWORD FOR Seller
+ ..........
+*/
+
+exports.sellerChangePassword=async(req,res)=>{
+    try{
+        const {oldPassword, newPassword, confirmPassword}=req.body;
+        const user=await Seller.findById(req.user.id);
+
+        if(!oldPassword || !newPassword || !confirmPassword)
+        {
+            return res.status(403).json({
+                success:false,
+                message:'All fields are mandetory'
+              }) 
+        }
+        
+        if(newPassword!==confirmPassword)
+        {
+            return res.status(401).json({
+                succes:false,
+                message:'Confirm Password and Password does not not match'
+            })
+        }
+
+        if(bcrypt.compare(oldPassword,user.password))
+        {
+            const hashedPass = await bcrypt.hash(newPassword,10)
+            const updateSeller=await Seller.findByIdAndUpdate(
+                     req.Seller.id,
+                     {password:hashedPass},
+                     {new:true}
+            )
+        }
+        else{
+            return res
+				.status(401)
+				.json({ success: false, message: "The existing password is incorrect" }); 
+        }
+
+        return res.status(200).json({
+            message:"password updated successfully",
+            success:true
+        })
+    }
+    catch(error)
+    {
+        console.error("Error occurred while updating password:", error);
+		return res.status(500).json({
+			success: false,
+			message: "Error occurred while updating password",
+			error: error.message,
+		});
     }
 }
