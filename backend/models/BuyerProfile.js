@@ -11,7 +11,12 @@ const buyerProfileSchema= new mongoose.Schema({
     
     address:{
         type:String,
-        required:true
+        // required:true
+    },
+
+    phoneNumber:{
+        type:Number,
+        // required:true
     },
 
     // cardNo:{
@@ -20,4 +25,4 @@ const buyerProfileSchema= new mongoose.Schema({
 
 })
 
-module.exports=mongoose.module('BuyerProfile',buyerProfileSchema);
+module.exports=mongoose.model('BuyerProfile',buyerProfileSchema);
