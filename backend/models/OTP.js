@@ -1,5 +1,6 @@
 const mongoose=require('mongoose');
 const mailSender=require('../utilis/mailSender')
+const otpTemplate=require("../mail_template/otpVerification")
 
 const otpSchema= new mongoose.Schema({
     email:{
@@ -21,9 +22,10 @@ const otpSchema= new mongoose.Schema({
 async function sendVerificationMail(email,otp)
 {
     try{
-        const mailResponse=await mailSender(email,
+        const mailResponse=await mailSender(email, 
                                             'Account Verification from Bharat Crafters',
-                                            otp)
+                                            otpTemplate(otp)
+                                        )
         console.log("email send successfully", mailResponse)
     }
     catch(error){

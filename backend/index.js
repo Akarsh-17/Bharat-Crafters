@@ -2,6 +2,7 @@ const express=require('express');
 const dbConnect=require('./config/database');
 const cloudinaryConnect=require('./config/cloudinary')
 const cookieParser=require('cookie-parser')
+const path = require('path')  // Node built-in path module
 require('dotenv').config();
 
 
@@ -9,6 +10,8 @@ const userRoutes=require('./routes/User')
 
 
 const app=express();
+const imagesPath = path.join(__dirname, 'images');
+app.use('/images', express.static(imagesPath));
 const PORT= process.env.PORT||5000;
 
 app.use(express.json());

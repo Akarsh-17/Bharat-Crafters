@@ -1,3 +1,4 @@
+// import logo from ("../images/")
 const otpVerification = (otp) => {
 	return `<!DOCTYPE html>
 	<html>
@@ -68,7 +69,7 @@ const otpVerification = (otp) => {
 	<body>
 		<div class="container">
 			<a href="#"><img class="logo"
-					src="logo.png" alt="BharatCrafters Logo"></a>
+				src="../images/logo.png" alt="BharatCrafters Logo"></a>
 			<div class="message">OTP Verification Email</div>
 			<div class="body">
 				<p>Dear User,</p>
@@ -86,4 +87,4 @@ const otpVerification = (otp) => {
 	
 	</html>`;
 };
-module.exports = otpTemplate;
+module.exports = otpVerification;
