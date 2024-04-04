@@ -275,13 +275,14 @@ exports.signupSeller=async (req,res)=>{
             email,
             password,
             confirmPassword,
+            phoneCode,
             phoneNumber,
             otp
         }=req.body
 
         // The HTTP status code '403 forbidden—you don't have permission to access this resource' 
 
-        if(!firstName || !lastName || !email || !password || !confirmPassword || !otp || !phoneNumber)
+        if(!firstName || !lastName || !email || !password || !confirmPassword || !otp || !phoneCode|| !phoneNumber)
         {
             return res.status(403).json({
               success:false,
@@ -295,7 +296,7 @@ exports.signupSeller=async (req,res)=>{
         if(password!==confirmPassword)
         {
             return res.status(401).json({
-                succes:false,
+                success:false,
                 message:'Confirm Password and Password does not not match'
             })
         }
@@ -336,9 +337,9 @@ exports.signupSeller=async (req,res)=>{
                 message:'otp invalid'
             })
         }
-        // console.log('before hass pass');
+        // console.log('before hash pass');
         const hashPass=await bcrypt.hash(password,10);
-        // console.log('after hass pass');
+        // console.log('after hash pass');
 
         const profileDetails=await SellerProfile.create({
             gender:null,
@@ -362,7 +363,7 @@ exports.signupSeller=async (req,res)=>{
 
         return res.status(200).json({
             success:true,
-            message:'User is suucessfully as Seller',
+            message:'User is sucessfully made a Seller',
             user
         }) 
     }

@@ -42,6 +42,11 @@ const sellerSchema=new mongoose.Schema({
      ref:'Category'
     }],
 
+    phoneCode:{
+        type:String,
+        required:true
+    },
+
     phoneNumber:{
         type:Number,
         required:true

@@ -1,0 +1,80 @@
+.outer-container {
+    padding: 0;
+    margin: 0;
+    height: 100vh;
+    width: 100%;
+}
+
+.header {
+    text-align: center;
+    background-color: white;
+    padding: 1rem;
+}
+
+.company-logo {
+    height: 1.3rem;
+}
+
+.form-container {
+    display: flex;
+    padding: 0.8rem;
+    justify-content: center;
+    background-color: #F08A5D;
+    height: 100vh;
+}
+
+.heading {
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin: 1rem;
+    color: white;
+}
+
+.form {
+    text-align: center;
+    max-width: 18rem;
+}
+
+.name {
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 1rem;
+}
+
+
+.phone-number input {
+    border-radius: 0px 5px 5px 0px;
+}
+
+.phone-code-select {
+    display: flex;
+}
+
+.phone-number {
+    display: flex;
+}
+
+.input {
+    margin-bottom: 10px;
+    width: 100%;
+    border-radius: 5px;
+    padding: 0.7rem;
+    outline: none;
+    border: none;
+    font-size: 0.8rem;
+}
+
+.paragraph {
+    margin: 0.5rem 0 1.2rem 0;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.button {
+    width: fit-content;
+    outline: none;
+    border-radius: 5px;
+    padding: 0.7rem 1.2rem;
+    border: none;
+    font-weight: 500;
+}

@@ -14,6 +14,10 @@ const buyerProfileSchema= new mongoose.Schema({
         // required:true
     },
 
+    phoneCode:{
+        type:String,
+    },
+
     phoneNumber:{
         type:Number,
         // required:true

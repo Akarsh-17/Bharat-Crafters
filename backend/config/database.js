@@ -1,8 +1,11 @@
+const { fileURLToPath } = require('url');
+const path = require('path') 
+require('dotenv').config({ path: '../.env' });
+const MONGO_URI= process.env.DB_URL;
 const mongoose= require("mongoose");
-require("dotenv").config();
 
 const dbConnect=()=>{
-    mongoose.connect(process.env.DB_URL,{
+    mongoose.connect(MONGO_URI,{
     //  useNewUrlParser:true,
     //  useUnifiedTopology:true
     }
