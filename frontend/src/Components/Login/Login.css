@@ -1,0 +1,68 @@
+.outer-container-login {
+    padding: 0;
+    margin: 0;
+    height: 100vh;
+    width: 100%;
+}
+
+.header-login {
+    text-align: center;
+    background-color: white;
+    padding: 1.5rem;
+}
+
+.company-logo {
+    height: 1.3rem;
+}
+
+.form-container-login {
+    display: flex;
+    padding: 8rem;
+    justify-content: center;
+    background-color: #F08A5D;
+    height: 100vh;
+}
+
+.heading-login {
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin: 1rem;
+    color: white;
+}
+
+.form {
+    text-align: center;
+    max-width: 18rem;
+}
+
+.input {
+    margin-bottom: 10px;
+    width: 100%;
+    border-radius: 5px;
+    padding: 0.7rem;
+    outline: none;
+    border: none;
+    font-size: 0.8rem;
+}
+
+.paragraph-login {
+    margin: 0.5rem 0 1.2rem 0;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.paragraph-login:hover{
+    text-decoration: underline;
+}
+
+.button-login {
+    width: fit-content;
+    outline: none;
+    border-radius: 5px;
+    padding: 0.5rem 1rem;
+    border: none;
+    font-weight: 500;
+    background-color: white;
+    color: black;
+}

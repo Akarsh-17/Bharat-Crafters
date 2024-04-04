@@ -8,7 +8,8 @@ const{
     signupBuyer,
     loginBuyer,
     buyerChangePassword,
-    sellerChangePassword
+    sellerChangePassword,
+    verifyOTP,
 
 }=require('../controllers/Auth')
 
@@ -41,6 +42,10 @@ router.post('/signupBuyer',signupBuyer)
 
 // send otp route
 router.post('/sendOTP',sendOTP)
+
+//verify otp
+router.post('/verifyOTP',verifyOTP)
+
 
 router.post('/buyerChangePassword',auth,isBuyer,buyerChangePassword)
 

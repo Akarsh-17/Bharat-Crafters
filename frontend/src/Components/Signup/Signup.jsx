@@ -5,20 +5,57 @@ import './Signup.css'
 import Select from 'react-select';
 
 function SignUp() {
-
-    //API ROUTE
+    //API ROUTES
 
     const sendFormData = async (formData) => {
-        axios.post(`http://localhost:4000/api/v1/auth/signupSeller`, formData)
-            .then(response => {
-                console.log(response)
-            })
-            .catch(error => {
-                console.log(error)
-            })
+        try {
+            const sendOtpResponse = await axios.post(`http://localhost:4000/api/v1/auth/sendOTP`, { email: formData.email });
+            console.log(formData.email);
+            console.log(sendOtpResponse.data);
+
+            const otp = sendOtpResponse.data.otp;
+            sessionStorage.setItem('otp', otp);
+
+            toggleOverlay(true);
+
+        } catch (error) {
+            console.log(error);
+            alert('Error sending OTP. Please try again later.');
+        }
     };
 
-    //USESTATE FRO INPUT FIELDS
+    const verifyOTP =()=>{
+        const otp = sessionStorage.getItem('otp');
+
+            
+                axios.post(`http://localhost:4000/api/v1/auth/verifyOTP`, { enteredOTP: formData.otp , otp: otp})
+                    .then(response => {
+                        console.log(response.data);
+                        alert('verification successful!');
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        alert('Error in verification!');
+                    });                    
+
+                    console.log("otp verified")
+                    console.log(formData)
+                    axios.post(`http://localhost:4000/api/v1/auth/signupBuyer`, formData)
+                    .then(response => {
+                        console.log(response.data);
+                        alert('registeration successful!');
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        alert('Error in registeration!');
+                    });
+                    sessionStorage.removeItem('otp');
+
+        
+    }
+    
+
+    //RETRIEVING DATA FROM INPUT FIELDS
 
     const [formData, setFormData] = useState({
         firstName: '',
@@ -26,7 +63,7 @@ function SignUp() {
         email: '',
         password: '',
         confirmPassword: '',
-        phoneCode: '',
+        phoneCode:'',
         phoneNumber: '',
         otp: '',
 
@@ -40,24 +77,12 @@ function SignUp() {
         });
     };
 
-    //SUBMITING INPUT FIELD VALUES
-
     const handleSubmit = (e) => {
         e.preventDefault();
-        sendFormData();
-        setFormData({
-            firstName: '',
-            lastName: '',
-            email: '',
-            password: '',
-            confirmPassword: '',
-            phoneCode: '',
-            phoneNumber: '',
-            otp: '',
-        });
+        console.log(formData);
+        sendFormData(formData);
+        
     };
-
-    //PHONE-CODE VALUES
 
     const countryOptions = [
         { value: '+1', label: '+1 (US)' },
@@ -74,18 +99,9 @@ function SignUp() {
         { value: '+27', label: '+27 (ZA)' },
     ];
 
-    //HANDLING PHONE-CODE SEPARATELY 
+     //CUSTOM STYLES FOR REACT-SELECT COMPONENT USED FOR PHONECODES
 
-    const handlePhoneChange = (selectedOption) => {
-        setFormData({
-            ...formData,
-            phoneCode: selectedOption.value,
-        });
-    };
-
-    //CUSTOM STYLES FOR REACT-SELECT COMPONENT USED FOR PHONECODES
-
-    const customStyles = {
+     const customStyles = {
         control: (provided) => ({
             ...provided,
             appearance: 'none',
@@ -106,15 +122,28 @@ function SignUp() {
         }),
     };
 
+    const handlePhoneChange = (selectedOption) => {
+        setFormData({
+            ...formData,
+            phoneCode: selectedOption.value,
+        });
+    };
+
+    const [showOverlay, toggleOverlay] = useState(false);
+
+    const handleOtpSubmit = () => {
+        verifyOTP();
+        toggleOverlay(false);
+    };
 
     return (
-        <div class="outer-container">
+        <div className="outer-container">
             <header className="header">
-                <img src={logo} alt="Company Logo" class="company-logo" />
+                <img src={logo} alt="Company Logo" className="company-logo" />
             </header>
             <div className="form-container">
                 <form className="form" onSubmit={handleSubmit}>
-                    <div class="heading">Sign Up as a Seller</div>
+                    <div className="heading">Sign Up as a Seller</div>
                     <div className="name">
                         <input
                             type="text"
@@ -159,6 +188,7 @@ function SignUp() {
                         value={formData.confirmPassword}
                         onChange={handleChange}
                         maxLength={8}
+
                     />
                     <div className="phone-number">
 
@@ -169,8 +199,8 @@ function SignUp() {
                             onChange={handlePhoneChange}
                             options={countryOptions}
                             styles={customStyles}
-
                         />
+
                         <input
                             type="tel"
                             name="phoneNumber"
@@ -179,25 +209,37 @@ function SignUp() {
                             value={formData.phoneNumber}
                             onChange={handleChange}
                             maxLength={10}
+
                         />
                     </div>
-                    <input
-                        type="text"
-                        name="otp"
-                        className="input"
-                        placeholder="Enter OTP"
-                        value={formData.otp}
-                        onChange={handleChange}
-                    />
 
                     <p className="paragraph">By signing in, you are agreeing to our user policies and cookie policies.</p>
                     <button type="submit" className="button">Sign Up</button>
                 </form>
             </div>
+
+            {showOverlay && (
+                <div className="overlay">
+                    <div className="overlay-content">
+                        <div class="overlay-heading">Enter OTP</div>
+                        <div className="overlay-form">
+                        <input
+                            type="text"
+                            name="otp"
+                            className="otp-input"
+                            placeholder="6-digit OTP"
+                            value={formData.otp}
+                            onChange={handleChange}
+                        />
+                        <button onClick={handleOtpSubmit}>Submit</button>
+                        </div>
+                        
+                    </div>
+                </div>
+            )}
         </div>
     );
 
 }
 
 export default SignUp;
-

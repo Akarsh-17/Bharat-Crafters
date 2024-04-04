@@ -31,7 +31,7 @@ exports.sendOTP= async(req,res)=>{
         while(result){
             otp= otpGenerator.generate(6,{
                 upperCaseAlphabets:false,
-                lowweCaseAlphabets:false,
+                lowerCaseAlphabets:false,
                 specialChars:false
             })
         }
@@ -42,8 +42,8 @@ exports.sendOTP= async(req,res)=>{
 
         res.status(200).json({
             success:true,
-            message:"otp generated successfully",
-            otp
+            message:"otp generated successfully"
+            
         })
     }
     catch(error)
@@ -54,6 +54,23 @@ exports.sendOTP= async(req,res)=>{
             message:error.message
         })
     }
+}
+
+
+//VERIFY OTP
+
+exports.verifyOTP= async(req,res)=>{
+
+        const otp= req.body.otp;
+        const enteredOTP= req.body.enteredOTP;
+
+        if (enteredOTP === otp) {
+            // OTP is valid
+            
+            return res.json({ message: 'OTP verified successfully' });
+        } else {
+            return res.status(400).json({ message: 'Invalid OTP' });
+        }
 }
 
 /*
@@ -100,7 +117,7 @@ exports.signupBuyer=async (req,res)=>{
         {
             return res.status(401).json({
                 success:false,
-                message:'User already exists buyer'
+                message:'User already exists as buyer'
             })
         }
 
@@ -448,9 +465,13 @@ exports.loginSeller= async(req,res)=>{
     try{
         
         const {email,password}=req.body
+        console.log("request received")
+        console.log(email, password)
+
 
         if(!email || !password)
         {
+            console.log("field empty")
             return res.status(403).json({
                 success:false,
                 message:'please fill all details'
