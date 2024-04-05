@@ -1,20 +1,20 @@
 const mongoose = require("mongoose");
 
 // Define the Tags schema
-const categorySchema = new mongoose.Schema({
+const subCategorySchema = new mongoose.Schema({
 	name: {
 		type: String,
 		required: true,
 	},
 	
-	subCategory: [
+	product: [
 		{
 			type: mongoose.Schema.Types.ObjectId,
-			ref: "SubCategory",
+			ref: "Product",
 			// required: true,
 		},
 	],
 });
 
 // Export the Tags model
-module.exports = mongoose.model("Category", categorySchema);
+module.exports = mongoose.model("SubCategory", subCategorySchema);

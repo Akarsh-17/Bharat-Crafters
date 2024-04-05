@@ -31,6 +31,11 @@ exports.auth= (req,res,next)=>{
                 console.log("inside buyer")
                 req.user=payload
             }
+            else if(payload.accountType==='admin')
+            {
+                console.log("inside admin")
+                req.user=payload
+            }
     
         }
         catch(error){
@@ -85,6 +90,30 @@ exports.isSeller= async(req,res,next)=>{
         return res.status(401).json({
             success:false,
             message:'This is protected for seller only'
+        })
+       }
+       next();
+    }
+    catch(error)
+    {
+        console.log(error)
+        return res.status(500).json({
+            success:false,
+            message:"User role can not be verified. Please try again"
+          })
+        }
+}
+
+
+exports.isAdmin= async(req,res,next)=>{
+    try{
+        console.log("is Admin verrifying")
+        console.log(req.user.accountType)
+        if(req.user.accountType!=='admin')
+       {
+        return res.status(401).json({
+            success:false,
+            message:'This is protected for admin only'
         })
        }
        next();

@@ -32,8 +32,8 @@ exports.contactUs = (
             }
     
             .logo {
-                max-width: 400px;
-				margin-top: 20px;
+                max-width: 200px;
+				// margin-top: 20px;
 				margin-bottom: 20px;
             }
     
@@ -76,7 +76,7 @@ exports.contactUs = (
     <body>
         <div class="container">
             <a href="#"><img class="logo"
-                src="logo.png" alt="BharatCrafters Logo"></a>
+                src="https://logoforemails.vercel.app/onlylogo.png/" alt="BharatCrafters Logo"></a>
             <div class="message">Contact Form Confirmation</div>
             <div class="body">
                 <p>Dear ${firstname} ${lastname},</p>

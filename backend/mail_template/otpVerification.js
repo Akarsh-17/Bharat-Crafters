@@ -1,4 +1,3 @@
-// import logo from ("../images/")
 const otpVerification = (otp) => {
 	return `<!DOCTYPE html>
 	<html>
@@ -25,8 +24,8 @@ const otpVerification = (otp) => {
 			}
 	
 			.logo {
-				max-width: 400px;
-				margin-top: 20px;
+				max-width: 200px;
+				/* margin-top: 20px; */
 				margin-bottom: 20px;
 			}
 	
@@ -62,6 +61,7 @@ const otpVerification = (otp) => {
 			.highlight {
 				font-weight: bold;
 			}
+			
 		</style>
 	
 	</head>
@@ -69,13 +69,13 @@ const otpVerification = (otp) => {
 	<body>
 		<div class="container">
 			<a href="#"><img class="logo"
-				src="../images/logo.png" alt="BharatCrafters Logo"></a>
+					src="https://logoforemails.vercel.app/onlylogo.png/" alt="BharatCrafters Logo"></a>
 			<div class="message">OTP Verification Email</div>
 			<div class="body">
 				<p>Dear User,</p>
 				<p>Thank you for registering with <b>Bharat Crafters</b>. To complete your registration, please use the following OTP
 					(One-Time Password) to verify your account:</p>
-				<h2 class="highlight">${otp}</h2>
+				<h2 class="cta">${otp}</h2>
 				<p>This OTP is valid for 5 minutes. If you did not request this verification, please disregard this email.
 				Once your account is verified, you will have access to our platform and its features.</p>
 			</div>

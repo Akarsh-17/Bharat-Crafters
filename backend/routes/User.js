@@ -7,6 +7,8 @@ const{
     loginSeller,
     signupBuyer,
     loginBuyer,
+    signupAdmin,
+    loginAdmin,
     buyerChangePassword,
     sellerChangePassword,
     verifyOTP,
@@ -16,8 +18,7 @@ const{
 const{
     auth,
     isSeller,
-    isBuyer
-
+    isBuyer,
 }=require('../middleware/auth')
 
 
@@ -40,6 +41,14 @@ router.post('/loginBuyer',loginBuyer)
 // route for buyer sign uo
 router.post('/signupBuyer',signupBuyer)
 
+
+// route for admin login
+router.post('/loginAdmin',loginAdmin)
+
+// route for buyer sign uo
+router.post('/signupAdmin',signupAdmin)
+
+
 // send otp route
 router.post('/sendOTP',sendOTP)
 
@@ -51,8 +60,6 @@ router.post('/buyerChangePassword',auth,isBuyer,buyerChangePassword)
 
 
 router.post('/sellerChangePassword',auth,isSeller,sellerChangePassword)
-
-
 
 
 module.exports= router

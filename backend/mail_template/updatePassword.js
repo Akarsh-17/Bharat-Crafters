@@ -25,8 +25,8 @@ exports.updatePassword = (email, name) => {
             }
     
             .logo {
-                max-width: 400px;
-				margin-top: 20px;
+                max-width: 200px;
+				// margin-top: 20px;
 				margin-bottom: 20px;
             }
     
@@ -57,7 +57,7 @@ exports.updatePassword = (email, name) => {
     <body>
         <div class="container">
             <a href="#"><img class="logo"
-                src="logo.png" alt="BharatCrafters Logo"></a>
+                src="https://logoforemails.vercel.app/onlylogo.png/" alt="BharatCrafters Logo"></a>
             <div class="message">Password Update Confirmation</div>
             <div class="body">
                 <p>Hey ${name},</p>

@@ -1,5 +1,6 @@
 const Buyer=require('../models/Buyer');
 const Seller=require('../models/Seller');
+const Admin=require('../models/Admin');
 const OTP=require('../models/OTP');
 const SellerProfile=require('../models/SellerProfile')
 const BuyerProfile=require('../models/BuyerProfile')
@@ -10,9 +11,10 @@ const jwt=require('jsonwebtoken');
 exports.sendOTP= async(req,res)=>{
     try{
         const {email}=req.body;
-        const  existingSeller= await Seller.findOne({email});
-        const  existingBuyer= await Buyer.findOne({email});
-        if(existingBuyer || existingSeller)
+        const  existingSeller = await Seller.findOne({email});
+        const  existingBuyer = await Buyer.findOne({email});
+        const existingAdmin = await Admin.findOne({email});
+        if(existingBuyer || existingSeller || existingAdmin)
         {
            return res.status(400).json({
                success:false,
@@ -42,6 +44,7 @@ exports.sendOTP= async(req,res)=>{
 
         res.status(200).json({
             success:true,
+            otp,
             message:"otp generated successfully"
             
         })
@@ -153,7 +156,8 @@ exports.signupBuyer=async (req,res)=>{
             gender:null,
             dateOfBirth:null,
             address:null,
-            phoneNumber:null
+            phoneNumber:null,
+            phoneCode:null
         })
 
         const user=await Buyer.create({
@@ -298,14 +302,15 @@ exports.signupSeller=async (req,res)=>{
         }=req.body
 
         // The HTTP status code '403 forbidden—you don't have permission to access this resource' 
-
+        console.log(phoneCode);
         if(!firstName || !lastName || !email || !password || !confirmPassword || !otp || !phoneCode|| !phoneNumber)
         {
             return res.status(403).json({
-              success:false,
-              message:'All fields are mandetory'
+                success:false,
+                message:'All fields are mandetory'
             })
         }
+        console.log(phoneCode);
 
         // The 401 (Unauthorized) status code indicates that the request has not been 
         // applied because it lacks valid authentication credentials for the target resource.
@@ -371,6 +376,7 @@ exports.signupSeller=async (req,res)=>{
            lastName,
            email,
            phoneNumber,
+           phoneCode,
            password:hashPass,
         //    accountType:'seller',
            additionalDetail:profileDetails._id,
@@ -591,5 +597,208 @@ exports.sellerChangePassword=async(req,res)=>{
 			message: "Error occurred while updating password",
 			error: error.message,
 		});
+    }
+}
+
+
+
+/*
+......
+  ADMIN SIGNUP .......
+.....
+*/
+
+
+exports.signupAdmin=async (req,res)=>{
+    try{
+        
+        const {
+            firstName,
+            lastName,
+            email,
+            password,
+            confirmPassword,
+            otp
+        }=req.body
+
+        // The HTTP status code '403 forbidden—you don't have permission to access this resource' 
+        
+        if(!firstName || !lastName || !email || !password || !confirmPassword || !otp)
+        {
+            return res.status(403).json({
+              success:false,
+              message:'All fields are mandetory'
+            })
+        }
+    
+        // The 401 (Unauthorized) status code indicates that the request has not been 
+        // applied because it lacks valid authentication credentials for the target resource.
+
+        if(password!==confirmPassword)
+        {
+            return res.status(401).json({
+                succes:false,
+                message:'Confirm Password and Password does not not match'
+            })
+        }
+
+        const existingBuyer=await Buyer.findOne({email})
+        const existingSeller=await Seller.findOne({email})
+        const existingAdmin=await Admin.findOne({email})
+        if(existingBuyer)
+        {
+            return res.status(401).json({
+                success:false,
+                message:'User already exists buyer'
+            })
+        }
+
+        if(existingSeller)
+        {
+            return res.status(401).json({
+                success:false,
+                message:'User already exists as seller'
+            })
+        }
+
+        if(existingAdmin)
+        {
+            return res.status(401).json({
+                success:false,
+                message:'User already exists as admin'
+            })
+        }
+
+
+        const recentOtp=await OTP.find({email}).sort({createdAt:-1}).limit(1);
+        
+        // scope of error 
+        if(recentOtp.length===0)
+        {
+            return res.status(400).json({
+                success:false,
+                message:'otp not found'
+            })
+        }
+        else if(otp!==recentOtp[0].otp)
+        {
+            return res.status(400).json({
+                success:false,
+                message:'otp invalid'
+            })
+        }
+
+        const hashPass=await bcrypt.hash(password,10);
+        // const profileDetails=await BuyerProfile.create({
+        //     gender:null,
+        //     dateOfBirth:null,
+        //     address:null,
+        //     phoneNumber:null
+        // })
+
+        const user=await Admin.create({
+            email,
+            password:hashPass,
+            accountType:'admin',
+            // additionalDetail:profileDetails._id,
+            // image:`https://api.dicebear.com/5.x/initials/svg?seed=${firstName}${lastName}`
+        })
+
+        return res.status(200).json({
+            success:true,
+            message:'User is successfully registerd as Admin',
+            user
+        })
+    }
+    catch(error)
+    {
+      console.log(error)
+      return res.status(500).json({
+        success:false,
+        message:'user can not be registered'
+      })
+    }
+}
+
+
+/*
+.......
+.....
+
+    LOGIN FOR ADMIN
+.....
+.......
+*/
+
+
+exports.loginAdmin= async(req,res)=>{
+    try{
+        const {email,password}= req.body;
+
+        if(!email || !password)
+        {
+            return res.status(400).json({
+                success:false,
+                message:'Please fill all details'
+            })
+        }
+
+        let user=await Admin.findOne({email})
+
+        if(!user)
+        {
+            return res.status(401).json({
+                success:false,
+                message:'user not found'
+            })
+        }
+
+
+        const payload={
+            email:user.email,
+            id:user._id,
+            accountType:user.accountType
+        }
+
+        if(await bcrypt.compare(password,user.password))
+        {
+            const token=jwt.sign(payload,
+                process.env.JWT_SECRET,{
+                    expiresIn:'48h'
+                }
+            )
+
+            console.log('printing token',token)
+            // review later
+            user.token=token;
+            user.password=undefined
+
+            // plsease this article of more clearity
+            // https://gemini.google.com/app/9ab264853e8d2f45
+            const options={
+                httpOnly:true,
+                expiresIN:new Date(Date.now()+3*24*60*60*1000)
+            }
+
+            res.cookie("token",token,options).status(200).json({
+                success:true,
+                message:'User looged in successfully',
+                token,
+                user
+            })
+        }
+        else{
+            return res.status(401).json({
+                success:false,
+                message:"password incorrect"
+            })
+        }
+    }
+    catch(error){
+        console.log(error)
+        return res.status(500).json({
+            success:false,
+            message:'login failure'
+        })
     }
 }
