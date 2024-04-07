@@ -10,7 +10,7 @@ import Footer from '../Footer/Footer.jsx'
 const Home = () => {
     return (
       <>
-<Login/>
+        <Login/>
       </>
     )
   }
