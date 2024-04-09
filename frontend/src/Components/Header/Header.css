@@ -37,7 +37,7 @@
   padding: 0.5rem ;
   text-decoration: none;
   font-size:0.9rem;
-  margin-left: 1.2rem;
+  margin-left: 1rem;
 }
 
 .header-login-button{
@@ -51,12 +51,12 @@
 
 .header-signup-button{
   padding: 0.5rem 1rem;
-  background-color: #E97451;
+  background-color: #c4674b;
   border-radius: 5px;
   color: white;
 }
 .header-signup-button:hover{
-  background-color: #e16843;
+  background-color: #c15b3c;
 }
 
 .right-header-container{

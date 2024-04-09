@@ -1,5 +1,5 @@
 .container {
-  background-color: #E97451;
+  background-color: #c4674b;
   position: relative;
   margin: 0 ;
   max-width: 100%;
@@ -14,15 +14,15 @@
 
 .subsection,
 .dropdown-button {
-  padding: 7px 11px;
+  padding: 11px;
   color: white;
   font-weight: 500;
-  font-size: 14px;
+  font-size: 0.8rem;
   text-decoration: none;
 }
 
 .subsection:hover {
-  background-color: #e16843;
+  background-color: #c15b3c;
 }
 
 .dropdown-button {
