@@ -1,10 +1,9 @@
 .container {
   background-color: #E97451;
   position: relative;
+  margin: 0 ;
   max-width: 100%;
-  margin: 0;
 }
-
 
 .container-content {
   display: flex;

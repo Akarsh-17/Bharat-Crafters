@@ -6,13 +6,15 @@
 }
 
 .header-login {
-    text-align: center;
+    display: grid;
     background-color: white;
-    padding: 1.5rem;
+    padding: 0.7rem 0;
 }
 
 .company-logo {
-    height: 1.3rem;
+    align-self: center;
+    height: 3.5rem;
+    justify-self: center;
 }
 
 .form-container-login {

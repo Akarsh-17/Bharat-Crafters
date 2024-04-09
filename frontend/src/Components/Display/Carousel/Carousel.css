@@ -1,0 +1,68 @@
+.carousel-container {
+  height: 72vh;
+  margin: 0 3rem;
+  overflow: hidden;
+  box-sizing: border-box;
+  margin-bottom: 0.8rem;
+}
+
+.carousel-item-container {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f0f0f0;
+  color: #333;
+  font-size: 24px;
+  position: relative;
+}
+
+.carousel-images {
+  height: 100%;
+}
+
+.carousel-image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 72vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.3s;
+  cursor: pointer;
+}
+
+.carousel-image-container:hover .carousel-image-overlay {
+  opacity: 1;
+}
+
+.overlay-link{
+  text-decoration: none;
+  align-self: center;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+}
+.overlay-shop-in {
+  font-size: 0.9rem;
+  font-weight: 400;
+  background: none;
+  color: white;
+  text-decoration: none;
+  border: 1px solid white;
+  padding: 0.7rem 1rem;
+  max-width: fit-content;
+}
+
+.overlay-category-links {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: white;
+  margin-top: 1rem;
+}

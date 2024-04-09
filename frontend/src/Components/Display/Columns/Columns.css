@@ -1,0 +1,23 @@
+.asymetrical-columns{
+    display: grid;
+    gap:0.8rem;
+    margin: 0 3rem;
+    }
+    
+    .section1{
+        display: grid;
+        grid-template-columns: 1fr 2fr 1fr;
+        gap: 0.8rem;
+    }
+    
+    .section2{
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 0.8rem;
+    }
+    
+    .box1, .box2, .box3 , .box4, .box5{
+        background-color: #f2f2f2;
+        padding: 20px;
+        text-align: center;
+      }

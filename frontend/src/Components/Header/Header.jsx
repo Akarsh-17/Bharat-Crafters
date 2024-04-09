@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Header.css';
-import logo from '../../Images/Screenshot 2024-03-23 001520.png'
+import logo from '../../Images/logo9.png'
 import account from '../../Images/icons8-customer-50.png'
 import cart from '../../Images/icons8-cart-50 (1).png'
 import myorders from '../../Images/icons8-order-50 (1).png'
@@ -23,15 +23,14 @@ const Header = () => {
         <>
             <nav className="custom-nav-class" id="home" >
 
-                <img src={logo} class="children logo" href="#home"></img>
+                <img src={logo} class="logo" href="#home"></img>
                 <SearchBar />
 
-                <button class="navbar-toggler children" type="button" onClick={showRightHeader} >
+                {/* <button class="navbar-toggler" type="button" onClick={showRightHeader} >
                     <span className="navbar-toggler-icon"></span>
-                </button>
+                </button> */}
 
-                <div className="right-header">
-                    <div className=" d-flex user-section">
+                <div className="right-header-container">
                         <div class="dropdown">
                             <button class="dropdown-button-header">En
                                 <img src={dropdownbutton} class="dropdownicon"></img></button>
@@ -43,13 +42,15 @@ const Header = () => {
                                 <a href="#" class="content">Bengali - BN</a>
                             </div>
                         </div>
-                        <Link className=" custom-title custom-small-font children" to="/user-account">Account<img src={account} class="small-logos"></img></Link>
-                        <Link className=" custom-title custom-small-font children" to="/wishlist">Wishlist<img src={wishlist} class="small-logos"></img></Link>
-                        <Link className=" custom-title custom-small-font children" to="/past-orders">Orders<img src={myorders} class="small-logos"></img></Link>
-                        <Link className=" custom-title custom-small-font children" to="/cart">Cart<img src={cart} class="small-logo"></img></Link>
-                    </div>
+                        {/* <Link className="custom-title custom-small-font children" to="/user-account">Account<img src={account} class="small-logos"></img></Link>
+                        <Link className="custom-title custom-small-font children" to="/wishlist">Wishlist<img src={wishlist} class="small-logos"></img></Link>
+                        <Link className="custom-title custom-small-font children" to="/past-orders">Orders<img src={myorders} class="small-logos"></img></Link>
+                        <Link className="custom-title custom-small-font children" to="/cart">Cart<img src={cart} class="small-logo"></img></Link> */}
+                       <Link to="/login" style={{ textDecoration: 'none' }}><div className="right-header-links header-login-button" >Login</div></Link>
+                       <Link to="/signup" style={{ textDecoration: 'none' }}><div className="right-header-links header-signup-button" >Sign up</div></Link>
+
                 </div>
-                <div class="right-slide">
+                {/* <div class="right-slide">
                     <ul class="right-nav-items">
                         <li type="none"><Link className="slide-in-text custom-small-font" to="/user-account">Account</Link></li>
                         <li type="none"><Link className="slide-in-text custom-small-font" to="/wishlist">Wishlist</Link></li>
@@ -58,7 +59,7 @@ const Header = () => {
                         <li type="none"><Link className="slide-in-text custom-small-font" to="/cart">Cart</Link></li>
                     </ul>
 
-                </div>
+                </div> */}
             </nav>
 
 

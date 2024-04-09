@@ -8,11 +8,14 @@ import Footer from '../Footer/Footer.jsx'
 
 
 const Home = () => {
-    return (
-      <>
-<Login/>
-      </>
-    )
-  }
-  
-  export default Home
+  return (
+    <>
+      <Header />
+      <BottomHeader/>
+      <Display />
+      <Footer />
+    </>
+  )
+}
+
+export default Home

@@ -1,20 +1,20 @@
 .custom-nav-class {
   width: 100%;
-  padding: 28px 23px;
+  padding: 2.5rem 3rem 2.5rem 3rem;
   align-items: center;
   margin: 0;
   position: relative;
   top: 0;
   left: 0;
   height: 8vh;
+  display: flex;
+  background-color: white;
 }
 
 .logo {
-  margin: 0;
-  padding-right: 7px;
+  margin-right: 2rem;
   cursor: pointer;
-  width: 185px;
-  height: 18px;
+  height: 3.3rem;
   align-self: center;
 }
 
@@ -31,29 +31,52 @@
   padding-left: 4px;
 }
 
-.custom-title {
-  font-weight: 500;
+.right-header-links{
+  font-weight: 600;
   color: black;
-  padding: 0px 11px;
+  padding: 0.5rem ;
   text-decoration: none;
-  display: flex;
-  align-items: end;
+  font-size:0.9rem;
+  margin-left: 1.2rem;
 }
 
-.user-section {
+.header-login-button{
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+}
+
+.header-login-button:hover{
+  background-color: #efefef;
+}
+
+.header-signup-button{
+  padding: 0.5rem 1rem;
+  background-color: #E97451;
+  border-radius: 5px;
+  color: white;
+}
+.header-signup-button:hover{
+  background-color: #e16843;
+}
+
+.right-header-container{
   justify-content: space-between;
   align-items: center;
+  display: flex;
+  margin-left: 10rem;
+
 }
 
 .dropdown-content {
   display: none;
   position: absolute;
-  background-color: #f9f9f9;
-  min-width: 160px;
+  background-color: #efefef;
+  min-width: 8.5rem;
   font-size: 12px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 2;
   padding: 18px;
+  margin-top:0.5rem;
 }
 
 .current-language {
@@ -74,7 +97,9 @@
   font-size: 14px;
   align-self: center;
   justify-self: center;
-  background-color: white;
+  color: black;
+  font-weight: 500;
+  background-color: transparent;
 }
 
 .dropdownicon {
@@ -82,22 +107,8 @@
   padding-left: 1px;
 }
 
-
-.custom-nav-class {
-  justify-content: space-between;
-  display: flex;
-}
-
-.child {
-  flex: 1;
-}
-
 .slide-out {
   transition: right 0.7s ease;
-}
-
-.custom-small-font {
-  font-size: 14px;
 }
 
 .navbar-toggler {

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import logo from '../../Images/Screenshot 2024-03-23 001520.png';
+import logo from '../../Images/logo9.png';
 import axios from 'axios';
 import './Signup.css'
 import Select from 'react-select';
@@ -9,13 +9,8 @@ function SignUp() {
 
     const sendFormData = async (formData) => {
         try {
-            const sendOtpResponse = await axios.post(`http://localhost:4000/api/v1/auth/sendOTP`, { email: formData.email });
-            console.log(formData.email);
-            console.log(sendOtpResponse.data);
-
-            const otp = sendOtpResponse.data.otp;
-            sessionStorage.setItem('otp', otp);
-
+            const sendOtpResponse = await axios.post(`http://localhost:4000/api/v1/auth/sendOTP`, 
+            { email: formData.email });
             toggleOverlay(true);
 
         } catch (error) {
@@ -214,7 +209,7 @@ function SignUp() {
                     </div>
 
                     <p className="paragraph">By signing in, you are agreeing to our user policies and cookie policies.</p>
-                    <button type="submit" className="button">Sign Up</button>
+                    <button type="submit" className="submit-signup-button">Sign Up</button>
                 </form>
             </div>
 
@@ -231,7 +226,7 @@ function SignUp() {
                             value={formData.otp}
                             onChange={handleChange}
                         />
-                        <button onClick={handleOtpSubmit}>Submit</button>
+                        <button onClick={handleOtpSubmit} className='otp-submit-button'>Submit</button>
                         </div>
                         
                     </div>

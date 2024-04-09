@@ -22,8 +22,9 @@ const SearchBar = ({ onSearch }) => {
 
   return (
     <>
-      <div className="dropdown-category">
-        <button className="category" onClick={handleDropdown}>All <img src={dropdownbutton} className="dropdownicon" alt="dropdown icon" /></button>
+    <div className="search-bar-container">
+    <div className="dropdown-category">
+        <button className="category-select-button" onClick={handleDropdown}>All <img src={dropdownbutton} className="dropdownicon" alt="dropdown icon" /></button>
         {showDropdown && (
           <div className="dropdown-category-content">
             <a href="#" class="content">Men essentials</a>
@@ -39,17 +40,17 @@ const SearchBar = ({ onSearch }) => {
         )}
       </div>
 
-      <form className="search-bar child" onSubmit={handleSubmit}>
         <input
-          className="search-input custom-small-font"
+          className="search-input"
           type="text"
           placeholder="Search BharatCrafters"
           value={searchTerm}
           onChange={handleChange}
         />
 
-        <button className="search-button custom-small-font" type="submit"><img src={searchbutton} width="18px" alt="search icon" /></button>
-      </form>
+        <button className="search-button" type="submit"><img src={searchbutton} alt="search icon" className='header-search-icon'/></button>
+    </div>
+
     </>
   );
 };
