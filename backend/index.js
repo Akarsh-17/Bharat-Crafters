@@ -3,6 +3,7 @@ const dbConnect=require('./config/database');
 const cloudinaryConnect=require('./config/cloudinary')
 const cookieParser=require('cookie-parser')
 const cors= require('cors')
+const fileUpload= require('express-fileupload')
 const helmet= require('helmet')
 const morgan = require('morgan')
 const path = require('path')  // Node built-in path module
@@ -10,6 +11,8 @@ require('dotenv').config();
 
 
 const userRoutes=require('./routes/User')
+const categoryRoutes=require('./routes/Category')
+const productRoutes=require('./routes/Product')
 
 
 const app=express();
@@ -22,9 +25,17 @@ app.use(cors());
 app.use(cookieParser());
 app.use(helmet())
 app.use(morgan("common"))
-
+app.use(
+	fileUpload({
+		useTempFiles:true,
+		tempFileDir:"/tmp",
+	})
+)
 
 app.use('/api/v1/auth',userRoutes);
+app.use('/api/v1/category',categoryRoutes);
+app.use('/api/v1/product',productRoutes);
+
 
 app.listen(PORT,()=>{
     console.log(`app is running at port ${PORT}`);
