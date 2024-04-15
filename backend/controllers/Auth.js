@@ -243,7 +243,9 @@ exports.loginBuyer= async(req,res)=>{
             // https://gemini.google.com/app/9ab264853e8d2f45
             const options={
                 httpOnly:true,
-                expiresIN:new Date(Date.now()+3*24*60*60*1000)
+                expiresIN:new Date(Date.now()+3*24*60*60*1000),
+                sameSite:"none",
+                // secure: true
             }
 
             res.cookie("token",token,options).status(200).json({
@@ -487,9 +489,9 @@ exports.loginSeller= async(req,res)=>{
         const user=await Seller.findOne({email}).populate("additionalDetail");
         if(!user)
         {
-            return res.status(401).json({
+            return res.status(400).json({
                 success:false,
-                message:'user not registered'
+                message:'Not registered as seller'
             })
         }
 
@@ -498,7 +500,7 @@ exports.loginSeller= async(req,res)=>{
             accountType:user.accountType,
             id:user._id
         }
-        if(bcrypt.compare(password,user.password))
+        if(await bcrypt.compare(password,user.password))
         {
             const token=jwt.sign(payload,
                 process.env.JWT_SECRET,
@@ -518,7 +520,7 @@ exports.loginSeller= async(req,res)=>{
 
             res.cookie("token",token,options).status(200).json({
                 success:true,
-                message:'user looged in successfully',
+                message:'user logged in successfully',
                 user,
                 token
             })

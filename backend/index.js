@@ -32,6 +32,13 @@ app.use(
 	})
 )
 
+app.use(
+	cors({
+		origin: "*",
+		credentials: true,
+	})
+);
+
 app.use('/api/v1/auth',userRoutes);
 app.use('/api/v1/category',categoryRoutes);
 app.use('/api/v1/product',productRoutes);
