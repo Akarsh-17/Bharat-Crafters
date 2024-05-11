@@ -5,6 +5,7 @@ import Header from '../Header/Header.jsx'
 import BottomHeader from '../BottomHeader/BottomHeader.jsx'
 import Display from '../Display/Display.jsx'
 import Footer from '../Footer/Footer.jsx'
+import ProductCategory from '../ProductCategory/ProductCategory.jsx'
 
 
 const Home = () => {
@@ -14,6 +15,7 @@ const Home = () => {
       <BottomHeader/>
       <Display />
       <Footer />
+      {/* <ProductCategory/> */}
     </>
   )
 }

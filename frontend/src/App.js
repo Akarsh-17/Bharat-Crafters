@@ -4,6 +4,7 @@ import './App.css';
 import Home from './Components/Home/Home.jsx';
 import Login from './Components/Login/Login.jsx';
 import SignUp from './Components/Signup/Signup.jsx';
+import ProductCategory from './Components/ProductCategory/ProductCategory.jsx';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Route exact path="/" element={<Home />} />
           <Route exact path="/login" element={<Login />} />
           <Route exact path="/signup" element={<SignUp />} />
+          <Route exact path="/category" element={<ProductCategory />} />
 
         </Routes>
       </div>

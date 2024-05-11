@@ -1,0 +1,224 @@
+.page-path-container{
+    margin:1rem;
+    font-size: 0.85rem;
+}
+
+.product-category-container{
+    display:grid;
+    grid-template-columns: 1fr 5fr;
+    gap: 3.5rem;
+}
+
+.product-filter-container{
+    margin:1rem 0rem 1rem 1.3rem ;
+    width: 100%;
+}
+
+.sub-category-name{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.sub-category-name li{
+    font-size: 0.85rem;
+    margin: 0.5rem 0;
+}
+
+.filter-heading-container{
+    display: grid;
+    grid-template-columns: auto auto;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.clear-all-filters{
+    justify-self: end;
+}
+
+.sub-category-heading-container, .price-range-heading, .color-option-heading,
+.size-option-heading{
+    font-weight: 600;
+    font-size: 0.85rem;
+    display: grid;
+    grid-template-columns: auto auto;
+}
+
+.sub-category-search-button{
+    justify-self: end;
+    height: 1rem;
+    cursor: pointer;
+}
+
+.price-range-container{
+    display: grid;
+}
+
+.filter-color-option-container{
+    display: grid;
+}
+
+.color-option-container{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.color-box{
+    margin: 1rem 0.5rem 0 0;
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    cursor: pointer;
+}
+
+.color{
+    border-radius: 50%;
+    background-color: red;
+    height: 85%;
+    width:85%;
+    padding: 1.1rem;
+    align-self: center;
+    justify-self: center;
+}
+
+.color-name{
+    align-self: center;
+    justify-self: center;
+font-size: 0.85rem;
+}
+
+.filter-size-option-container{
+    display: grid;
+}
+
+.size-option-container{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    align-items: center;
+    justify-content: center;
+}
+
+.size-box{
+    border: 1px solid rgb(153, 151, 151);
+    padding:0.5rem;
+    width: 2.5rem;
+    height: 2.45rem;
+    margin: 0.85rem 0.2rem;
+    border-radius: 50%;
+    text-align: center;
+justify-items: center;
+align-items: center;
+font-size: 0.8rem;
+cursor: pointer;
+}
+
+.size-box:hover{
+    border-color: black;
+    
+}
+
+.filter-applied-container{
+    width: fit-content;
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 0.5rem;
+    margin-left: 1rem;
+    border-radius: 35rem/40rem;
+    border: 1px solid rgb(153, 151, 151);
+    padding: 0.3rem 0.7rem ;
+}
+
+.filter-applied-container:hover{
+    border-color: black;
+}
+
+.product-display-container{
+}
+
+.product-container{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    margin: 0.5rem 0;
+}
+
+.product-category-heading{
+    margin: 0 0 1.5rem 1rem;
+    font-weight: 600;
+    font-size: 2rem;
+}
+
+.filter-name{
+    font-size:0.9rem;
+    justify-self: center;
+    align-self: center;
+}
+
+.filter-remove-icon{
+    height: 0.6rem;
+    justify-self: center;
+    align-self: center;
+    cursor: pointer;
+}
+
+.price-range-value{
+    font-weight: 600;
+}
+
+.product-card{
+    display: grid;
+    grid-template-rows: 1fr auto;
+    gap:0.3rem;
+    height: 20rem;
+    margin:1rem;
+}
+
+.product-image{
+    background: url(../../Images/shirt.webp);
+    background-size: cover;
+    background-repeat: no-repeat;
+    border-radius: 8px;
+}
+
+.add-to-wishlist-icon{
+    background-color: white;
+    border-radius: 50%;
+    width:fit-content;
+    margin: 0.7rem 0.5rem;
+    padding:0;
+    cursor: pointer;
+    border: none;
+}
+
+.add-to-wishlist-icon img{
+    height: 2.2rem;
+    padding: 0.5rem;
+    justify-self: center;
+    align-self: center;
+}
+
+.product-name-container{
+    display: grid;
+    grid-template-columns: 1fr auto;
+    background-color: white;
+}
+
+.product-name{
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.product-price{
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #c15b3c;
+}
+
+.add-to-cart-icon{
+    background-color: #c15b3c;
+    height: fit-content;
+    padding: 0.4rem 0.8rem;
+    border-radius: 5px;
+    color: white;
+    font-weight: 500;
+    cursor: pointer;
+    font-size: 0.8rem;
+}

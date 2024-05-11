@@ -46,6 +46,7 @@ const Header = () => {
                         <Link className="custom-title custom-small-font children" to="/wishlist">Wishlist<img src={wishlist} class="small-logos"></img></Link>
                         <Link className="custom-title custom-small-font children" to="/past-orders">Orders<img src={myorders} class="small-logos"></img></Link>
                         <Link className="custom-title custom-small-font children" to="/cart">Cart<img src={cart} class="small-logo"></img></Link> */}
+                        <Link to="/category" style={{ textDecoration: 'none' }}><div className="right-header-links header-login-button" >Category</div></Link>
                        <Link to="/login" style={{ textDecoration: 'none' }}><div className="right-header-links header-login-button" >Login</div></Link>
                        <Link to="/signup" style={{ textDecoration: 'none' }}><div className="right-header-links header-signup-button" >Sign up</div></Link>
 
