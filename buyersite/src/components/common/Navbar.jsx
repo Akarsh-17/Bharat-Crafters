@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom'
 import ProfileDropDown from '../core/Auth/ProfileDropDown'
 
 const Navbar = () => {
-  const {user}=useSelector((state)=>state.auth)
-  const {token}=useSelector((state)=>state.auth)
+  // const {user}=useSelector((state)=>state.auth)
+  const token=useSelector((state)=>state.auth.currentUser)
   return (
     <div className='flex h-20 justify-center border-b-[1px] items-center bg-site-5'>
       <div className='flex w-11/12 justify-between items-center max-w-maxContent'>

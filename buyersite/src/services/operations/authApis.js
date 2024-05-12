@@ -1,14 +1,14 @@
 import { toast } from "react-hot-toast";
 import { authEndPoints } from "../apis";
-import { apiConnector } from "../apiConnector";
-import { setLoading, setToken } from "../../slices/authSlice";
-import {setUser} from '../../slices/profileSlice'
+import { apiConnector, } from "../apiConnector";
+import { setLoading, setCurrentUser } from "../../slices/authSlice";
+// import {setUser} from '../../slices/profileSlice'
 
 
 const {
   SEND_OTP,
   LOGIN_SELLER,
-  SIGNUP_SELLER,
+  // SIGNUP_SELLER,
 }=authEndPoints
 
 
@@ -54,17 +54,17 @@ export async function loginSeller(email,password,navigate,dispatch)
         throw new Error(response.data.message)
        } 
        toast.success("LogIn Successful") 
-       dispatch(setToken(response.data.token))
-   
+       
        console.log("response ",response)
        const userImage = response.data?.user?.image
-        ? response.data.user.image
-        : `https://api.dicebear.com/5.x/initials/svg?seed=${response.data.user.firstName}`
-        // console.log("userImage ",userImage);
-        dispatch(setUser({ ...response.data.user, image:userImage}))
+       ? response.data.user.image
+       : `https://api.dicebear.com/5.x/initials/svg?seed=${response.data.user.firstName}`
+       // console.log("userImage ",userImage);
+       dispatch(setCurrentUser({...response.data.user,image:userImage}))
+        // dispatch(setUser({ ...response.data.user, image:userImage}))
        
-       localStorage.setItem("token",JSON.stringify(response.data.token))
-       localStorage.setItem("user", JSON.stringify(response.data.user))
+      //  localStorage.setItem("token",JSON.stringify(response.data.token))
+      //  localStorage.setItem("user", JSON.stringify(response.data.user))
    
      //  console.log("printing token= >",JSON.stringify(response.data.token))
      //  console.log("token = >",localStorage.token)
@@ -83,9 +83,9 @@ export async function loginSeller(email,password,navigate,dispatch)
 export default function logout(dispatch,navigate)
 {
   dispatch(setLoading(true))
-  dispatch(setToken(null))
-  dispatch(setUser(null))
-  localStorage.removeItem("token");
+  dispatch(setCurrentUser(null))
+  // dispatch(setUser(null))
+  // localStorage.removeItem("token");
   toast.success("Logout Successfully")
   dispatch(setLoading(false))
   navigate('/');

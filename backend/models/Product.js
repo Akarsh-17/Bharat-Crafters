@@ -1,10 +1,16 @@
 const mongoose=require('mongoose')
-
+// rating and review left
 const productSchema=new mongoose.Schema({
 
   seller:{
     type:mongoose.Schema.Types.ObjectId,
     ref:"Seller",
+    required: true
+  },
+
+  category:{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:"Category",
     required: true
   },
 
@@ -144,6 +150,7 @@ const productSchema=new mongoose.Schema({
     type: String,
     enum: ["Draft", "Published"],
   },
+  createdAt: { type: Date, default: Date.now },
 });
 
 productSchema.index(
@@ -151,20 +158,22 @@ productSchema.index(
     name: 'text',
     brand: 'text',
     description: 'text',
-    'options.size': 'text',
-    'options.color': 'text',
-    price: 1, // Include price for sorting and filtering
+    "options.size": 'text',
+    "options.color": 'text',
   },
   {
     weights: {
       name: 3, // Give more weight to name for better matching
       brand: 2,
       description: 1,
-      'options.size': 1,
-      'options.color': 1,
+      "options.size": 1,
+      "options.color": 1,
     },
   }
 );
+
+productSchema.index({"options.price": 1});
+// productSchema.ensureIndexes();y
 
 module.exports=mongoose.model('Product',productSchema)
 

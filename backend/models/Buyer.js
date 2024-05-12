@@ -38,9 +38,9 @@ const buyerSchema=new mongoose.Schema({
     }],
 
 
-    token:{
-        type:String
-    },
+    // token:{
+    //     type:String
+    // },
    
     resetPasswordExpires:{
      type:Date

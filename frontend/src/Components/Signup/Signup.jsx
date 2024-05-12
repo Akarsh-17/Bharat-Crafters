@@ -189,7 +189,7 @@ function SignUp() {
 
                         <Select
                             name="phoneCode"
-                            className="select"
+                            className="flex"
                             value={{ value: formData.phoneCode, label: formData.phoneCode }}
                             onChange={handlePhoneChange}
                             options={countryOptions}

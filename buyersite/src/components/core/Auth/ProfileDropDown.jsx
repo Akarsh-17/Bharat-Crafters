@@ -7,7 +7,7 @@ import useOnClickOutside from '../../../hooks/useOnClickOutside'
 import logout from '../../../services/operations/authApis'
 
 const ProfileDropDown = () => {
-  const {user}=useSelector((state)=>state.profile)
+  const user=useSelector((state)=>state.auth.currentUser)
   const [open,setOpen]=useState(false);
   const ref=useRef(null);
   const dispatch=useDispatch();

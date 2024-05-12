@@ -52,9 +52,9 @@ const sellerSchema=new mongoose.Schema({
         required:true
     },
 
-    token:{
-        type:String
-    },
+    // token:{
+    //     type:String
+    // },
    
     resetPasswordExpires:{
      type:Date
