@@ -209,7 +209,7 @@ exports.loginBuyer= async(req,res)=>{
             })
         }
 
-        let user=await Buyer.findOne({email}).populate("additionalDetail")
+        const user=await Buyer.findOne({email}).populate("additionalDetail")
 
         if(!user)
         {
@@ -236,15 +236,20 @@ exports.loginBuyer= async(req,res)=>{
 
             console.log('printing token',token)
             // review later
-            user.token=token;
+            // user.token=token;
             user.password=undefined
 
             // plsease this article of more clearity
             // https://gemini.google.com/app/9ab264853e8d2f45
-            const options={
-                httpOnly:true,
-                expiresIN:new Date(Date.now()+3*24*60*60*1000)
-            }
+            const options = {
+                httpOnly: false,  // Ensures the cookie is sent only over HTTP(S), not accessible by JavaScript
+                // expires: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),  // Corrected from expiresIN to expires
+                 secure: true,  // Ensures the cookie is sent over HTTPS only
+                sameSite: 'None',  // Needed if your frontend and backend are not on the same domain
+                domain:'.localhost',
+                //  maxAge: 60000 //1 min
+                maxAge: 172800000 //2 days
+            };
 
             res.cookie("token",token,options).status(200).json({
                 success:true,
@@ -487,9 +492,9 @@ exports.loginSeller= async(req,res)=>{
         const user=await Seller.findOne({email}).populate("additionalDetail");
         if(!user)
         {
-            return res.status(401).json({
+            return res.status(400).json({
                 success:false,
-                message:'user not registered'
+                message:'Not registered as seller'
             })
         }
 
@@ -498,7 +503,7 @@ exports.loginSeller= async(req,res)=>{
             accountType:user.accountType,
             id:user._id
         }
-        if(bcrypt.compare(password,user.password))
+        if(await bcrypt.compare(password,user.password))
         {
             const token=jwt.sign(payload,
                 process.env.JWT_SECRET,
@@ -507,21 +512,41 @@ exports.loginSeller= async(req,res)=>{
                 }
             )
 
-            user.token=token
+            // user.token=token
             user.password=undefined;
 
-            const options={
-                httpOnly:true,
-                expiresIN:new Date(Date.now()+3*24*60*60*1000)
-            }
+            // const options={
+            //     httpOnly:true,
+            //     expiresIN:new Date(Date.now()+3*24*60*60*1000),
+            //     secure:true,
+            //     sameSite:'None'
+            // }
 
 
-            res.cookie("token",token,options).status(200).json({
-                success:true,
-                message:'user looged in successfully',
+            // return res.cookie("token",token,options).status(200).json({
+            //     success:true,
+            //     message:'user logged in successfully',
+            //     user,
+            //     token
+            // })
+
+            const options = {
+                httpOnly: false,  // Ensures the cookie is sent only over HTTP(S), not accessible by JavaScript
+                // expires: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),  // Corrected from expiresIN to expires
+                 secure: true,  // Ensures the cookie is sent over HTTPS only
+                sameSite: 'None',  // Needed if your frontend and backend are not on the same domain
+                domain:'.localhost',
+                //  maxAge: 60000 //1 min
+                maxAge: 172800000 //2 days
+            };
+            
+            return res.cookie("token", token, options).status(200).json({
+                success: true,
+                message: 'User logged in successfully',
                 user,
                 token
-            })
+            });
+            // res.send("Cookie has ben set!");
         }
         else{
             return res.status(401).json({

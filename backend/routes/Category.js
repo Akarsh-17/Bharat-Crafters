@@ -4,7 +4,8 @@ const router=express.Router();
 
 const {
     createCategory,
-    showAllCategories
+    showAllCategories,
+    categoryPageDetails
 
 }=require('../controllers/Category')
 
@@ -28,6 +29,10 @@ router.get('/showAllCategories',showAllCategories);
 router.post('/createSubCategory',auth,isAdmin,createSubCategory)
 
 router.get('/showSubCategories/:id',showSubCategories);
+
+router.get('/categoryPageDetails/:id',categoryPageDetails);
+
+
 
 
 

@@ -1,7 +1,7 @@
 const SubCategory=require('../models/Subcategory');
 const Category=require('../models/Category');
 
-
+// only for admin
 exports.createSubCategory= async(req,res)=>{
     try{
         const{name,categoryId}=req.body
@@ -54,7 +54,7 @@ exports.createSubCategory= async(req,res)=>{
     }
 }
 
-
+// only for admin
 exports.updateSubCategory = async (req, res) => {
 	try {
 		const { name, subCategoryId,categoryId } = req.body;

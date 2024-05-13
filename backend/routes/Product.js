@@ -4,7 +4,10 @@ const router=express.Router();
 
 const {
     createProduct,
-
+    editProduct,
+    getSellerProducts,
+    getFullProductDetails,
+    deleteProduct
 }=require('../controllers/Product')
 
 const{
@@ -17,6 +20,11 @@ const{
 
 
 router.post('/addProduct',auth,isSeller,createProduct)
+router.post('/editProduct',auth,isSeller,editProduct)
+router.get('/getSellerProducts',auth,isSeller,getSellerProducts)
+router.delete('/deleteProduct/:id',auth,isSeller,deleteProduct)
+router.get('/getFullProductDetails/:id',getFullProductDetails)
+
 
 
 

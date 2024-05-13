@@ -6,8 +6,9 @@ const cors= require('cors')
 const fileUpload= require('express-fileupload')
 const helmet= require('helmet')
 const morgan = require('morgan')
-const path = require('path')  // Node built-in path module
+// const path = require('path')  // Node built-in path module
 require('dotenv').config();
+const bodyParser = require('body-parser');
 
 
 const userRoutes=require('./routes/User')
@@ -16,12 +17,17 @@ const productRoutes=require('./routes/Product')
 
 
 const app=express();
-const imagesPath = path.join(__dirname, 'images');
-app.use('/images', express.static(imagesPath));
+// app.use(bodyParser.json({ limit: '50mb' }));
+// app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+// const imagesPath = path.join(__dirname, 'images');
+// app.use('/images', express.static(imagesPath));
 const PORT= process.env.PORT||5000;
 
+
+dbConnect();
+cloudinaryConnect();
+
 app.use(express.json());
-app.use(cors());
 app.use(cookieParser());
 app.use(helmet())
 app.use(morgan("common"))
@@ -31,6 +37,54 @@ app.use(
 		tempFileDir:"/tmp",
 	})
 )
+
+
+app.use((req, res, next) => {
+	res.setHeader(
+	  "Access-Control-Allow-Origin",
+	  "http://localhost:3000",
+	);
+	res.setHeader(
+	  "Access-Control-Allow-Methods",
+	  "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS,CONNECT,TRACE"
+	);
+	res.setHeader(
+	  "Access-Control-Allow-Headers",
+	  "Content-Type, Authorization, X-Content-Type-Options, Accept, X-Requested-With, Origin, Access-Control-Request-Method, Access-Control-Request-Headers"
+	);
+	res.setHeader("Access-Control-Allow-Credentials", true);
+	res.setHeader("Access-Control-Allow-Private-Network", true);
+	res.setHeader("Access-Control-Max-Age", 259200);
+  
+	next();
+  });
+
+  app.use(
+	cors({
+	  origin: ["http://localhost:3000",],
+	  credentials: true,
+	})
+  );
+
+// const corsOptions = {
+// 	origin: 'http://localhost:3000',
+// 	Access-Control-Allow-Credentials:true,
+// 	credentials: true // Enable credentials
+//   };
+
+// const corsOptions = {
+//     origin: 'http://localhost:3000',  // Ensure this matches your front-end URL exactly
+//     methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
+//     allowedHeaders: "Content-Type, Authorization, X-Content-Type-Options, Accept, X-Requested-With, Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+//     credentials: true,
+//     maxAge: 259200,  //3days
+//     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+// };
+
+// app.use(cors(corsOptions));
+
+  
+
 
 app.use('/api/v1/auth',userRoutes);
 app.use('/api/v1/category',categoryRoutes);
@@ -48,5 +102,3 @@ app.get("/", (req, res) => {
 	});
 });
 
-dbConnect();
-cloudinaryConnect();

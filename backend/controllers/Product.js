@@ -3,6 +3,7 @@ const Joi = require('joi');
 const Seller = require('../models/Seller');
 const SubCategory = require('../models/Subcategory');
 const { uploadImageToCloudinary } = require('../utilis/imageUploader');
+const Category = require('../models/Category');
 
 require("dotenv").config();
 
@@ -16,6 +17,7 @@ function validateProduct(product)
     const schema = Joi.object({
         // seller: Joi.string().required(),
         subCategory: Joi.string().required(),
+        category: Joi.string().required(),
         name: Joi.string().required().trim(),
         brand: Joi.string().required().trim(),
         description: Joi.string().required().trim(),
@@ -47,7 +49,7 @@ function validateProduct(product)
 }
 
 exports.createProduct= async(req,res)=>{
-    console.log('type ', req.files.images)
+    // console.log('type ', req.files.images)
     console.log('options ', req.body.options)
 
     if (typeof  req.body.components=== 'string'){
@@ -58,17 +60,11 @@ exports.createProduct= async(req,res)=>{
         req.body.specialFeatures = JSON.parse(req.body.specialFeatures);
     }
 
-    // if (typeof  req.body.images=== 'string') {
-    //     req.body.images = JSON.parse(req.body.images);
-    // }
     
     if (typeof  req.body.options=== 'string') {
         req.body.options = JSON.parse(req.body.options);
     }
 
-    // if (typeof  req.body.options.color=== 'string') {
-    //     req.body.options.color = JSON.parse(req.body.options.color);
-    // }
     
     const newOptions=[]
     req.body.options.map((element)=>{
@@ -110,7 +106,8 @@ exports.createProduct= async(req,res)=>{
             length,
             pattern,
             status,
-            subCategory
+            subCategory,
+            category
         }=req.body;
         console.log("subCategoryId ",subCategory)
         console.log("printing ",req.files.images)
@@ -126,17 +123,9 @@ exports.createProduct= async(req,res)=>{
             images = JSON.parse(images);
         }
 
-        // if (typeof  specialFeatures=== 'string') {
-        //     specialFeatures = JSON.parse(specialFeatures);
-        // }
-
         if (typeof  options=== 'string') {
             options = JSON.parse(options);
         }
-
-        // if (typeof  components=== 'string') {
-        //     components = JSON.parse(components);
-        // }
 
         if (typeof  options.color=== 'string') {
             options.color = JSON.parse(options.color);
@@ -152,6 +141,13 @@ exports.createProduct= async(req,res)=>{
         }
 
         const subCategoryDetails = await SubCategory.findById(subCategory)
+        const categoryDetails = await Category.findById(category)
+        if (!categoryDetails) {
+            return res.status(404).json({
+              success: false,
+              message: "Category Details Not Found",
+            })
+          }
         if (!subCategoryDetails) {
           return res.status(404).json({
             success: false,
@@ -177,6 +173,7 @@ exports.createProduct= async(req,res)=>{
         const newProduct = await Product.create({
           seller:sellerDetails._id,
           subCategory:subCategoryDetails._id,
+          category:categoryDetails._id,
           name,
           brand,
           description,
@@ -231,8 +228,231 @@ exports.createProduct= async(req,res)=>{
 
 
 
+// edit product
+exports.editProduct=async (req,res)=>{
+    try{
+        const {productId}=req.body
+        console.log(productId)
+        // const {seller}=req.body
+        const updates=req.body
+        console.log(updates)
+        const product=await Product.findById(productId)
+
+        if(!product)
+        {
+            return res.status(404).json({ error: "Product not found" }) 
+        }
+
+        const userId=req.user.id
+
+       if(userId!==product.seller.toString())
+        {
+           return res.status(401).json({
+            success: false,
+            message: "Unauthorized Access"
+           })
+        }
+        
+        if(req.files)
+        {
+            console.log("inside edit product for files")
+            const images=req.files.images 
+
+            if (typeof  images=== 'string') {
+                images = JSON.parse(images);
+            }
+
+            let imageLink=[];
+    
+            for(let i=0;i<images.length;i++)
+            {
+                const result = await uploadImageToCloudinary(images[i], {
+                    folder:process.env.FOLDER_NAME,
+                });
+              
+                imageLink.push(result.secure_url);
+            }
+            product.images=imageLink
+        }
+        for (const key in updates) {
+            console.log(key)
+            if (updates.hasOwnProperty(key)) {
+              if (key === "options" || key === "components" || key=== "specialFeatures") {
+                product[key] = JSON.parse(updates[key])
+              } else {
+                product[key] = updates[key]
+              }
+            }
+        }
+
+        await product.save()
+        
+        // rating and reviews left
+        const updatedProduct=await Product.findOne({
+            _id:productId
+        })
+        .populate({
+            path: "seller",
+            populate: {
+              path: "additionalDetail",
+            },
+        })
+        .exec()
+        
+        // .populate("subCtegory")
+        // .populate("category")
+        
+        res.json({
+            success: true,
+            message: "Product updated successfully",
+            data: updatedProduct,
+        })
+    }
+    catch(error)
+    {
+        console.error(error)
+        res.status(500).json({
+          success: false,
+          message: "Internal server error",
+          error: error.message,
+        }) 
+    }
+}
 
 
 
+// get a list of products of given seller
+exports.getSellerProducts = async (req,res)=>{
+    try{
+      const sellerId=req.user.id
+
+      const products=await Product.find({
+        seller:sellerId
+      }).sort({createdAt:-1})
+      res.status(200).json({
+        success: true,
+        data: products,
+      })
+    }
+    catch(error){
+      console.error(error)
+      res.status(500).json({
+      success: false,
+      message: "Failed to retrieve seller Product",
+      error: error.message,
+    })
+    }
+}
 
 
+exports.getFullProductDetails=async(req,res)=>{
+    try{
+        console.log("hello")
+       const productId=req.params.id
+    //    const userId=req.user.id
+
+       const productDetails=await Product.findOne({
+        _id:productId,
+       })
+       .populate({
+            path: "seller",
+            populate: {
+              path: "additionalDetail",
+            },
+        })
+        .populate({
+            path: "category",
+            populate: {
+              path: "subCategory",
+              populate: {
+                path: "product",
+              }
+            },
+        })
+        .populate({
+            path:"subCategory",
+            populate:{
+                path:"product"
+            }
+        })
+        .exec()
+    //    if(userId!==productDetails.seller.toString())
+    //     {
+    //        return res.status(401).json({
+    //         success: false,
+    //         message: "Unauthorized Access"
+    //        })
+    //     }
+
+        if (!productDetails) {
+            return res.status(400).json({
+              success: false,
+              message: `Could not find product with id: ${productId}\or payment has been delisted`,
+            })
+        }
+        
+        return res.status(200).json({
+            success: true,
+            data: productDetails,
+            message:"Product Fetched successfully"
+        })
+    }
+    catch(error)
+    {
+        return res.status(500).json({
+            success: false,
+            error: error.message,
+            message: "Failed to retrieve Product details"
+        })
+    }
+}
+
+
+exports.deleteProduct=async(req,res)=>{
+    try{
+       const {productId}=req.params.id
+       const userId=req.user.id
+       const product=await Product.findById(productId)
+
+       if(userId!==product.seller.toString())
+        {
+           return res.status(401).json({
+            success: false,
+            message: "Unauthorized Access"
+           })
+        }
+        
+        if (!product) {
+            return res.status(400).json({
+              success: false,
+              message: `Could not find product with id: ${productId}`,
+            })
+        }
+        
+        const subCategoryId=product.subCategory
+        await SubCategory.findByIdAndUpdate(
+            {_id:subCategoryId},
+            {
+                $pull:{
+                    product:productId
+                }
+            }
+        )
+        
+        await Product.findByIdAndDelete(productId)
+
+        return res.status(200).json({
+            success: true,
+            message: "Product deleted successfully",
+        })
+    }
+    catch(error)
+    {
+        // console.error(error)
+        return res.status(500).json({
+          success: false,
+          message: "Server error",
+          error: error.message,
+        })
+    }
+}

@@ -21,6 +21,14 @@ exports.auth= (req,res,next)=>{
         try{
             const payload=jwt.verify(token,process.env.JWT_SECRET);
             console.log('printing payload in middleware ',payload);
+            console.log(Date.now())
+            // if (Date.now() >= decoded.exp * 1000) {
+            //     console.log("hi")
+            //     // Token expired, clear cookie and redirect to login
+            //     res.clearCookie('token');
+            //     return res.redirect('/login'); //usually status code is 302
+            // }
+            console.log("hello")
             if(payload.accountType==='seller')
             {
                 console.log("inside seller")
