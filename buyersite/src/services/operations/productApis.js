@@ -26,7 +26,7 @@ export const createProductDetails=async(data)=>{
         if (!response?.data?.success) {
             throw new Error(response.data.message)
         }
-        toast.success("Course Details Added Successfully")
+        toast.success("Product Details Added Successfully")
         result = response?.data?.data
     }
     catch(error)
@@ -51,7 +51,7 @@ export const editProductDetails = async (data) => {
       if (!response?.data?.success) {
         throw new Error(response.data.message)
       }
-      toast.success("Course Details Updated Successfully")
+      toast.success("Product Details Updated Successfully")
       result = response?.data?.data
     } catch (error) {
       toast.error(error?.response?.data?.message)

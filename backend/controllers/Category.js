@@ -1,3 +1,4 @@
+const { match } = require("assert");
 const Category=require("../models/Category")
 
 function getRandomInt(max) {
@@ -67,14 +68,14 @@ exports.categoryPageDetails=async(req,res)=>{
 
     // Get courses for the specified category
     const selectedCategory = await Category.findById(categoryId)
-      .populate({
-        path:"subCategory",
+    .populate({
+      path:"subCategory",
+      populate:{
+        path:"product",
         match: { status: "Published" },
-        populate:{
-            path:"product"
-        }
-      })
-      .exec()
+      }
+    })
+    .exec()
 
     console.log("SELECTED CATEGORY", selectedCategory)
     // Handle the case when the category is not found
@@ -103,9 +104,9 @@ exports.categoryPageDetails=async(req,res)=>{
     )
     .populate({
       path:"subCategory",
-      match: { status: "Published" },
       populate:{
-          path:"product"
+        path:"product",
+        match: { status: "Published" },
       }
     })
     .exec()
@@ -115,9 +116,9 @@ exports.categoryPageDetails=async(req,res)=>{
     const allCategories = await Category.find()
     .populate({
       path:"subCategory",
-      match: { status: "Published" },
       populate:{
-          path:"product"
+        path:"product",
+        match: { status: "Published" },
       }
     })
     .exec()

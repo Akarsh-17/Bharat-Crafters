@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 
 import { editProductDetails } from "../../../../services/operations/productApis"
-import {setStep,resetProductState } from "../../../../slices/productSlice"
+import {setStep,resetProductState, setEditProduct } from "../../../../slices/productSlice"
 import { PRODUCT_STATUS } from "../../../../utils/constants"
 import IconBtn from "../../../common/IconBtn"
 
@@ -25,6 +25,7 @@ export default function PublishProduct() {
 
   const goBack = () => {
     dispatch(setStep(1))
+    dispatch(setEditProduct(true))
   }
 
   const goToProduct = () => {
