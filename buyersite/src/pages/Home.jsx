@@ -16,10 +16,13 @@ const Home = () => {
                 </ul>
             </nav> */}
             <header className="hero-section">
-                <h1>Welcome to ArtisanHub</h1>
-                <p>Empowering Local Artisans and MSMEs</p>
-                <button className="hero-button">Start Selling</button>
-            </header>
+    <div className="hero-background"></div>
+    <div className="hero-section-text-section">
+        <h1>Welcome to ArtisanHub</h1>
+        <p>Empowering Local Artisans and MSMEs</p>
+        <button className="hero-button">Start Selling</button>
+    </div>
+</header>
             <section className="featured-products">
                 <h2>Featured Products</h2>
                 <div className="products">
