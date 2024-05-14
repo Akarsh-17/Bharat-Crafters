@@ -79,11 +79,29 @@ const ProductDescriptionPage = () => {
             </div>
             <div className="product-details-container">
                 <div className="product-name">{ProductDetails.name}</div>
-                <div className="product-description">{ProductDetails.description}</div>
-                <div className="product-ratings-container">
+                <div className='product-brand-details'>{ProductDetails.brand}</div>
+
+<div className="product-main-details">
+                <div className="product-details">
+                    <ul>
+                        <li className='product-description-detail-list'>This consists of : {ProductDetails.components}</li>
+                        <li className='product-description-detail-list'>Height : {ProductDetails.height}</li>
+                        <li className='product-description-detail-list'>Width : {ProductDetails.width}</li>
+                        <li className='product-description-detail-list'>Weight : {ProductDetails.weight}</li>
+                        <li className='product-description-detail-list'>Shape : {ProductDetails.shape}</li>
+                       
+
+
+
+
+
+                    </ul>
+                </div>
+            </div>
+                {/* <div className="product-ratings-container">
                     <div className="product-rating">4.5</div>
                     <div className="ratings-number">100 reviews</div>
-                </div>
+                </div> */}
                 <div className="product-size-list">
 
 
@@ -97,7 +115,7 @@ const ProductDescriptionPage = () => {
 </div>
                 <div className="product-price-detail">Rs. 200</div>
                 <div className="product-size-container">
-                    <div className="select-size">Select Size</div>
+                    <div className="select-size">Size Available</div>
                     <div className="product-size-list">
 
 
@@ -117,34 +135,24 @@ const ProductDescriptionPage = () => {
                     <button className="add-to-wishlist-button">Add to Wishlist</button>
                 </div>
                 <div className="product-reaching-date">Get it by Wed, 15 May</div>
-                <div className="product-seller">Seller: Any Seller Name</div>
+                <div className="product-seller">{`Seller: ${ProductDetails.seller && ProductDetails.seller.firstName} ${ProductDetails.seller && ProductDetails.seller.lastName}`}</div>
             </div>
-            <div className="product-main-details">
-                <h3>Product Details</h3>
-                <div className="product-details">
-                    <ul>
-                        <li>Brand : {ProductDetails.brand}</li>
-                        <li>This consists of : {ProductDetails.components}</li>
-                        <li>Height : {ProductDetails.height}</li>
-                        <li>Width : {ProductDetails.width}</li>
-                        <li>Weight : {ProductDetails.weight}</li>
-                        <li>Shape : {ProductDetails.shape}</li>
-                        <li>Style : {ProductDetails.style}</li>
-                        <li>Pattern : {ProductDetails.pattern}</li>
-                        <li>Material : {ProductDetails.material}</li>
-                        {ProductDetails.specialFeatures && ProductDetails.specialFeatures.map((feature,key)=>(
+            
+        </div>
+        <div className="product-description-container">
+        <div className='product-detail-heading'>Product Details</div>
+<div className="product-description">{ProductDetails.description}</div>
+<ul className="product-description-list"><li><span className='product-list-heading'>Style : </span>{ProductDetails.style}</li>
+                        <li><span className='product-list-heading'>Pattern : </span>{ProductDetails.pattern}</li>
+                        <li><span className='product-list-heading'>Material : </span>{ProductDetails.material}</li>
+                        <li><span className='product-list-heading'>Additional Deatils : </span><br></br>{ProductDetails.specialFeatures && ProductDetails.specialFeatures.map((feature,key)=>(
                         <li>{feature}</li>
 
-                        ))}
+                        ))}</li>
 
-
-
-
-
-                    </ul>
-                </div>
-            </div>
+                        </ul>
         </div>
+       
         </>
     );
 }

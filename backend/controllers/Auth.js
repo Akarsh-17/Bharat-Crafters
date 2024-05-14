@@ -113,9 +113,10 @@ exports.signupBuyer=async (req,res)=>{
                 message:'Confirm Password and Password does not not match'
             })
         }
-
         const existingBuyer=await Buyer.findOne({email})
         const existingSeller=await Seller.findOne({email})
+        console.log("checked in db")
+
         if(existingBuyer)
         {
             return res.status(401).json({
@@ -169,6 +170,7 @@ exports.signupBuyer=async (req,res)=>{
             additionalDetail:profileDetails._id,
             image:`https://api.dicebear.com/5.x/initials/svg?seed=${firstName}${lastName}`
         })
+
 
         return res.status(200).json({
             success:true,

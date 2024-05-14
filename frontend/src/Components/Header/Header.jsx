@@ -10,14 +10,32 @@ import dropdownbutton from '../../Images/icons8-dropdown-30.png';
 import SearchBar from '../SearchBar/SearchBar.jsx';
 
 
-const showRightHeader = () => {
 
-    const rightSlide = document.querySelector('.right-slide');
-    rightSlide.style.visibility = "visible";
-}
+// const showRightHeader = () => {
+
+//     const rightSlide = document.querySelector('.right-slide');
+//     rightSlide.style.visibility = "visible";
+// }
 
 
 const Header = () => {
+
+    const [cookieExists, setCookieExists] = useState(false);
+
+
+    // useEffect(() => {
+    //     const checkCookie = async () => {
+    //         try {
+    //             const response = await axios.get('/api/check-token');
+    //             setCookieExists(response.data.exists);
+    //         } catch (error) {
+    //             console.error('Error checking cookie:', error);
+    //         }
+    //     };
+
+    //     checkCookie();
+    // }, []);
+
 
     return (
         <>
@@ -42,13 +60,20 @@ const Header = () => {
                                 <a href="#" class="content">Bengali - BN</a>
                             </div>
                         </div>
-                        {/* <Link className="custom-title custom-small-font children" to="/user-account">Account<img src={account} class="small-logos"></img></Link>
-                        <Link className="custom-title custom-small-font children" to="/wishlist">Wishlist<img src={wishlist} class="small-logos"></img></Link>
-                        <Link className="custom-title custom-small-font children" to="/past-orders">Orders<img src={myorders} class="small-logos"></img></Link>
-                        <Link className="custom-title custom-small-font children" to="/cart">Cart<img src={cart} class="small-logo"></img></Link> */}
-                        <Link to="/category" style={{ textDecoration: 'none' }}><div className="right-header-links header-login-button" >Category</div></Link>
-                       <Link to="/login" style={{ textDecoration: 'none' }}><div className="right-header-links header-login-button" >Login</div></Link>
+                       
+                       
+
+                       {cookieExists?(<>
+                        <Link to="/login" style={{ textDecoration: 'none' }}><div className="right-header-links" >Wishlist</div></Link>
+                       <Link to="/signup" style={{ textDecoration: 'none' }}><div className="right-header-links " >Orders</div></Link>
+                       <Link to="/signup" style={{ textDecoration: 'none' }}><div className="right-header-links " >Cart</div></Link>
+                       <Link to="/signup" style={{ textDecoration: 'none' }}><div className="right-header-links" >Account</div></Link>
+
+
+                        </>):(<>
+                            <Link to="/login" style={{ textDecoration: 'none' }}><div className="right-header-links header-login-button" >Login</div></Link>
                        <Link to="/signup" style={{ textDecoration: 'none' }}><div className="right-header-links header-signup-button" >Sign up</div></Link>
+                        </>)}
 
                 </div>
                 {/* <div class="right-slide">

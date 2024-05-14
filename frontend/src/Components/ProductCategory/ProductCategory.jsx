@@ -112,7 +112,7 @@ const ProductCategory = () => {
                         </div>
                         <PriceSlider value={Price} onChange={handlePrice} />
                     </div>
-                    <hr></hr>
+                    {/* <hr></hr>
                     <div className="filter-color-option-container">
                         <div className="color-option-heading">COLORS</div>
                         <div className="color-option-container">
@@ -141,7 +141,7 @@ const ProductCategory = () => {
                                 <div className="color-name">Red</div>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                     <hr></hr>
                     <div className="filter-size-option-container">
                         <div className="size-option-heading">SIZE</div>

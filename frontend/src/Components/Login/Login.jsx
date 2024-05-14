@@ -2,16 +2,20 @@ import React, { useState } from 'react';
 import logo from '../../Images/logo9.png';
 import axios from 'axios';
 import './Login.css'
+import {useNavigate} from 'react-router-dom'
 
 function Login() {
 
     //API ROUTE
 
+    const navigate= useNavigate();
+
     const sendFormData = async (formData) => {
         console.log(formData)
         axios.post(`http://localhost:4000/api/v1/auth/loginBuyer`, formData)
             .then(response => {
-                console.log(response)
+                console.log(response);
+                navigate('/');
             })
             .catch(error => {
                 console.log(error)
