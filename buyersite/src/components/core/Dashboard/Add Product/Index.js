@@ -17,20 +17,18 @@ const AddProduct = () => {
         <div className="fixed right-5 z-10 top-30 hidden max-w-[400px] flex-1 rounded-md border-[1px] border-richblack-700 bg-richblack-800 p-6 xl:block">
           <p className="mb-8 text-lg text-richblack-5">⚡ Product Upload Tips</p>
           <ul className="ml-5 list-item list-disc space-y-4 text-xs text-richblack-5">
-            <li>Set the Course Price option or make it free.</li>
-            <li>Standard size for the course thumbnail is 1024x576.</li>
-            <li>Video section controls the course overview video.</li>
-            <li>Course Builder is where you create & organize a course.</li>
+            <li>Name of the product should be easily understandble.</li>
+            <li>Brand name should be authenticated.</li>
+            <li>Select the category first then the field of the subcategory is editable.</li>
+            <li>Cannot add more than  4 images.</li>
             <li>
-              Add Topics in the Course Builder section to create lessons,
-              quizzes, and assignments.
+              Standard size for the product image is 640*640.
             </li>
             <li>
-              Information from the Additional Data section shows up on the
-              course single page.
+            Edit the group field according to the size of products.
             </li>
-            <li>Make Announcements to notify any important</li>
-            <li>Notes to all enrolled students at once.</li>
+            <li>Price is according to the product quality.</li>
+            <li>Special features and Component section take one input at a time using Add button.</li>
           </ul>
         </div>
       </div>
