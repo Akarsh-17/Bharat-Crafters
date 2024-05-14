@@ -2,14 +2,17 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import ProfileDropDown from '../core/Auth/ProfileDropDown'
-
+import logo from '../../images/logo9.png'
+import './Navbar.css'
 const Navbar = () => {
   // const {user}=useSelector((state)=>state.auth)
   const token=useSelector((state)=>state.auth.currentUser)
   return (
-    <div className='flex h-20 justify-center border-b-[1px] items-center bg-site-5'>
+    <div className='flex h-20 justify-center border-b-[1px] items-center bg-white'>
       <div className='flex w-11/12 justify-between items-center max-w-maxContent'>
-        <h1 className="text-4xl font-bold">Bharat Crafter</h1>
+      <header className="header">
+                <img src={logo} alt="Company Logo" className="company-logo" />
+            </header>
 
         <div className='flex gap-x-6'>
           {
