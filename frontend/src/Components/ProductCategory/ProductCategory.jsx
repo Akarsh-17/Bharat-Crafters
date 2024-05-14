@@ -1,20 +1,34 @@
 import './ProductCategory.css'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import add_to_wishlist from '../../Images/heart.png'
 import added_to_wishlist from '../../Images/heart (1).png'
 import close_button from '../../Images/close.png'
 import category_search_icon from '../../Images/icons8-search-30.png'
 import PriceSlider from '../Sliders/PriceSlider.jsx'
 import Header from '../Header/Header.jsx'
+import axios from 'axios';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setProductId } from '../store/reducers.js';
+
 
 
 const ProductCategory = () => {
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
-    const [Wishlist, setWishlist]= useState([]);
+    const [Wishlist, setWishlist] = useState([]);
+    const [CategoryIdForAPI, setCategoryIdForAPI] = useState(0);
+    const [CategoryDetailsArray, setCategoryDetailsArray] = useState([]);
+    const [SubCategoryDetailsArray, setSubCategoryDetailsArray] = useState([]);
+
+
+    const CategoryId = useSelector((state) => state.CategoryId.CategoryId);
 
     const handle_add_to_wishlist = (productId) => {
         if (Wishlist.includes(productId)) {
-            setWishlist(Wishlist.filter((id)=>id!==productId));
+            setWishlist(Wishlist.filter((id) => id !== productId));
         }
         else {
             setWishlist([...Wishlist, productId]);
@@ -26,16 +40,49 @@ const ProductCategory = () => {
     };
 
     const [Price, setPrice] = useState(2000);
-  
+
 
     const handlePrice = (event, newPrice) => {
         setPrice(newPrice);
     };
-    
+
+
+    const getCategoryData = async () => {
+        try {
+            const response = await axios.get(`http://localhost:4000/api/v1/category/categoryPageDetails/${CategoryIdForAPI}`, {
+                withCredentials: true
+            });
+            const subCategoryDetails = response.data.data.selectedCategory.subCategory;
+            setSubCategoryDetailsArray(subCategoryDetails);
+
+            const categoryDetails = response.data.data.selectedCategory;
+
+            console.log(categoryDetails);
+
+            setCategoryDetailsArray(categoryDetails);
+
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+
+
+    useEffect(() => {
+        if (CategoryId !== undefined) {
+            setCategoryIdForAPI(CategoryId);
+        }
+    }, [CategoryId]);
+
+    useEffect(() => {
+        getCategoryData();
+    }, [CategoryIdForAPI]);
+
+
 
     return (
         <>
-        <Header/>
+            <Header />
             <div className="page-path-container">Home / Clothing / Women</div>
             <div className='product-category-container'>
 
@@ -47,28 +94,25 @@ const ProductCategory = () => {
                     <hr></hr>
                     <div className="sub-category-container">
                         <div className="sub-category-heading-container">
-                            <div className="sub-category-heading">CATEGORIES</div>
+                            <div className="sub-category-heading">SUBCATEGORIES</div>
                             <img className="sub-category-search-button" src={category_search_icon}></img>
 
                         </div>
                         <ul className='sub-category-name'>
-                            <li>Subcategory name</li>
-                            <li>Subcategory name</li>
-                            <li>Subcategory name</li>
-                            <li>Subcategory name</li>
-                            <li>Subcategory name</li>
-                            <li>Subcategory name</li>
+                            {SubCategoryDetailsArray.length > 0 && SubCategoryDetailsArray.map((subcategory, key) => (
+                                <li>{subcategory.name}</li>
+                            ))}
                         </ul>
                     </div>
-<hr></hr>
+                    <hr></hr>
                     <div className="price-range-container">
                         <div className="price-range-heading">
                             PRICE
 
                         </div>
-                        <PriceSlider value={Price} onChange={handlePrice}/>
+                        <PriceSlider value={Price} onChange={handlePrice} />
                     </div>
-<hr></hr>
+                    <hr></hr>
                     <div className="filter-color-option-container">
                         <div className="color-option-heading">COLORS</div>
                         <div className="color-option-container">
@@ -98,7 +142,7 @@ const ProductCategory = () => {
                             </div>
                         </div>
                     </div>
-<hr></hr>
+                    <hr></hr>
                     <div className="filter-size-option-container">
                         <div className="size-option-heading">SIZE</div>
                         <div className="size-option-container">
@@ -113,104 +157,43 @@ const ProductCategory = () => {
                     </div>
                 </div>
                 <div className="product-display-container">
-                    <div className="product-category-heading">Women Clothing</div>
+
+
+                    <div className="product-category-heading">{CategoryDetailsArray.name}</div>
                     <div className="filter-applied-container">
                         <div className="filter-name">XL</div>
                         <img className="filter-remove-icon" src={close_button}></img>
                     </div>
                     <div className="product-container">
-                        <div className="product-card">
-                            <div className="product-image">
-                                <button className="add-to-wishlist-icon" id='1'
-                                    onClick={() => {
-                                        handle_add_to_wishlist('1');}}>  
-                                <img src={isWishlisted('1') ? added_to_wishlist : add_to_wishlist}></img>                         
-                                </button>
-                            </div>
-                            <div className="product-name-container">
-                                <div className="product-name-and-price">
-                                    <div className="product-name">Red shirt</div>
-                                    <div className="product-price">Rs. 1200</div>
+
+                        {SubCategoryDetailsArray.length > 0 && SubCategoryDetailsArray.map((subcategory, key) => (
+                            subcategory.product.map((product, key) => (
+                                <div className="product-card" key={product._id} onClick={() => {
+                                    navigate(`/products`);
+                                    dispatch(setProductId(product._id));
+                                }}>
+                                    <div className="product-image-container">
+                                        <img className="product-image" src={product.images[1]}></img>
+                                        <button className="add-to-wishlist-icon"
+                                            onClick={() => { handle_add_to_wishlist(product._id); }}>
+                                            <img src={isWishlisted(product._id) ? added_to_wishlist : add_to_wishlist} alt="wishlist"></img>
+                                        </button>
+                                    </div>
+                                    <div className="product-name-container">
+                                        <div className="product-name-and-price">
+                                            <div className="product-name-detail">{product.name}</div>
+                                            <select className="product-price">
+                                                {product.options.map((option, key) => (
+                                                    <option key={option._id}>{option.size.charAt(0)} - Rs. {option.price}</option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                        <div className="add-to-cart-icon">Add + </div>
+                                    </div>
                                 </div>
-                                <div className="add-to-cart-icon">Add + </div>
-                            </div>
-                        </div>
+                            ))
+                        ))}
 
-                        <div className="product-card">
-                            <div className="product-image">
-                                <button className="add-to-wishlist-icon" id='2'
-                                    onClick={() => {
-                                        handle_add_to_wishlist('2');
-                                    }}>
-                         <img src={isWishlisted('2') ? added_to_wishlist : add_to_wishlist}></img>
-                                    </button>
-                            </div>
-                            <div className="product-name-container">
-                                <div className="product-name-and-price">
-                                    <div className="product-name">Red shirt</div>
-                                    <div className="product-price">Rs. 1200</div>
-                                </div>
-                                <div className="add-to-cart-icon">Add + </div>
-                            </div>
-                        </div>
-
-
-                        <div className="product-card" >
-                            <div className="product-image">
-                                <button className="add-to-wishlist-icon" id='3'
-                                    onClick={() => {
-                                        handle_add_to_wishlist('3');
-                                    }
-                                    }>
-                             <img src={isWishlisted('3') ? added_to_wishlist : add_to_wishlist}></img>
-                                </button>
-                            </div>
-                            <div className="product-name-container">
-                                <div className="product-name-and-price">
-                                    <div className="product-name">Red shirt</div>
-                                    <div className="product-price">Rs. 1200</div>
-                                </div>
-                                <div className="add-to-cart-icon">Add + </div>
-                            </div>
-                        </div>
-
-
-                        <div className="product-card">
-                            <div className="product-image">
-                                <button className="add-to-wishlist-icon" id='4'
-                                    onClick={() => {
-                                        handle_add_to_wishlist('4');
-                                    }
-                                    }>
- <img src={isWishlisted('4') ? added_to_wishlist : add_to_wishlist}></img>                                </button>
-                            </div>
-                            <div className="product-name-container">
-                                <div className="product-name-and-price">
-                                    <div className="product-name">Red shirt</div>
-                                    <div className="product-price">Rs. 1200</div>
-                                </div>
-                                <div className="add-to-cart-icon">Add + </div>
-                            </div>
-                        </div>
-
-
-                        <div className="product-card">
-                            <div className="product-image">
-                                <button className="add-to-wishlist-icon" id='5'
-                                    onClick={() => {
-                                        handle_add_to_wishlist('5');
-                                    }
-                                    }>
- <img src={isWishlisted('5') ? added_to_wishlist : add_to_wishlist}></img>                                </button>
-                            </div>
-                            <div className="product-name-container">
-                                <div className="product-name-and-price">
-                                    <div className="product-name">Red shirt</div>
-                                    <div className="product-price">Rs. 1200</div>
-                                </div>
-                                <div className="add-to-cart-icon">Add + </div>
-                            </div>
-                        </div>
 
 
                     </div>

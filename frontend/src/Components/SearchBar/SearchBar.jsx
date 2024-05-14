@@ -1,9 +1,33 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './SearchBar.css';
 import searchbutton from '../../Images/icons8-search-30.png';
 import dropdownbutton from '../../Images/icons8-dropdown-30.png';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setCategoryId } from '../store/reducers.js';
+
+
+
 
 const SearchBar = ({ onSearch }) => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const [CategoryDataArray, setCategoryDataArray] = useState([]);
+
+  const getCategoriesData = async () => {
+    try {
+      const CategoryData = await axios.get(`http://localhost:4000/api/v1/category/showAllCategories`,
+        { withCredentials: true });
+
+      setCategoryDataArray(CategoryData.data.allCategories);
+
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   const [searchTerm, setSearchTerm] = useState('');
   const [showDropdown, setShowDropdown] = useState(false);
 
@@ -20,25 +44,37 @@ const SearchBar = ({ onSearch }) => {
     setShowDropdown(!showDropdown);
   };
 
+
+  useEffect(() => {
+    getCategoriesData();
+
+  }, []);
+
+
+
+
   return (
     <>
-    <div className="search-bar-container">
-    <div className="dropdown-category">
-        <button className="category-select-button" onClick={handleDropdown}>All <img src={dropdownbutton} className="dropdownicon" alt="dropdown icon" /></button>
-        {showDropdown && (
-          <div className="dropdown-category-content">
-            <a href="#" class="content">Men essentials</a>
-            <a href="#" class="content">Women essentials</a>
-            <a href="#" class="content">Home & Living</a>
-            <a href="#" class="content">Handicrafts</a>
-            <a href="#" class="content">Beauty</a>
-            <a href="#" class="content">Lifestyle and clothing</a>
-            <a href="#" class="content">Books</a>
-            <a href="#" class="content">Appliances</a>
-
-          </div>
-        )}
-      </div>
+      <div className="search-bar-container">
+        <div className="dropdown-category">
+          <button className="category-select-button" onClick={handleDropdown}>All <img src={dropdownbutton} className="dropdownicon" alt="dropdown icon" /></button>
+          {showDropdown && (
+            <div className="dropdown-category-content">
+              {CategoryDataArray.map((category, key) => (
+                <>
+                <button className="content" key={key}
+                  onClick={() => {
+                    navigate(`/category`);
+                    dispatch(setCategoryId(category._id));
+                  }}>
+                  {category.name}
+                </button>
+                <hr class="apparel-section-hr"></hr>
+                </>
+              ))}
+            </div>
+          )}
+        </div>
 
         <input
           className="search-input"
@@ -48,8 +84,8 @@ const SearchBar = ({ onSearch }) => {
           onChange={handleChange}
         />
 
-        <button className="search-button" type="submit"><img src={searchbutton} alt="search icon" className='header-search-icon'/></button>
-    </div>
+        <button className="search-button" type="submit"><img src={searchbutton} alt="search icon" className='header-search-icon' /></button>
+      </div>
 
     </>
   );

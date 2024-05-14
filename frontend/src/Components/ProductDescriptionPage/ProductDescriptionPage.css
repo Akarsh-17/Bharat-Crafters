@@ -1,0 +1,152 @@
+.product-details-outer-container {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 4rem;
+    padding: 4rem;
+}
+
+.product-photo-container {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+}
+
+.product-photo-options {
+grid-template-rows: repeat(3, 1fr);
+
+}
+
+.product-photo-options-images{
+    height: 10rem;
+    width: 10rem;
+    margin: 0.5rem;
+    cursor: pointer;
+}
+
+.product-display-image{
+    position: relative;
+}
+
+.product-display-image-photo{
+    height: 100%;
+    width:100%;
+    position: absolute;
+}
+
+.product-display-image {
+    grid-row: span 3;
+
+}
+
+.product-details-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.heading-class.product-name {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 2rem;
+}
+
+.product-ratings-container {
+display: flex;
+justify-content: space-between;
+    max-width: 12rem;
+    border: 1px black solid;
+    align-items: center;
+    padding: 0.4rem 0.6rem;
+    font-size: 1.1rem;
+}
+
+.product-rating {
+    /* Add styles for rating */
+}
+
+.ratings-number {
+    /* Add styles for ratings number */
+}
+
+.product-price-detail {
+    font-size: 2rem;
+    font-weight: bold;
+    margin: 2.5rem 0;
+}
+
+.product-size-container {
+    display: grid;
+    grid-template-rows: repeat(3, 1fr);
+
+}
+
+.product-name{
+    font-size: 1.45rem;
+    font-weight: 600;
+}
+
+.product-description{
+    font-size: 0.9rem;
+    margin: 1.5rem 0;
+}
+
+.select-size {
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.product-size-detail {
+    border-radius: 50%;
+    border: 1px black solid;
+    height: 2.8rem;
+    width: 2.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.product-size-list{
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    max-width: 14rem;
+    gap: 0.8rem;
+}
+
+.product-buy-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.add-product-to-bag {
+    width: fit-content;
+    padding: 0.8rem 1.2rem;
+
+    /* Add other styles for the button */
+}
+
+.add-to-wishlist-button {
+    width: fit-content;
+    padding: 0.8rem 1.2rem;
+
+    /* Add styles for add to wishlist button */
+}
+
+.product-reaching-date {
+    margin-top: 1.5rem;
+}
+
+.product-seller {
+    margin-top: 10px;
+}
+
+.product-main-details {
+    margin-top: 20px;
+}
+
+.product-main-details h2 {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.product-details {
+    /* Add styles for product details text */
+}
