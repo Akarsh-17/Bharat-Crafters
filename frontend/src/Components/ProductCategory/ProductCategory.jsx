@@ -46,6 +46,25 @@ const ProductCategory = () => {
         setPrice(newPrice);
     };
 
+    const [hoveredImageIndex, setHoveredImageIndex] = useState({});
+
+    const handleMouseEnter = (productIndex, imageIndex) => {
+        setTimeout(() => {
+            setHoveredImageIndex((prevIndex) => ({
+                ...prevIndex,
+                [productIndex]: imageIndex
+            }));
+        }, 800);
+    };
+
+    const handleMouseLeave = (productIndex, imageIndex) => {
+        setHoveredImageIndex((prevIndex) => ({
+            ...prevIndex,
+            [productIndex]: imageIndex
+        }));
+    };
+
+
 
     const getCategoryData = async () => {
         try {
@@ -167,13 +186,22 @@ const ProductCategory = () => {
                     <div className="product-container">
 
                         {SubCategoryDetailsArray.length > 0 && SubCategoryDetailsArray.map((subcategory, key) => (
-                            subcategory.product.map((product, key) => (
-                                <div className="product-card" key={product._id} onClick={() => {
-                                    navigate(`/products`);
-                                    dispatch(setProductId(product._id));
-                                }}>
+                            subcategory.product.map((product, productIndex) => (
+                                <div className="product-card" key={productIndex}>
                                     <div className="product-image-container">
-                                        <img className="product-image" src={product.images[1]}></img>
+                                    {product.images.map((image, imageIndex) => (
+                                    <img
+                                        key={imageIndex}
+                                        className={`product-image ${imageIndex === hoveredImageIndex[productIndex] ? 'product-image-hidden' : ''}`}
+                                        src={imageIndex === hoveredImageIndex[productIndex] ? product.images[(imageIndex + 1) % product.images.length] : image}
+                                        onMouseEnter={() => {handleMouseEnter(productIndex, imageIndex)}}
+                                        onMouseLeave={()=>{handleMouseLeave(productIndex, product.images[0])}}
+                                        onClick={() => {
+                                            navigate(`/products`);
+                                            dispatch(setProductId(product._id));
+                                        }}
+                                    />
+                                ))}
                                         <button className="add-to-wishlist-icon"
                                             onClick={() => { handle_add_to_wishlist(product._id); }}>
                                             <img src={isWishlisted(product._id) ? added_to_wishlist : add_to_wishlist} alt="wishlist"></img>
@@ -181,7 +209,11 @@ const ProductCategory = () => {
                                     </div>
                                     <div className="product-name-container">
                                         <div className="product-name-and-price">
-                                            <div className="product-name-detail">{product.name}</div>
+                                            <div className="product-name-detail" key={product._id} onClick={() => {
+                                                navigate(`/products`);
+                                                dispatch(setProductId(product._id));
+                                            }}>{product.name}</div>
+
                                             <select className="product-price">
                                                 {product.options.map((option, key) => (
                                                     <option key={option._id}>{option.size.charAt(0)} - Rs. {option.price}</option>

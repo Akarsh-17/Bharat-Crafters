@@ -19,6 +19,7 @@ import SearchBar from '../SearchBar/SearchBar.jsx';
 
 
 const Header = () => {
+    const navigate= useNavigate();
 
     const [cookieExists, setCookieExists] = useState(false);
 
@@ -39,9 +40,9 @@ const Header = () => {
 
     return (
         <>
-            <nav className="custom-nav-class" id="home" >
+            <nav className="custom-nav-class">
 
-                <img src={logo} class="logo" href="#home"></img>
+                <img src={logo} class="logo"></img>
                 <SearchBar />
 
                 {/* <button class="navbar-toggler" type="button" onClick={showRightHeader} >

@@ -23,7 +23,7 @@ export default function PriceSlider({ value, onChange }) {
             backgroundColor: '#c15b3c',
             boxShadow: '0px 0px 5px 0px #c15b3c',
           },
-          '& .MuiSlider-mark': { color: 'rgb(153, 151, 151)' },
+          '& .MuiSlider-mark': { color: 'transparent' },
           '& .MuiSlider-markLabel': { color: 'rgb(153, 151, 151)' },
           '& .MuiSlider-valueLabel': {
             backgroundColor: 'whitesmoke',
