@@ -380,7 +380,12 @@ exports.getFullProductDetails=async(req,res)=>{
         })
         .exec()
         
-
+        if (!productDetails) {
+            return res.status(400).json({
+              success: false,
+              message: `Could not find product`,
+            })
+        }
         const subCategoryId=productDetails.subCategory
         const selectedSubCategory = await SubCategory.findById(subCategoryId).populate('product').exec();
         const otherProductsIds = selectedSubCategory.product.filter(product => 
@@ -390,12 +395,7 @@ exports.getFullProductDetails=async(req,res)=>{
     // Fetch full details of the remaining products
         const otherProducts = await Product.find({ _id: { $in: otherProductsIds } }).exec();
 
-        if (!productDetails) {
-            return res.status(400).json({
-              success: false,
-              message: `Could not find product`,
-            })
-        }
+        
         
         return res.status(200).json({
             success: true,
