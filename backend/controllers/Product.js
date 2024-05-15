@@ -4,6 +4,7 @@ const Seller = require('../models/Seller');
 const SubCategory = require('../models/Subcategory');
 const { uploadImageToCloudinary } = require('../utilis/imageUploader');
 const Category = require('../models/Category');
+const { match } = require('assert');
 
 require("dotenv").config();
 
@@ -349,7 +350,7 @@ exports.getFullProductDetails=async(req,res)=>{
     try{
         console.log("hello")
        const productId=req.params.id
-    //    const userId=req.user.id
+    
 
        const productDetails=await Product.findOne({
         _id:productId,
@@ -366,34 +367,42 @@ exports.getFullProductDetails=async(req,res)=>{
               path: "subCategory",
               populate: {
                 path: "product",
+                match: { status: "Published" },
               }
             },
         })
         .populate({
             path:"subCategory",
             populate:{
-                path:"product"
+                path:"product",
+                match: { status: "Published" },
             }
         })
         .exec()
-    //    if(userId!==productDetails.seller.toString())
-    //     {
-    //        return res.status(401).json({
-    //         success: false,
-    //         message: "Unauthorized Access"
-    //        })
-    //     }
+        
+
+        const subCategoryId=productDetails.subCategory
+        const selectedSubCategory = await SubCategory.findById(subCategoryId).populate('product').exec();
+        const otherProductsIds = selectedSubCategory.product.filter(product => 
+            product._id.toString() !== productId && product.status === 'Published'
+        );
+
+    // Fetch full details of the remaining products
+        const otherProducts = await Product.find({ _id: { $in: otherProductsIds } }).exec();
 
         if (!productDetails) {
             return res.status(400).json({
               success: false,
-              message: `Could not find product with id: ${productId}\or payment has been delisted`,
+              message: `Could not find product`,
             })
         }
         
         return res.status(200).json({
             success: true,
-            data: productDetails,
+            data: {
+                productDetails,
+                otherProducts
+            },
             message:"Product Fetched successfully"
         })
     }

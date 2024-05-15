@@ -135,3 +135,45 @@ exports.showSubCategories= async(req,res)=>{
         })
     }
 }
+
+
+exports.subCategoryPageDetails=async(req,res)=>{
+    try{
+       const subCategoryId=req.params.id
+
+       // get 
+       const selectedSubCatergory=await SubCategory.findById(subCategoryId)
+       .populate({
+        path:"product",
+        match:{status:"Published"}
+       }) 
+       .exec()  
+
+       if (!selectedSubCatergory) {
+        console.log("Sub-Category not found.")
+        return res
+          .status(404)
+          .json({ success: false, message: "Sub-Category not found" })
+      }
+      // Handle the case when there are no products
+      if (selectedSubCatergory.product.length === 0) {
+        console.log("No Data found for the selected Sub-category.")
+        return res.status(404).json({
+          success: false,
+          message: "No Data found for the selected Sub-category.",
+        })
+      }
+      return res.status(200).json({
+        success:true,
+        data:selectedSubCatergory,
+      })
+    }
+    catch(error)
+    {
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error",
+            error: error.message,
+        })
+    }
+}

@@ -85,7 +85,7 @@ exports.categoryPageDetails=async(req,res)=>{
         .status(404)
         .json({ success: false, message: "Category not found" })
     }
-    // Handle the case when there are no courses
+    // Handle the case when there are no products
     if (selectedCategory.subCategory.length === 0) {
       console.log("No Data found for the selected category.")
       return res.status(404).json({
@@ -94,7 +94,7 @@ exports.categoryPageDetails=async(req,res)=>{
       })
     }
 
-    // Get courses for other categories
+    // Get products for other categories
     const categoriesExceptSelected = await Category.find({
       _id: { $ne: categoryId },
     })

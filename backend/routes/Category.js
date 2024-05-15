@@ -11,7 +11,8 @@ const {
 
 const {
     createSubCategory,
-    showSubCategories
+    showSubCategories,
+    subCategoryPageDetails
 }=require('../controllers/SubCategory')
 
 
@@ -31,6 +32,11 @@ router.post('/createSubCategory',auth,isAdmin,createSubCategory)
 router.get('/showSubCategories/:id',showSubCategories);
 
 router.get('/categoryPageDetails/:id',categoryPageDetails);
+
+
+router.get('/subCategoryPageDetails/:id',subCategoryPageDetails);
+
+
 
 
 
