@@ -64,8 +64,8 @@ const SearchBar = ({ onSearch }) => {
                 <>
                 <button className="content" key={key}
                   onClick={() => {
-                    navigate(`/category`);
                     dispatch(setCategoryId(category._id));
+                    navigate(`/category/${category._id}`);
                   }}>
                   {category.name}
                 </button>

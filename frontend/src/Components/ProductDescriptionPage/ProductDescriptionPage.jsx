@@ -4,24 +4,30 @@ import Header from '../Header/Header'
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import zoomIconImg from '../../Images/zoom-in.png'
-
+import { useParams } from "react-router-dom"
+import { setProductId } from '../store/reducers';
+import { useDispatch } from 'react-redux';
 const ProductDescriptionPage = () => {
-
+    const dispatch=useDispatch()
     const [ProductIdForAPI, setProductIdForAPI] = useState(0);
     const [ProductDetails, setProductDetails] = useState({});
     const [MainImage, setMainImage] = useState('');
-
+    
+    const { productId } = useParams()
     const ProductId = useSelector((state) => state.ProductId.ProductId);
-
-
+    
+    // changes
+    useEffect(()=>{
+     dispatch(setProductId(productId))
+    },[])
     const getProductData = async () => {
         try {
             const response = await axios.get(`http://localhost:4000/api/v1/product/getFullProductDetails/${ProductIdForAPI}`, {
                 withCredentials: true
             });
-
-
-            const productData = response.data.data;
+            console.log(response)
+            // changes
+            const productData = response?.data?.data?.productDetails;
             setProductDetails(productData);
             console.log(productData);
 
