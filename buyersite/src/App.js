@@ -16,6 +16,7 @@ import Settings from './components/core/Dashboard/Settings/Settings';
 import MyProducts from './components/core/Dashboard/MyProducts';
 import AddProduct from './components/core/Dashboard/Add Product/Index';
 import EditProduct from './components/core/Dashboard/Edit Product';
+import Message from './components/core/Dashboard/Chat/Message';
 
 function App() {
   const navigate=useNavigate()
@@ -97,6 +98,9 @@ function App() {
                  <Route
                   path="dashboard/edit-product/:productId"
                   element={<EditProduct/>}/>
+                  <Route
+                  path="dashboard/messages"
+                  element={<Message/>}/>
                </>
               )
             }

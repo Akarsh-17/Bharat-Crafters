@@ -11,13 +11,13 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setProductId } from '../store/reducers.js';
-
-
+import { useParams } from "react-router-dom"
+import { setCategoryId } from '../store/reducers.js';
 
 const ProductCategory = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-
+    const { categoryId } = useParams()
     const [Wishlist, setWishlist] = useState([]);
     const [CategoryIdForAPI, setCategoryIdForAPI] = useState(0);
     const [CategoryDetailsArray, setCategoryDetailsArray] = useState([]);
@@ -25,7 +25,12 @@ const ProductCategory = () => {
 
 
     const CategoryId = useSelector((state) => state.CategoryId.CategoryId);
-
+    // changes
+    useEffect(()=>{
+      dispatch(setCategoryId(categoryId))
+    //   check if required Akarsh has doubt 
+    //   dispatch(setProductId(null))
+    },[])
     const handle_add_to_wishlist = (productId) => {
         if (Wishlist.includes(productId)) {
             setWishlist(Wishlist.filter((id) => id !== productId));
@@ -197,8 +202,8 @@ const ProductCategory = () => {
                                         onMouseEnter={() => {handleMouseEnter(productIndex, imageIndex)}}
                                         onMouseLeave={()=>{handleMouseLeave(productIndex, product.images[0])}}
                                         onClick={() => {
-                                            navigate(`/products`);
                                             dispatch(setProductId(product._id));
+                                            navigate(`/products/${product._id}`);
                                         }}
                                     />
                                 ))}
@@ -210,8 +215,8 @@ const ProductCategory = () => {
                                     <div className="product-name-container">
                                         <div className="product-name-and-price">
                                             <div className="product-name-detail" key={product._id} onClick={() => {
-                                                navigate(`/products`);
                                                 dispatch(setProductId(product._id));
+                                                navigate(`/products/${product._id}`);
                                             }}>{product.name}</div>
 
                                             <select className="product-price">

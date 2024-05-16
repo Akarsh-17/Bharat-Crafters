@@ -99,7 +99,7 @@ export const getFullDetailsOfProduct= async(productId,url)=>
     if (!response.data.success) {
       throw new Error(response.data.message)
     }
-    result = response?.data?.data
+    result = response?.data?.data?.productDetails
   } catch (error) {
     console.log("COURSE_FULL_DETAILS_API API ERROR............", error)
     result = error.response.data
