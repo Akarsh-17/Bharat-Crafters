@@ -46,7 +46,7 @@ exports.showAllCategories= async(req,res)=>{
                                           })
 
         
-        // console.log("printing all categories ",allCategories)
+        console.log("printing all categories ",allCategories)
         res.status(200).json({
         success:true,
         message:"All categories returned successfully",

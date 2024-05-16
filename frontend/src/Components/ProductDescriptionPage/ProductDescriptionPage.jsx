@@ -21,7 +21,7 @@ const ProductDescriptionPage = () => {
             });
 
 
-            const productData = response.data.data;
+            const productData = response.data.data.productDetails;
             setProductDetails(productData);
             console.log(productData);
 

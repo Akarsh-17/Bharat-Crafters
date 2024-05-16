@@ -20,6 +20,7 @@ const SearchBar = ({ onSearch }) => {
     try {
       const CategoryData = await axios.get(`http://localhost:4000/api/v1/category/showAllCategories`,
         { withCredentials: true });
+        console.log(CategoryData);
 
       setCategoryDataArray(CategoryData.data.allCategories);
 
