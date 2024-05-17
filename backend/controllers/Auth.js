@@ -256,7 +256,6 @@ exports.loginBuyer= async(req,res)=>{
             res.cookie("token",token,options).status(200).json({
                 success:true,
                 message:'User looged in successfully',
-                token,
                 user
             })
         }

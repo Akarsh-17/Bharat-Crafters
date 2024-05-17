@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux'
 import './Header.css';
 import logo from '../../Images/logo9.png'
 import account from '../../Images/icons8-customer-50.png'
@@ -8,6 +9,7 @@ import myorders from '../../Images/icons8-order-50 (1).png'
 import wishlist from '../../Images/icons8-heart-50 (1).png'
 import dropdownbutton from '../../Images/icons8-dropdown-30.png';
 import SearchBar from '../SearchBar/SearchBar.jsx';
+
 
 
 
@@ -20,8 +22,7 @@ import SearchBar from '../SearchBar/SearchBar.jsx';
 
 const Header = () => {
     const navigate= useNavigate();
-
-    const [cookieExists, setCookieExists] = useState(false);
+    const userLoggedIn=useSelector((state)=>state.CurrentUser.CurrentUser)
 
 
     // useEffect(() => {
@@ -63,18 +64,20 @@ const Header = () => {
                         </div>
                        
                        
+     {userLoggedIn?(<>
+        <div className="right-header-links-container">
 
-                       {cookieExists?(<>
-                        <Link to="/login" style={{ textDecoration: 'none' }}><div className="right-header-links" >Wishlist</div></Link>
-                       <Link to="/signup" style={{ textDecoration: 'none' }}><div className="right-header-links " >Orders</div></Link>
-                       <Link to="/signup" style={{ textDecoration: 'none' }}><div className="right-header-links " >Cart</div></Link>
-                       <Link to="/signup" style={{ textDecoration: 'none' }}><div className="right-header-links" >Account</div></Link>
-
+                        <Link to="/login" style={{ textDecoration: 'none' }}><div className="right-header-links" ><img className="right-header-icon" src={wishlist}></img><div className="right-header-button">Wishlist</div></div></Link>
+                       <Link to="/signup" style={{ textDecoration: 'none' }}><div className="right-header-links " ><img className="right-header-icon" src={cart}></img><div className="right-header-button"></div>Cart</div></Link>
+                       <Link to="/signup" style={{ textDecoration: 'none' }}><div className="right-header-links" ><img className="right-header-icon" src={account}></img><div className="right-header-button"></div>Account</div></Link>
+</div>
 
                         </>):(<>
                             <Link to="/login" style={{ textDecoration: 'none' }}><div className="right-header-links header-login-button" >Login</div></Link>
                        <Link to="/signup" style={{ textDecoration: 'none' }}><div className="right-header-links header-signup-button" >Sign up</div></Link>
                         </>)}
+
+                      
 
                 </div>
                 {/* <div class="right-slide">

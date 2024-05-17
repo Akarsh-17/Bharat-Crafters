@@ -1,20 +1,41 @@
 import React, { useEffect, useState } from 'react'
 import './ProductDescriptionPage.css'
 import Header from '../Header/Header'
+import add_to_wishlist from '../../Images/heart.png'
+import added_to_wishlist from '../../Images/heart (1).png'
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import zoomIconImg from '../../Images/zoom-in.png'
 import { useParams } from "react-router-dom"
 import { setProductId } from '../store/reducers';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+
 const ProductDescriptionPage = () => {
     const dispatch=useDispatch()
+    const navigate = useNavigate();
+    
     const [ProductIdForAPI, setProductIdForAPI] = useState(0);
     const [ProductDetails, setProductDetails] = useState({});
     const [MainImage, setMainImage] = useState('');
+    const [Wishlist, setWishlist] = useState([]);
+
     
     const { productId } = useParams()
     const ProductId = useSelector((state) => state.ProductId.ProductId);
+
+    const handle_add_to_wishlist = (productId) => {
+        if (Wishlist.includes(productId)) {
+            setWishlist(Wishlist.filter((id) => id !== productId));
+        }
+        else {
+            setWishlist([...Wishlist, productId]);
+        }
+    }
+
+    const isWishlisted = (productId) => {
+        return Wishlist.includes(productId);
+    };
     
     // changes
     useEffect(()=>{
@@ -45,7 +66,6 @@ const ProductDescriptionPage = () => {
         if (target.src) {
             setMainImage(target.src);
         }
-        console.log("clicked");
     }
 
 
@@ -61,11 +81,6 @@ const ProductDescriptionPage = () => {
         // if(ProductDetails.images){
         //     setMainImage(ProductDetails.images[0]);
         // } 
-        // if(ProductDetails.options){
-        //     setselectedSize(ProductDetails.options[0].size);
-        //     setselectedPrice(ProductDetails.options[0].price);
-        //     setselectedColor(ProductDetails.options[0].color);
-        // }
         // console.log(MainImage);
     }, [ProductIdForAPI]);
 
@@ -255,6 +270,51 @@ const ProductDescriptionPage = () => {
                     ))}</li>
 
                 </ul>
+            </div>
+
+            <div className="more-products-like-this-section">
+                <div className="more-products-like-this-heading">More Products like this</div>
+                <div className="more-products-like-this-container">
+                {ProductDetails.subCategory?.product?.map((product, key)=>(
+                                                    <div className="product-card">
+                                                    <div className="product-image-container">
+                                                        {product.images.map((image, key) => (
+                                                            <img
+                                                                className={`product-image `}
+                                                                src={image}
+                                                               
+                                                                onClick={() => {
+                                                                    dispatch(setProductId(product._id));
+                                                                    navigate(`/products/${product._id}`);
+                                                                }}
+                                                            />
+                                                        ))}
+                                                        <button className="add-to-wishlist-icon"
+                                                            onClick={() => { handle_add_to_wishlist(product._id); }}>
+                                                            <img src={isWishlisted(product._id) ? added_to_wishlist : add_to_wishlist} alt="wishlist"></img>
+                                                        </button>
+                                                    </div>
+                                                    
+                                                       <div className="product-name-container">
+                                        <div className="product-name-and-price">
+                                            <div className="product-name-detail" key={product._id} onClick={() => {
+                                                dispatch(setProductId(product._id));
+                                                navigate(`/products/${product._id}`);
+                                            }}>{product.name}</div>
+
+                                            <select className="product-price">
+                                                {product.options.map((option, key) => (
+                                                    <option key={option._id}>{option.size.charAt(0)} - Rs. {option.price}</option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                        <div className="add-to-cart-icon">Add + </div>
+                                    </div>
+                                                  
+                                                </div>
+                ))}
+                </div>
+                
             </div>
 
         </>

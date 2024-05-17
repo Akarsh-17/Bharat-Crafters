@@ -31,13 +31,37 @@
   padding-left: 4px;
 }
 
+.right-header-links-container{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
 .right-header-links{
   font-weight: 600;
   color: black;
-  padding: 0.5rem ;
+  padding: 0.5rem 0;
   text-decoration: none;
-  font-size:0.9rem;
+  font-size:0.8rem;
   margin-left: 1rem;
+  display:grid;
+  grid-template-rows: 1fr auto;
+  align-items: center ;
+  justify-content: center;
+}
+
+.right-header-links:hover{
+  background-color: gainsboro;
+}
+
+.right-header-icon{
+  height: 1.4rem;
+  width:1.4rem;
+  justify-self: center;
+  margin:0;
+}
+
+.right-header-button{
+  margin-top:0.15rem;
 }
 
 .header-login-button{

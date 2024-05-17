@@ -2,7 +2,8 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   CategoryId: 0,
-  productId: 0,
+  ProductId: 0,
+  CurrentUser: '',
 };
 
 const CategoryIdSlice = createSlice({
@@ -27,9 +28,22 @@ const ProductIdSlice = createSlice({
     },
   });
 
+  const AuthSlice = createSlice({
+    name: 'CurrentUser',
+    initialState,
+    reducers: {
+      setCurrentUser(state, action) {
+          console.log('setCurrentUser reducer called with payload:', action.payload);
+          state.CurrentUser=action.payload;
+      },
+    },
+  });
+
 
 export const { setCategoryId } = CategoryIdSlice.actions;
 export const { setProductId } = ProductIdSlice.actions;
+export const {setCurrentUser} = AuthSlice.actions;
 
 export const CategoryIdReducer = CategoryIdSlice.reducer;
 export const ProductIdReducer = ProductIdSlice.reducer;
+export const CurrentUserReducer = AuthSlice.reducer;

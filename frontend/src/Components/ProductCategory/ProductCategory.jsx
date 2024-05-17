@@ -22,15 +22,17 @@ const ProductCategory = () => {
     const [CategoryIdForAPI, setCategoryIdForAPI] = useState(0);
     const [CategoryDetailsArray, setCategoryDetailsArray] = useState([]);
     const [SubCategoryDetailsArray, setSubCategoryDetailsArray] = useState([]);
+    const [SubCategoryData, setSubCategoryData] = useState([]);
+    const [SubCategoryDataExists, setSubCategoryDataExists] = useState(false);
 
 
     const CategoryId = useSelector((state) => state.CategoryId.CategoryId);
     // changes
-    useEffect(()=>{
-      dispatch(setCategoryId(categoryId))
-    //   check if required Akarsh has doubt 
-    //   dispatch(setProductId(null))
-    },[])
+    useEffect(() => {
+        dispatch(setCategoryId(categoryId))
+        //   check if required Akarsh has doubt 
+        //   dispatch(setProductId(null))
+    }, [])
     const handle_add_to_wishlist = (productId) => {
         if (Wishlist.includes(productId)) {
             setWishlist(Wishlist.filter((id) => id !== productId));
@@ -54,12 +56,12 @@ const ProductCategory = () => {
     const [hoveredImageIndex, setHoveredImageIndex] = useState({});
 
     const handleMouseEnter = (productIndex, imageIndex) => {
-        setTimeout(() => {
+
             setHoveredImageIndex((prevIndex) => ({
                 ...prevIndex,
                 [productIndex]: imageIndex
             }));
-        }, 800);
+
     };
 
     const handleMouseLeave = (productIndex, imageIndex) => {
@@ -89,6 +91,26 @@ const ProductCategory = () => {
             console.error(error);
         }
     };
+
+    const getSubcategory = async (SubCategoryIdForAPI) => {
+
+        try {
+            const response = await axios.get(`http://localhost:4000/api/v1/category/subCategoryPageDetails/${SubCategoryIdForAPI}`, {
+                withCredentials: true
+            });
+            const subCategoryDetails = response.data.data;
+
+            setSubCategoryData(subCategoryDetails);
+
+            console.log(subCategoryDetails);
+
+            setSubCategoryDataExists(true);
+
+
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
 
 
@@ -124,7 +146,9 @@ const ProductCategory = () => {
                         </div>
                         <ul className='sub-category-name'>
                             {SubCategoryDetailsArray.length > 0 && SubCategoryDetailsArray.map((subcategory, key) => (
-                                <li>{subcategory.name}</li>
+                                <li onClick={() => {
+                                    getSubcategory(subcategory._id);
+                                }}>{subcategory.name}</li>
                             ))}
                         </ul>
                     </div>
@@ -182,8 +206,58 @@ const ProductCategory = () => {
                 </div>
                 <div className="product-display-container">
 
+{(SubCategoryDataExists)?<>                    <div className="product-category-heading">{SubCategoryData.name}</div>
+                    <div className="filter-applied-container">
+                        <div className="filter-name">XL</div>
+                        <img className="filter-remove-icon" src={close_button}></img>
+                    </div>
+                    <div className="product-container">
 
-                    <div className="product-category-heading">{CategoryDetailsArray.name}</div>
+                        {
+                            SubCategoryData.product.length > 0 && SubCategoryData.product.map((product, productIndex) => (
+                                <div className="product-card" key={productIndex}>
+                                    <div className="product-image-container">
+                                        {product.images.map((image, imageIndex) => (
+                                            <img
+                                                key={imageIndex}
+                                                className={`product-image ${imageIndex === hoveredImageIndex[productIndex] ? 'product-image-hidden' : ''}`}
+                                                src={imageIndex === hoveredImageIndex[productIndex] ? product.images[(imageIndex + 1) % product.images.length] : image}
+                                                onMouseEnter={() => { handleMouseEnter(productIndex, imageIndex) }}
+                                                onMouseLeave={() => { handleMouseLeave(productIndex, product.images[0]) }}
+                                                onClick={() => {
+                                                    dispatch(setProductId(product._id));
+                                                    navigate(`/products/${product._id}`);
+                                                }}
+                                            />
+                                        ))}
+                                        <button className="add-to-wishlist-icon"
+                                            onClick={() => { handle_add_to_wishlist(product._id); }}>
+                                            <img src={isWishlisted(product._id) ? added_to_wishlist : add_to_wishlist} alt="wishlist"></img>
+                                        </button>
+                                    </div>
+                                    <div className="product-name-container">
+                                        <div className="product-name-and-price">
+                                            <div className="product-name-detail" key={product._id} onClick={() => {
+                                                dispatch(setProductId(product._id));
+                                                navigate(`/products/${product._id}`);
+                                            }}>{product.name}</div>
+
+                                            <select className="product-price">
+                                                {product.options.map((option, key) => (
+                                                    <option key={option._id}>{option.size.charAt(0)} - Rs. {option.price}</option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                        <div className="add-to-cart-icon">Add + </div>
+                                    </div>
+                                </div>
+                            ))
+                    }
+
+
+
+                    </div></>:<>
+<div className="product-category-heading">{CategoryDetailsArray.name}</div>
                     <div className="filter-applied-container">
                         <div className="filter-name">XL</div>
                         <img className="filter-remove-icon" src={close_button}></img>
@@ -194,19 +268,19 @@ const ProductCategory = () => {
                             subcategory.product.map((product, productIndex) => (
                                 <div className="product-card" key={productIndex}>
                                     <div className="product-image-container">
-                                    {product.images.map((image, imageIndex) => (
-                                    <img
-                                        key={imageIndex}
-                                        className={`product-image ${imageIndex === hoveredImageIndex[productIndex] ? 'product-image-hidden' : ''}`}
-                                        src={imageIndex === hoveredImageIndex[productIndex] ? product.images[(imageIndex + 1) % product.images.length] : image}
-                                        onMouseEnter={() => {handleMouseEnter(productIndex, imageIndex)}}
-                                        onMouseLeave={()=>{handleMouseLeave(productIndex, product.images[0])}}
-                                        onClick={() => {
-                                            dispatch(setProductId(product._id));
-                                            navigate(`/products/${product._id}`);
-                                        }}
-                                    />
-                                ))}
+                                        {product.images.map((image, imageIndex) => (
+                                            <img
+                                                key={imageIndex}
+                                                className={`product-image ${imageIndex === hoveredImageIndex[productIndex] ? 'product-image-hidden' : ''}`}
+                                                src={imageIndex === hoveredImageIndex[productIndex] ? product.images[(imageIndex + 1) % product.images.length] : image}
+                                                onMouseEnter={() => { handleMouseEnter(productIndex, imageIndex) }}
+                                                onMouseLeave={() => { handleMouseLeave(productIndex, product.images[0]) }}
+                                                onClick={() => {
+                                                    dispatch(setProductId(product._id));
+                                                    navigate(`/products/${product._id}`);
+                                                }}
+                                            />
+                                        ))}
                                         <button className="add-to-wishlist-icon"
                                             onClick={() => { handle_add_to_wishlist(product._id); }}>
                                             <img src={isWishlisted(product._id) ? added_to_wishlist : add_to_wishlist} alt="wishlist"></img>
@@ -233,7 +307,8 @@ const ProductCategory = () => {
 
 
 
-                    </div>
+                    </div></>}
+
 
                 </div>
 

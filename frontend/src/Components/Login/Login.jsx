@@ -3,18 +3,25 @@ import logo from '../../Images/logo9.png';
 import axios from 'axios';
 import './Login.css'
 import {useNavigate} from 'react-router-dom'
+import { useDispatch} from 'react-redux'
+import { setCurrentUser } from '../store/reducers.js';
+
+
 
 function Login() {
 
     //API ROUTE
 
     const navigate= useNavigate();
+    const dispatch=useDispatch();
 
     const sendFormData = async (formData) => {
         console.log(formData)
         axios.post(`http://localhost:4000/api/v1/auth/loginBuyer`, formData)
             .then(response => {
                 console.log(response);
+
+       dispatch(setCurrentUser(response.data.user));
                 navigate('/');
             })
             .catch(error => {
