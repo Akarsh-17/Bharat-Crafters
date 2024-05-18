@@ -17,7 +17,10 @@ function Login() {
 
     const sendFormData = async (formData) => {
         console.log(formData)
-        axios.post(`http://localhost:4000/api/v1/auth/loginBuyer`, formData)
+        axios.post(`http://localhost:4000/api/v1/auth/loginBuyer`, formData,
+        {withCredentials: true}
+        
+        )
             .then(response => {
                 console.log(response);
 
