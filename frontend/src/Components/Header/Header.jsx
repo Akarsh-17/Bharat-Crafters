@@ -9,6 +9,7 @@ import myorders from '../../Images/icons8-order-50 (1).png'
 import wishlist from '../../Images/icons8-heart-50 (1).png'
 import dropdownbutton from '../../Images/icons8-dropdown-30.png';
 import SearchBar from '../SearchBar/SearchBar.jsx';
+import ProfileDropdown from '../ProfileDropdown/ProfileDropdown.jsx';
 
 
 
@@ -21,22 +22,9 @@ import SearchBar from '../SearchBar/SearchBar.jsx';
 
 
 const Header = () => {
-    const navigate= useNavigate();
-    const userLoggedIn=useSelector((state)=>state.CurrentUser.CurrentUser)
+    const navigate = useNavigate();
+    const userLoggedIn = useSelector((state) => state.CurrentUser.CurrentUser)
 
-
-    // useEffect(() => {
-    //     const checkCookie = async () => {
-    //         try {
-    //             const response = await axios.get('/api/check-token');
-    //             setCookieExists(response.data.exists);
-    //         } catch (error) {
-    //             console.error('Error checking cookie:', error);
-    //         }
-    //     };
-
-    //     checkCookie();
-    // }, []);
 
 
     return (
@@ -51,33 +39,33 @@ const Header = () => {
                 </button> */}
 
                 <div className="right-header-container">
-                        <div class="dropdown">
-                            <button class="dropdown-button-header">En
-                                <img src={dropdownbutton} class="dropdownicon"></img></button>
-                            <div class="dropdown-content">
-                                <a href="#" class="current-language">English - EN</a>
-                                <hr class="language-section"></hr>
-                                <a href="#" class="content">Hindi - HN</a>
-                                <a href="#" class="content">Marathi - MR</a>
-                                <a href="#" class="content">Bengali - BN</a>
-                            </div>
+                    <div class="dropdown">
+                        <button class="dropdown-button-header">En
+                            <img src={dropdownbutton} class="dropdownicon"></img></button>
+                        <div class="dropdown-content">
+                            <a href="#" class="current-language">English - EN</a>
+                            <hr class="language-section"></hr>
+                            <a href="#" class="content">Hindi - HN</a>
+                            <a href="#" class="content">Marathi - MR</a>
+                            <a href="#" class="content">Bengali - BN</a>
                         </div>
-                       
-                       
-     {userLoggedIn?(<>
-        <div className="right-header-links-container">
+                    </div>
 
-                        <Link to="/login" style={{ textDecoration: 'none' }}><div className="right-header-links" ><img className="right-header-icon" src={wishlist}></img><div className="right-header-button">Wishlist</div></div></Link>
-                       <Link to="/signup" style={{ textDecoration: 'none' }}><div className="right-header-links " ><img className="right-header-icon" src={cart}></img><div className="right-header-button"></div>Cart</div></Link>
-                       <Link to="/signup" style={{ textDecoration: 'none' }}><div className="right-header-links" ><img className="right-header-icon" src={account}></img><div className="right-header-button"></div>Account</div></Link>
-</div>
 
-                        </>):(<>
-                            <Link to="/login" style={{ textDecoration: 'none' }}><div className="right-header-links header-login-button" >Login</div></Link>
-                       <Link to="/signup" style={{ textDecoration: 'none' }}><div className="right-header-links header-signup-button" >Sign up</div></Link>
-                        </>)}
+                    {userLoggedIn ? (<>
+                        <div className="right-header-links-container">
 
-                      
+                            <Link to="/" style={{ textDecoration: 'none' }}><div className="right-header-links" ><img className="right-header-icon" src={wishlist}></img><div className="right-header-button">Wishlist</div></div></Link>
+                            <Link to="/" style={{ textDecoration: 'none' }}><div className="right-header-links " ><img className="right-header-icon" src={cart}></img><div className="right-header-button"></div>Cart</div></Link>
+                            {<ProfileDropdown />}
+                        </div>
+
+                    </>) : (<>
+                        <Link to="/login" style={{ textDecoration: 'none' }}><div className="right-header-links header-login-button" >Login</div></Link>
+                        <Link to="/signup" style={{ textDecoration: 'none' }}><div className="right-header-links header-signup-button" >Sign up</div></Link>
+                    </>)}
+
+
 
                 </div>
                 {/* <div class="right-slide">

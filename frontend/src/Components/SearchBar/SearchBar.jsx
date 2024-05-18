@@ -5,7 +5,7 @@ import dropdownbutton from '../../Images/icons8-dropdown-30.png';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { setCategoryId } from '../store/reducers.js';
+import { setCategoryId } from '../store/slices/CategoryIdSlice.js';
 
 
 

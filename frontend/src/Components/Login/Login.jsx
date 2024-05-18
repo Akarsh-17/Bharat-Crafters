@@ -4,11 +4,15 @@ import axios from 'axios';
 import './Login.css'
 import {useNavigate} from 'react-router-dom'
 import { useDispatch} from 'react-redux'
-import { setCurrentUser } from '../store/reducers.js';
+import { setCurrentUser } from '../store/slices/AuthSlice.js';
+import toast from 'react-hot-toast';
+
 
 
 
 function Login() {
+
+    const [loading, setLoading] = useState(false);
 
     //API ROUTE
 
@@ -16,17 +20,31 @@ function Login() {
     const dispatch=useDispatch();
 
     const sendFormData = async (formData) => {
+        setLoading(true);
+        toast.loading('Loading...');
+
         console.log(formData)
-        axios.post(`http://localhost:4000/api/v1/auth/loginBuyer`, formData)
+        axios.post(`http://localhost:4000/api/v1/auth/loginBuyer`, formData,
+        {
+            withCredentials: true
+        }
+        )
             .then(response => {
                 console.log(response);
 
        dispatch(setCurrentUser(response.data.user));
+       toast.success('User logged in successfully!');
+
                 navigate('/');
             })
             .catch(error => {
                 console.log(error)
+                toast.error('Error occured in login. Try again');
+
             })
+
+            setLoading(false);
+            toast.dismiss();
     };
 
     //USESTATE FOR INPUT FIELDS

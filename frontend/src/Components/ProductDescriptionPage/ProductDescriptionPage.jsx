@@ -7,7 +7,7 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 import zoomIconImg from '../../Images/zoom-in.png'
 import { useParams } from "react-router-dom"
-import { setProductId } from '../store/reducers';
+import { setProductId } from '../store/slices/ProductIdSlice.js';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
@@ -19,6 +19,7 @@ const ProductDescriptionPage = () => {
     const [ProductDetails, setProductDetails] = useState({});
     const [MainImage, setMainImage] = useState('');
     const [Wishlist, setWishlist] = useState([]);
+    const [isLoading, setisLoading] = useState(true);
 
     
     const { productId } = useParams()
@@ -51,7 +52,7 @@ const ProductDescriptionPage = () => {
             const productData = response?.data?.data?.productDetails;
             setProductDetails(productData);
             console.log(productData);
-
+            setisLoading(false);
 
 
         } catch (error) {
@@ -146,20 +147,43 @@ const ProductDescriptionPage = () => {
         setZoomStyle(null);
     };
 
+    function renderSkeletons(count) {
+        const skeletons = [];
+        for (let i = 0; i < count; i++) {
+            skeletons.push(<div key={i} className="product-photo-options-images loadingEffects"></div>);
+        }
+    
+        return skeletons;
+    }
+
     return (
         <>
+
+
+                    {/* When loading finishes */}
             <Header />
             <div className="product-details-outer-container">
                 <div className="product-photo-container">
+                    
                     <div className="product-photo-options">
+
+                    {/* {isLoading ? (
+                    renderSkeletons(4)
+                ) : (
+                    <div className="product-photo-options"></div>
+                )} */}
+                    {isLoading?
+                    renderSkeletons(4)
+                        :<>
                         {ProductDetails.images && ProductDetails.images.map((image, key) => (
                             <img src={image} alt="Product" className='product-photo-options-images' key={key}
                                 onClick={(e) => { handleImageChange(e) }} />
                         ))}
+                        </>}
+                       
 
                     </div>
-                    <div className="product-display-image"
-                    >
+                    <div className={` ${isLoading ? "loadingEffects" : 'product-display-image'}`}>
                         <img className={`zoom-icon-img  ${ZoomIcon ? 'zoomIconImgVisible' : ''}`} src={zoomIconImg}
                             onClick={(e) => {
                                 handleZoomClick(MainImage ? MainImage : (ProductDetails.images && ProductDetails.images[0]));
@@ -317,6 +341,7 @@ const ProductDescriptionPage = () => {
                 
             </div>
 
+    
         </>
     );
 }

@@ -3,14 +3,25 @@ import logo from '../../Images/logo9.png';
 import axios from 'axios';
 import './Signup.css'
 import Select from 'react-select';
+import toast from 'react-hot-toast';
+
 
 function SignUp() {
+
+    const [loading, setLoading] = useState(false);
+
     //API ROUTES
 
+
     const sendFormData = async (formData) => {
+        setLoading(true);
+        toast.loading('Loading...');
         try {
             const sendOtpResponse = await axios.post(`http://localhost:4000/api/v1/auth/sendOTP`, 
-            { email: formData.email });
+            { email: formData.email }
+            , {
+                withCredentials: true
+            });
             toggleOverlay(true);
 
         } catch (error) {
@@ -22,8 +33,10 @@ function SignUp() {
     const verifyOTP =()=>{
         const otp = sessionStorage.getItem('otp');
 
-            
-                axios.post(`http://localhost:4000/api/v1/auth/verifyOTP`, { enteredOTP: formData.otp , otp: otp})
+
+                axios.post(`http://localhost:4000/api/v1/auth/verifyOTP`, { enteredOTP: formData.otp , otp: otp}, {
+                    withCredentials: true
+                })
                     .then(response => {
                         console.log(response.data);
                         alert('verification successful!');
@@ -35,17 +48,21 @@ function SignUp() {
 
                     console.log("otp verified")
                     console.log(formData)
-                    axios.post(`http://localhost:4000/api/v1/auth/signupBuyer`, formData)
+                    axios.post(`http://localhost:4000/api/v1/auth/signupBuyer`, formData, {
+                        withCredentials: true
+                    })
                     .then(response => {
                         console.log(response.data);
-                        alert('registeration successful!');
+                        toast.success('Registeration successfull!');
+                        
                     })
                     .catch(error => {
                         console.log(error);
-                        alert('Error in registeration!');
+                        toast.error('Registeration error');
                     });
                     sessionStorage.removeItem('otp');
-
+                    setLoading(false);
+                    toast.dismiss();
         
     }
     

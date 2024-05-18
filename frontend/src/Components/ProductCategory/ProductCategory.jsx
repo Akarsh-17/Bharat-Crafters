@@ -10,9 +10,9 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { setProductId } from '../store/reducers.js';
+import { setProductId } from '../store/slices/ProductIdSlice.js';
 import { useParams } from "react-router-dom"
-import { setCategoryId } from '../store/reducers.js';
+import { setCategoryId } from '../store/slices/CategoryIdSlice.js';
 
 const ProductCategory = () => {
     const navigate = useNavigate();
@@ -24,6 +24,8 @@ const ProductCategory = () => {
     const [SubCategoryDetailsArray, setSubCategoryDetailsArray] = useState([]);
     const [SubCategoryData, setSubCategoryData] = useState([]);
     const [SubCategoryDataExists, setSubCategoryDataExists] = useState(false);
+    const [Filter, setFilter] = useState(false);
+    const [isLoading, setisLoading] = useState(true);
 
 
     const CategoryId = useSelector((state) => state.CategoryId.CategoryId);
@@ -57,10 +59,10 @@ const ProductCategory = () => {
 
     const handleMouseEnter = (productIndex, imageIndex) => {
 
-            setHoveredImageIndex((prevIndex) => ({
-                ...prevIndex,
-                [productIndex]: imageIndex
-            }));
+        setHoveredImageIndex((prevIndex) => ({
+            ...prevIndex,
+            [productIndex]: imageIndex
+        }));
 
     };
 
@@ -86,6 +88,7 @@ const ProductCategory = () => {
             console.log(categoryDetails);
 
             setCategoryDetailsArray(categoryDetails);
+            setisLoading(false);
 
         } catch (error) {
             console.error(error);
@@ -105,11 +108,17 @@ const ProductCategory = () => {
             console.log(subCategoryDetails);
 
             setSubCategoryDataExists(true);
+            setFilter(true);
 
 
         } catch (error) {
             console.error(error);
         }
+    }
+
+    const handleRemoveFilter = () => {
+        setFilter(false);
+        setSubCategoryDataExists(false);
     }
 
 
@@ -125,42 +134,221 @@ const ProductCategory = () => {
     }, [CategoryIdForAPI]);
 
 
+    function renderSkeletons(count) {
+        const skeletons = [];
+        for (let i = 0; i < count; i++) {
+            skeletons.push(<div key={i} className="product-card-empty"></div>);
+        }
+    
+        return skeletons;
+    }
+
 
     return (
         <>
             <Header />
-            <div className="page-path-container">Home / Clothing / Women</div>
-            <div className='product-category-container'>
 
-                <div className="product-filter-container">
-                    <div className="filter-heading-container">
-                        <div className="filter-heading">FILTERS</div>
-                        <div className="clear-all-filters">CLEAR ALL</div>
-                    </div>
-                    <hr></hr>
-                    <div className="sub-category-container">
-                        <div className="sub-category-heading-container">
-                            <div className="sub-category-heading">SUBCATEGORIES</div>
-                            <img className="sub-category-search-button" src={category_search_icon}></img>
 
-                        </div>
-                        <ul className='sub-category-name'>
-                            {SubCategoryDetailsArray.length > 0 && SubCategoryDetailsArray.map((subcategory, key) => (
-                                <li onClick={() => {
-                                    getSubcategory(subcategory._id);
-                                }}>{subcategory.name}</li>
-                            ))}
-                        </ul>
+            {/* For loading */}
+            {(isLoading) ? <>
+                <div className='product-category-container'>
+                    <div className="product-filter-empty-container">
                     </div>
-                    <hr></hr>
-                    <div className="price-range-container">
-                        <div className="price-range-heading">
-                            PRICE
+                    <div className="product-display-container">
+                        <div className="product-category-empty-heading"></div>
+
+                        <div className="product-empty-container">
+                            {renderSkeletons(8)}
 
                         </div>
-                        <PriceSlider value={Price} onChange={handlePrice} />
                     </div>
-                    {/* <hr></hr>
+
+                </div>
+            </> :
+
+                <>
+
+                    {/* When loading finishes */}
+                    <div className="page-path-container">Home / Clothing / Women</div>
+                    <div className='product-category-container'>
+
+                        <div className="product-filter-container">
+                            <div className="filter-heading-container">
+                                <div className="filter-heading">FILTERS</div>
+                                <div className="clear-all-filters">CLEAR ALL</div>
+                            </div>
+                            <hr></hr>
+                            <div className="sub-category-container">
+                                <div className="sub-category-heading-container">
+                                    <div className="sub-category-heading">SUBCATEGORIES</div>
+                                    <img className="sub-category-search-button" src={category_search_icon}></img>
+
+                                </div>
+                                <ul className='sub-category-name'>
+                                    {SubCategoryDetailsArray.length > 0 && SubCategoryDetailsArray.map((subcategory, key) => (
+                                        <li onClick={() => {
+                                            getSubcategory(subcategory._id);
+                                        }}>{subcategory.name}</li>
+                                    ))}
+                                </ul>
+                            </div>
+                            <hr></hr>
+                            <div className="price-range-container">
+                                <div className="price-range-heading">
+                                    PRICE
+
+                                </div>
+                                <PriceSlider value={Price} onChange={handlePrice} />
+                            </div>
+
+                            <hr></hr>
+                            <div className="filter-size-option-container">
+                                <div className="size-option-heading">SIZE</div>
+                                <div className="size-option-container">
+                                    <div className="size-box">XXS</div>
+                                    <div className="size-box">S</div>
+                                    <div className="size-box">M</div>
+                                    <div className="size-box">L</div>
+                                    <div className="size-box">XL</div>
+                                    <div className="size-box">XXL</div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div className="product-display-container">
+
+                            {/* if subcategory filter is applied, only then this code will work */}
+
+                            {(SubCategoryDataExists) ? <>
+                                <div className="product-category-heading">{SubCategoryData.name}</div>
+                                {(Filter) ? <div className="filter-applied-container">
+                                    <div className="filter-name">{SubCategoryData.name}</div>
+                                    <img className="filter-remove-icon" src={close_button}
+                                        onClick={() => { handleRemoveFilter() }}></img>
+                                </div> : ''}
+                                <div className="product-container">
+
+                                    {
+                                        SubCategoryData.product.length > 0 && SubCategoryData.product.map((product, productIndex) => (
+                                            <div className="product-card" key={product._id}>
+                                                <div className="product-image-container">
+                                                    {product.images.map((image, imageIndex) => (
+                                                        <img
+                                                            key={imageIndex}
+                                                            className={`product-image ${imageIndex === hoveredImageIndex[product._id] ? 'product-image-hidden' : ''}`}
+                                                            src={imageIndex === hoveredImageIndex[product._id] ? product.images[(imageIndex + 1) % product.images.length] : image}
+                                                            onMouseEnter={() => { handleMouseEnter(product._id, imageIndex) }}
+                                                            onMouseLeave={() => { handleMouseLeave(product._id) }}
+                                                            onClick={() => {
+                                                                dispatch(setProductId(product._id));
+                                                                navigate(`/products/${product._id}`);
+                                                            }}
+                                                        />
+                                                    ))}
+                                                    <button className="add-to-wishlist-icon"
+                                                        onClick={() => { handle_add_to_wishlist(product._id); }}>
+                                                        <img src={isWishlisted(product._id) ? added_to_wishlist : add_to_wishlist} alt="wishlist"></img>
+                                                    </button>
+                                                </div>
+                                                <div className="product-name-container">
+                                                    <div className="product-name-and-price">
+                                                        <div className="product-name-detail" key={product._id} onClick={() => {
+                                                            dispatch(setProductId(product._id));
+                                                            navigate(`/products/${product._id}`);
+                                                        }}>{product.name}</div>
+
+                                                        <select className="product-price">
+                                                            {product.options.map((option, key) => (
+                                                                <option key={option._id}>{option.size.charAt(0)} - Rs. {option.price}</option>
+                                                            ))}
+                                                        </select>
+                                                    </div>
+                                                    <div className="add-to-cart-icon">Add + </div>
+                                                </div>
+                                            </div>
+                                        ))
+                                    }
+
+
+
+                                </div></> : <>
+
+                                {/* this is the code for category data */}
+
+                                <div className="product-category-heading">{CategoryDetailsArray.name}</div>
+                                {/* <div className="filter-applied-container">
+                            <div className="filter-name">XL</div>
+                            <img className="filter-remove-icon" src={close_button}></img>
+                        </div> */}
+                                <div className="product-container">
+
+                                    {SubCategoryDetailsArray.length > 0 && SubCategoryDetailsArray.map((subcategory, key) => (
+                                        subcategory.product.map((product, productIndex) => (
+                                            <div className="product-card" key={product._id}>
+                                                <div className="product-image-container">
+                                                    {product.images.map((image, imageIndex) => (
+                                                        <img
+                                                            key={imageIndex}
+                                                            className={`product-image ${imageIndex === hoveredImageIndex[product._id] ? 'product-image-hidden' : ''}`}
+                                                            src={imageIndex === hoveredImageIndex[product._id] ? product.images[(imageIndex + 1) % product.images.length] : image}
+                                                            onMouseEnter={() => { handleMouseEnter(product._id, imageIndex) }}
+                                                            onMouseLeave={() => { handleMouseLeave(product._id) }}
+                                                            onClick={() => {
+                                                                dispatch(setProductId(product._id));
+                                                                navigate(`/products/${product._id}`);
+                                                            }}
+                                                        />
+                                                    ))}
+                                                    <button className="add-to-wishlist-icon"
+                                                        onClick={() => { handle_add_to_wishlist(product._id); }}>
+                                                        <img src={isWishlisted(product._id) ? added_to_wishlist : add_to_wishlist} alt="wishlist"></img>
+                                                    </button>
+                                                </div>
+                                                <div className="product-name-container">
+                                                    <div className="product-name-and-price">
+                                                        <div className="product-name-detail" key={product._id} onClick={() => {
+                                                            dispatch(setProductId(product._id));
+                                                            navigate(`/products/${product._id}`);
+                                                        }}>{product.name}</div>
+
+                                                        <select className="product-price">
+                                                            {product.options.map((option, key) => (
+                                                                <option key={option._id}>{option.size.charAt(0)} - Rs. {option.price}</option>
+                                                            ))}
+                                                        </select>
+                                                    </div>
+                                                    <div className="add-to-cart-icon">Add + </div>
+                                                </div>
+                                            </div>
+                                        ))
+                                    ))}
+
+
+
+                                </div></>}
+
+
+                        </div>
+
+
+                    </div>
+
+                </>}
+        </>
+    )
+}
+
+export default ProductCategory
+
+
+
+
+
+
+
+
+
+{/* <hr></hr>
                     <div className="filter-color-option-container">
                         <div className="color-option-heading">COLORS</div>
                         <div className="color-option-container">
@@ -190,132 +378,3 @@ const ProductCategory = () => {
                             </div>
                         </div>
                     </div> */}
-                    <hr></hr>
-                    <div className="filter-size-option-container">
-                        <div className="size-option-heading">SIZE</div>
-                        <div className="size-option-container">
-                            <div className="size-box">XXS</div>
-                            <div className="size-box">S</div>
-                            <div className="size-box">M</div>
-                            <div className="size-box">L</div>
-                            <div className="size-box">XL</div>
-                            <div className="size-box">XXL</div>
-
-                        </div>
-                    </div>
-                </div>
-                <div className="product-display-container">
-
-{(SubCategoryDataExists)?<>                    <div className="product-category-heading">{SubCategoryData.name}</div>
-                    <div className="filter-applied-container">
-                        <div className="filter-name">XL</div>
-                        <img className="filter-remove-icon" src={close_button}></img>
-                    </div>
-                    <div className="product-container">
-
-                        {
-                            SubCategoryData.product.length > 0 && SubCategoryData.product.map((product, productIndex) => (
-                                <div className="product-card" key={productIndex}>
-                                    <div className="product-image-container">
-                                        {product.images.map((image, imageIndex) => (
-                                            <img
-                                                key={imageIndex}
-                                                className={`product-image ${imageIndex === hoveredImageIndex[productIndex] ? 'product-image-hidden' : ''}`}
-                                                src={imageIndex === hoveredImageIndex[productIndex] ? product.images[(imageIndex + 1) % product.images.length] : image}
-                                                onMouseEnter={() => { handleMouseEnter(productIndex, imageIndex) }}
-                                                onMouseLeave={() => { handleMouseLeave(productIndex, product.images[0]) }}
-                                                onClick={() => {
-                                                    dispatch(setProductId(product._id));
-                                                    navigate(`/products/${product._id}`);
-                                                }}
-                                            />
-                                        ))}
-                                        <button className="add-to-wishlist-icon"
-                                            onClick={() => { handle_add_to_wishlist(product._id); }}>
-                                            <img src={isWishlisted(product._id) ? added_to_wishlist : add_to_wishlist} alt="wishlist"></img>
-                                        </button>
-                                    </div>
-                                    <div className="product-name-container">
-                                        <div className="product-name-and-price">
-                                            <div className="product-name-detail" key={product._id} onClick={() => {
-                                                dispatch(setProductId(product._id));
-                                                navigate(`/products/${product._id}`);
-                                            }}>{product.name}</div>
-
-                                            <select className="product-price">
-                                                {product.options.map((option, key) => (
-                                                    <option key={option._id}>{option.size.charAt(0)} - Rs. {option.price}</option>
-                                                ))}
-                                            </select>
-                                        </div>
-                                        <div className="add-to-cart-icon">Add + </div>
-                                    </div>
-                                </div>
-                            ))
-                    }
-
-
-
-                    </div></>:<>
-<div className="product-category-heading">{CategoryDetailsArray.name}</div>
-                    <div className="filter-applied-container">
-                        <div className="filter-name">XL</div>
-                        <img className="filter-remove-icon" src={close_button}></img>
-                    </div>
-                    <div className="product-container">
-
-                        {SubCategoryDetailsArray.length > 0 && SubCategoryDetailsArray.map((subcategory, key) => (
-                            subcategory.product.map((product, productIndex) => (
-                                <div className="product-card" key={productIndex}>
-                                    <div className="product-image-container">
-                                        {product.images.map((image, imageIndex) => (
-                                            <img
-                                                key={imageIndex}
-                                                className={`product-image ${imageIndex === hoveredImageIndex[productIndex] ? 'product-image-hidden' : ''}`}
-                                                src={imageIndex === hoveredImageIndex[productIndex] ? product.images[(imageIndex + 1) % product.images.length] : image}
-                                                onMouseEnter={() => { handleMouseEnter(productIndex, imageIndex) }}
-                                                onMouseLeave={() => { handleMouseLeave(productIndex, product.images[0]) }}
-                                                onClick={() => {
-                                                    dispatch(setProductId(product._id));
-                                                    navigate(`/products/${product._id}`);
-                                                }}
-                                            />
-                                        ))}
-                                        <button className="add-to-wishlist-icon"
-                                            onClick={() => { handle_add_to_wishlist(product._id); }}>
-                                            <img src={isWishlisted(product._id) ? added_to_wishlist : add_to_wishlist} alt="wishlist"></img>
-                                        </button>
-                                    </div>
-                                    <div className="product-name-container">
-                                        <div className="product-name-and-price">
-                                            <div className="product-name-detail" key={product._id} onClick={() => {
-                                                dispatch(setProductId(product._id));
-                                                navigate(`/products/${product._id}`);
-                                            }}>{product.name}</div>
-
-                                            <select className="product-price">
-                                                {product.options.map((option, key) => (
-                                                    <option key={option._id}>{option.size.charAt(0)} - Rs. {option.price}</option>
-                                                ))}
-                                            </select>
-                                        </div>
-                                        <div className="add-to-cart-icon">Add + </div>
-                                    </div>
-                                </div>
-                            ))
-                        ))}
-
-
-
-                    </div></>}
-
-
-                </div>
-
-
-            </div>
-        </>
-    )
-}
-
-export default ProductCategory

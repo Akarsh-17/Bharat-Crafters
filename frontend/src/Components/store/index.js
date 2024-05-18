@@ -1,6 +1,7 @@
 import { combineReducers,configureStore } from "@reduxjs/toolkit";
-import { CategoryIdReducer, ProductIdReducer , CurrentUserReducer} from './reducers.js'; 
-
+import { CategoryIdReducer } from './slices/CategoryIdSlice';
+import { ProductIdReducer } from './slices/ProductIdSlice';
+import { CurrentUserReducer } from './slices/AuthSlice';
 
 
 import {
