@@ -238,8 +238,38 @@ font-size: 1rem;
 
 
 
-.product-seller {
+.product-seller-container{
+    display: grid;
+    grid-template-columns: 1fr auto;
+    max-width: auto;
+    margin: 0.5rem 0;
+    align-items: center;
+    font-size: 1.05rem;
+    font-weight: 500;
+    max-width: 22.8rem;
+
 }
+
+.product-seller{
+font-weight: 600;
+}
+
+.send-a-message{
+    border-radius: 9.5rem / 10rem;
+    border: none;
+    padding: 0.7rem 1rem;
+    font-size: 1rem;
+    font-weight: 500;
+    justify-content: center;
+    align-items: center;
+}
+
+.send-message-icon{
+    height: 1.3rem;
+    width: 1.3rem;
+    margin-right: 0.5rem;
+}
+
 
 .product-main-details {
     margin: 1.8rem 0;
@@ -261,7 +291,7 @@ margin:0;
 padding:0;
 }
 
-.product-reaching-date, .product-seller{
+.product-reaching-date{
     font-size:0.9rem;
     font-weight: 500;
 }

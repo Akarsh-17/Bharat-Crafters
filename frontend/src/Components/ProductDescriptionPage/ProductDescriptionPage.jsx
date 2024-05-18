@@ -10,6 +10,7 @@ import { useParams } from "react-router-dom"
 import { setProductId } from '../store/slices/ProductIdSlice.js';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import sendMessageIcon from '../../Images/paper-plane (1).png'
 
 const ProductDescriptionPage = () => {
     const dispatch=useDispatch()
@@ -277,8 +278,14 @@ const ProductDescriptionPage = () => {
                         <button className="add-product-to-bag">Add to Bag</button>
                         <button className="add-to-wishlist-button">Add to Wishlist</button>
                     </div>
+                    <div className="product-seller-container">
+                    <div>Seller - <span class="product-seller">{ProductDetails.seller && ProductDetails.seller.firstName} {ProductDetails.seller && ProductDetails.seller.lastName}</span></div>
+                    <button className='send-a-message'><img src={sendMessageIcon} className='send-message-icon'></img>Message</button>
+                    </div>
                     <div className="product-reaching-date">Get it by Wed, 15 May</div>
-                    <div className="product-seller">{`Seller: ${ProductDetails.seller && ProductDetails.seller.firstName} ${ProductDetails.seller && ProductDetails.seller.lastName}`}</div>
+
+                    
+
                 </div>
 
             </div>
