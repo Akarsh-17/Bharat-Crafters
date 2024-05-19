@@ -139,7 +139,7 @@ const ProductCategory = () => {
         for (let i = 0; i < count; i++) {
             skeletons.push(<div key={i} className="product-card-empty"></div>);
         }
-    
+
         return skeletons;
     }
 
@@ -257,11 +257,16 @@ const ProductCategory = () => {
                                                             navigate(`/products/${product._id}`);
                                                         }}>{product.name}</div>
 
-                                                        <select className="product-price">
+
+                                                        <div className="product-price">
+                                                            <span>Starts at </span> Rs. {product.options[0].price}
+                                                        </div>
+                                                        {/* <select className="product-price">
                                                             {product.options.map((option, key) => (
                                                                 <option key={option._id}>{option.size.charAt(0)} - Rs. {option.price}</option>
                                                             ))}
-                                                        </select>
+                                                        </select> */}
+
                                                     </div>
                                                     <div className="add-to-cart-icon">Add + </div>
                                                 </div>
@@ -311,11 +316,15 @@ const ProductCategory = () => {
                                                             navigate(`/products/${product._id}`);
                                                         }}>{product.name}</div>
 
-                                                        <select className="product-price">
+                                                        <div className="product-price">
+                                                            <span>Starts at </span> Rs. {product.options[0].price}
+                                                        </div>
+
+                                                        {/* <select className="product-price">
                                                             {product.options.map((option, key) => (
                                                                 <option key={option._id}>{option.size.charAt(0)} - Rs. {option.price}</option>
                                                             ))}
-                                                        </select>
+                                                        </select> */}
                                                     </div>
                                                     <div className="add-to-cart-icon">Add + </div>
                                                 </div>

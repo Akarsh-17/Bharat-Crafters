@@ -311,15 +311,22 @@
 }
 
 .product-price {
-    font-size: 1.1rem;
+    font-size: 1.15rem;
     font-weight: 600;
     color: black;
-    margin-top: 0.8rem;
+    margin-top: 0.25rem;
     background-color: white;
     cursor: pointer;
     border-radius: 5px;
     outline: none;
     border: none;
+}
+
+.product-price span{
+    font-size: 0.82rem;
+    font-weight: 400;
+    margin-right: 0.2rem;
+
 }
 
 .product-price option {

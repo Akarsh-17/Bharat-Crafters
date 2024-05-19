@@ -11,6 +11,7 @@ import ProductCategory from './Components/ProductCategory/ProductCategory.jsx';
 import ProductDescriptionPage from './Components/ProductDescriptionPage/ProductDescriptionPage.jsx';
 import AuthProvider from './Components/AuthProvider.jsx';
 import { Toaster } from 'react-hot-toast';
+import ProfileSettings from './Components/ProfileSettings/ProfileSettings.jsx';
 
 
 
@@ -30,6 +31,7 @@ function App() {
               <Route exact path="/signup" element={<SignUp />} />
               <Route exact path="/category/:categoryId" element={<ProductCategory />} />
               <Route exact path="/products/:productId" element={<ProductDescriptionPage />} />
+              <Route exact path = "/settings/my-profile" element ={<ProfileSettings/>}/>
 
 
             </Routes>

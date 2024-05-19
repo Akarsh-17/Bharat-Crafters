@@ -31,7 +31,7 @@ const Header = () => {
         <>
             <nav className="custom-nav-class">
 
-                <img src={logo} class="logo"></img>
+                <Link to="/" className='logo-link'><img src={logo} class="logo"></img></Link>
                 <SearchBar />
 
                 {/* <button class="navbar-toggler" type="button" onClick={showRightHeader} >

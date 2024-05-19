@@ -6,23 +6,30 @@ import added_to_wishlist from '../../Images/heart (1).png'
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import zoomIconImg from '../../Images/zoom-in.png'
-import { useParams } from "react-router-dom"
+import { useHref, useParams } from "react-router-dom"
 import { setProductId } from '../store/slices/ProductIdSlice.js';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import sendMessageIcon from '../../Images/paper-plane (1).png'
 
+
+
 const ProductDescriptionPage = () => {
-    const dispatch=useDispatch()
+    const dispatch = useDispatch()
     const navigate = useNavigate();
-    
+
     const [ProductIdForAPI, setProductIdForAPI] = useState(0);
     const [ProductDetails, setProductDetails] = useState({});
     const [MainImage, setMainImage] = useState('');
     const [Wishlist, setWishlist] = useState([]);
     const [isLoading, setisLoading] = useState(true);
+    const [selectedOption, setSelectedOption] = useState(null);
+    const [SelectedPrice, setSelectedPrice] = useState(null);
+    const [SelectedSize, setSelectedSize] = useState(null);
+    const [SelectedColor, setSelectedColor] = useState(null);
 
-    
+
+
     const { productId } = useParams()
     const ProductId = useSelector((state) => state.ProductId.ProductId);
 
@@ -38,11 +45,12 @@ const ProductDescriptionPage = () => {
     const isWishlisted = (productId) => {
         return Wishlist.includes(productId);
     };
-    
+
     // changes
-    useEffect(()=>{
-     dispatch(setProductId(productId))
-    },[])
+    useEffect(() => {
+        dispatch(setProductId(productId))
+    }, [])
+
     const getProductData = async () => {
         try {
             const response = await axios.get(`http://localhost:4000/api/v1/product/getFullProductDetails/${ProductIdForAPI}`, {
@@ -80,11 +88,16 @@ const ProductDescriptionPage = () => {
 
     useEffect(() => {
         getProductData();
-        // if(ProductDetails.images){
-        //     setMainImage(ProductDetails.images[0]);
-        // } 
-        // console.log(MainImage);
     }, [ProductIdForAPI]);
+
+    useEffect(() => {
+        if (ProductDetails && ProductDetails.options && ProductDetails.options.length > 0) {
+            setSelectedPrice(ProductDetails.options[0].price);
+            setSelectedSize(ProductDetails.options[0].size);
+            setSelectedColor(ProductDetails.options[0].color);
+        }
+
+    }, [ProductDetails]);
 
     const [zoomStyle, setZoomStyle] = useState(null);
     const [overlayZoomStyle, setoverlayZoomStyle] = useState(null);
@@ -148,40 +161,39 @@ const ProductDescriptionPage = () => {
         setZoomStyle(null);
     };
 
+    const handleSelectedPrice = (option) => {
+        setSelectedOption(option);
+        setSelectedSize(option.size);
+        setSelectedPrice(option.price);
+        setSelectedColor(option.color);
+    };
+
     function renderSkeletons(count) {
         const skeletons = [];
         for (let i = 0; i < count; i++) {
             skeletons.push(<div key={i} className="product-photo-options-images loadingEffects"></div>);
         }
-    
+
         return skeletons;
     }
 
+
     return (
         <>
-
-
-                    {/* When loading finishes */}
             <Header />
-            <div className="product-details-outer-container">
+            <div className="product-details-outer-container" id="product-detail-page">
                 <div className="product-photo-container">
-                    
-                    <div className="product-photo-options">
 
-                    {/* {isLoading ? (
-                    renderSkeletons(4)
-                ) : (
-                    <div className="product-photo-options"></div>
-                )} */}
-                    {isLoading?
-                    renderSkeletons(4)
-                        :<>
-                        {ProductDetails.images && ProductDetails.images.map((image, key) => (
-                            <img src={image} alt="Product" className='product-photo-options-images' key={key}
-                                onClick={(e) => { handleImageChange(e) }} />
-                        ))}
-                        </>}
-                       
+                    <div className="product-photo-options">
+                        {isLoading ?
+                            renderSkeletons(4)
+                            : <>
+                                {ProductDetails.images && ProductDetails.images.map((image, key) => (
+                                    <img src={image} alt="Product" className='product-photo-options-images' key={key}
+                                        onClick={(e) => { handleImageChange(e) }} />
+                                ))}
+                            </>}
+
 
                     </div>
                     <div className={` ${isLoading ? "loadingEffects" : 'product-display-image'}`}>
@@ -192,18 +204,16 @@ const ProductDescriptionPage = () => {
                         ></img>
                         {isZoomOverlayOpen && (
                             <div className="zoom-overlay"
-                            onClick={()=>{handleCloseZoomOverlay()}}
+                                onClick={() => { handleCloseZoomOverlay() }}
 
                             >
                                 <img className="zoomed-image" src={MainImage ? MainImage : (ProductDetails.images && ProductDetails.images[0])}
                                     onMouseMove={(e) => { handleOverlayMouseMove(e) }}
                                     alt="Zoomed"
-                                    style={overlayZoomStyle} 
-                                    onClick={()=>{handleCloseZoomOverlay()}}/>
+                                    style={overlayZoomStyle}
+                                    onClick={() => { handleCloseZoomOverlay() }} />
                             </div>
                         )}
-
-
 
                         <img src={(MainImage) ? MainImage : ProductDetails.images && ProductDetails.images[0]} alt="Product" className='product-display-image-photo'
                             onMouseMove={(e) => {
@@ -224,68 +234,67 @@ const ProductDescriptionPage = () => {
                 <div className="product-details-container">
                     <div className="product-name">{ProductDetails.name}</div>
                     <div className='product-brand-details'>{ProductDetails.brand}</div>
+                    <div className="starts-at">Starts at</div>
+                    <div className="product-price-detail">Rs. {SelectedPrice}</div>
+                    <div className="product-size-container">
+                        <div className="select-size">Options Available</div>
+                        <div className="product-size-list">
+
+                            {ProductDetails?.options && (
+                                <>
+
+                                    {ProductDetails.options.map((option) => (
+
+                                        <>
+
+                                            <div key={option}
+                                                className={`product-size-detail ${(selectedOption === option) ? 'selected-option-class' : ''}`}
+                                                onClick={() => handleSelectedPrice(option)}>
+                                                <div className="product-price-option">Rs. {option.price}</div>
+                                                {/* <div className="product-custom-grid"> <div className="product-size-option">{option.size.charAt(0).toUpperCase()}</div>
+                                                    <div className="product-color-option" style={{ backgroundColor: `${option.color}` }}></div></div> */}
+                                                <div className="product-size-option">{option.size.charAt(0).toUpperCase()} - {option.color}</div>
+
+
+
+
+
+                                            </div>
+
+
+
+                                        </>
+
+                                    ))}
+                                </>
+                            )}
+                        </div>
+                    </div>
 
                     <div className="product-main-details">
                         <div className="product-details">
                             <ul>
                                 <li className='product-description-detail-list'>This consists of : {ProductDetails.components}</li>
+                                <li className='product-description-detail-list'>Color : {SelectedColor}</li>
+                                <li className='product-description-detail-list'>Size : {SelectedSize}</li>
                                 <li className='product-description-detail-list'>Height : {ProductDetails.height}</li>
                                 <li className='product-description-detail-list'>Width : {ProductDetails.width}</li>
                                 <li className='product-description-detail-list'>Weight : {ProductDetails.weight}</li>
                                 <li className='product-description-detail-list'>Shape : {ProductDetails.shape}</li>
 
-
-
-
-
-
                             </ul>
                         </div>
                     </div>
-                    {/* <div className="product-ratings-container">
-                    <div className="product-rating">4.5</div>
-                    <div className="ratings-number">100 reviews</div>
-                </div> */}
-                    <div className="product-size-list">
 
-
-                        {/* {ProductDetails.options && ProductDetails.options.map((option, key) => (
-    <div key={key}>
-        <div className="product-size-detail" key={option._id}>{option.color}</div>
-    </div>
-))} */}
-
-
-                    </div>
-                    <div className="product-price-detail">Rs. 200</div>
-                    <div className="product-size-container">
-                        <div className="select-size">Size Available</div>
-                        <div className="product-size-list">
-
-
-                            {ProductDetails.options && (
-                                <>
-                                    {Array.from(new Set(ProductDetails.options.map(option => option.size))).map((size, key) => (
-                                        <div className="product-size-detail" key={key}>{size.charAt(0)}</div>
-                                    ))}
-                                </>
-                            )}
-
-                        </div>
-
-                    </div>
                     <div className="product-buy-container">
                         <button className="add-product-to-bag">Add to Bag</button>
                         <button className="add-to-wishlist-button">Add to Wishlist</button>
                     </div>
                     <div className="product-seller-container">
-                    <div>Seller - <span class="product-seller">{ProductDetails.seller && ProductDetails.seller.firstName} {ProductDetails.seller && ProductDetails.seller.lastName}</span></div>
-                    <button className='send-a-message'><img src={sendMessageIcon} className='send-message-icon'></img>Message</button>
+                        <div>Seller - <span class="product-seller">{ProductDetails.seller && ProductDetails.seller.firstName} {ProductDetails.seller && ProductDetails.seller.lastName}</span></div>
+                        <button className='send-a-message'><img src={sendMessageIcon} className='send-message-icon'></img>Message</button>
                     </div>
                     <div className="product-reaching-date">Get it by Wed, 15 May</div>
-
-                    
-
                 </div>
 
             </div>
@@ -295,7 +304,7 @@ const ProductDescriptionPage = () => {
                 <ul className="product-description-list"><li><span className='product-list-heading'>Style : </span>{ProductDetails.style}</li>
                     <li><span className='product-list-heading'>Pattern : </span>{ProductDetails.pattern}</li>
                     <li><span className='product-list-heading'>Material : </span>{ProductDetails.material}</li>
-                    <li><span className='product-list-heading'>Additional Deatils : </span><br></br>{ProductDetails.specialFeatures && ProductDetails.specialFeatures.map((feature, key) => (
+                    <li><span className='product-list-heading'>Additional Details : </span><br></br>{ProductDetails.specialFeatures && ProductDetails.specialFeatures.map((feature, key) => (
                         <li>{feature}</li>
 
                     ))}</li>
@@ -306,49 +315,54 @@ const ProductDescriptionPage = () => {
             <div className="more-products-like-this-section">
                 <div className="more-products-like-this-heading">More Products like this</div>
                 <div className="more-products-like-this-container">
-                {ProductDetails.subCategory?.product?.map((product, key)=>(
-                                                    <div className="product-card">
-                                                    <div className="product-image-container">
-                                                        {product.images.map((image, key) => (
-                                                            <img
-                                                                className={`product-image `}
-                                                                src={image}
-                                                               
-                                                                onClick={() => {
-                                                                    dispatch(setProductId(product._id));
-                                                                    navigate(`/products/${product._id}`);
-                                                                }}
-                                                            />
-                                                        ))}
-                                                        <button className="add-to-wishlist-icon"
-                                                            onClick={() => { handle_add_to_wishlist(product._id); }}>
-                                                            <img src={isWishlisted(product._id) ? added_to_wishlist : add_to_wishlist} alt="wishlist"></img>
-                                                        </button>
-                                                    </div>
-                                                    
-                                                       <div className="product-name-container">
-                                        <div className="product-name-and-price">
-                                            <div className="product-name-detail" key={product._id} onClick={() => {
-                                                dispatch(setProductId(product._id));
-                                                navigate(`/products/${product._id}`);
-                                            }}>{product.name}</div>
+                    {ProductDetails.subCategory?.product?.map((product, key) => (
+                        <div className="product-card">
+                            <div className="product-image-container">
+                                {product.images.map((image, key) => (
+                                    <img
+                                        className={`product-image `}
+                                        src={image}
 
-                                            <select className="product-price">
-                                                {product.options.map((option, key) => (
-                                                    <option key={option._id}>{option.size.charAt(0)} - Rs. {option.price}</option>
-                                                ))}
-                                            </select>
-                                        </div>
-                                        <div className="add-to-cart-icon">Add + </div>
+                                        onClick={() => {
+                                            dispatch(setProductId(product._id));
+                                            navigate(`/products/${product._id}`);
+                                            window.scrollTo(0, 0);
+                                        }}
+                                    />
+                                ))}
+                                <button className="add-to-wishlist-icon"
+                                    onClick={() => { handle_add_to_wishlist(product._id); }}>
+                                    <img src={isWishlisted(product._id) ? added_to_wishlist : add_to_wishlist} alt="wishlist"></img>
+                                </button>
+                            </div>
+
+                            <div className="product-name-container">
+                                <div className="product-name-and-price">
+                                    <div className="product-name-detail" key={product._id} onClick={() => {
+                                        dispatch(setProductId(product._id));
+                                        navigate(`/products/${product._id}`);
+                                        window.scrollTo(0, 0);
+                                    }}>{product.name}</div>
+
+                                    <div className="product-price">
+                                        <span>Starts at </span> Rs. {product.options[0].price}
                                     </div>
-                                                  
-                                                </div>
-                ))}
+                                    {/* <select className="product-price">
+                                        {product.options.map((option, key) => (
+                                            <option key={option._id}>{option.size.charAt(0)} - Rs. {option.price}</option>
+                                        ))}
+                                    </select> */}
+                                </div>
+                                <div className="add-to-cart-icon">Add + </div>
+                            </div>
+
+                        </div>
+                    ))}
                 </div>
-                
+
             </div>
 
-    
+
         </>
     );
 }
