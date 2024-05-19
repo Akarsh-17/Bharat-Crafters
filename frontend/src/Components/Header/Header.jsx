@@ -24,61 +24,84 @@ import ProfileDropdown from '../ProfileDropdown/ProfileDropdown.jsx';
 const Header = () => {
     const navigate = useNavigate();
     const userLoggedIn = useSelector((state) => state.CurrentUser.CurrentUser)
+    const [scrolled, setScrolled] = useState(false);
+
+
+    useEffect(() => {
+        const Scroll = () => {
+            if (window.scrollY > 50) {
+                setScrolled(true);
+            } else {
+                setScrolled(false);
+            }
+        };
+
+        window.addEventListener('scroll', Scroll);
+        return () => {
+            window.removeEventListener('scroll', Scroll);
+        };
+    }, []);
 
 
 
     return (
         <>
-            <nav className="custom-nav-class">
+        <div className="relative-navbar">
 
-                <Link to="/" className='logo-link'><img src={logo} class="logo"></img></Link>
-                <SearchBar />
+        <nav className={`custom-nav-class ${scrolled ? 'scrolled' : ''}`}>
 
-                {/* <button class="navbar-toggler" type="button" onClick={showRightHeader} >
-                    <span className="navbar-toggler-icon"></span>
-                </button> */}
+<Link to="/" className='logo-link'><img src={logo} class="logo"></img></Link>
+<SearchBar />
 
-                <div className="right-header-container">
-                    <div class="dropdown">
-                        <button class="dropdown-button-header">En
-                            <img src={dropdownbutton} class="dropdownicon"></img></button>
-                        <div class="dropdown-content">
-                            <a href="#" class="current-language">English - EN</a>
-                            <hr class="language-section"></hr>
-                            <a href="#" class="content">Hindi - HN</a>
-                            <a href="#" class="content">Marathi - MR</a>
-                            <a href="#" class="content">Bengali - BN</a>
-                        </div>
-                    </div>
+{/* <button class="navbar-toggler" type="button" onClick={showRightHeader} >
+    <span className="navbar-toggler-icon"></span>
+</button> */}
 
-
-                    {userLoggedIn ? (<>
-                        <div className="right-header-links-container">
-
-                            <Link to="/" style={{ textDecoration: 'none' }}><div className="right-header-links" ><img className="right-header-icon" src={wishlist}></img><div className="right-header-button">Wishlist</div></div></Link>
-                            <Link to="/" style={{ textDecoration: 'none' }}><div className="right-header-links " ><img className="right-header-icon" src={cart}></img><div className="right-header-button"></div>Cart</div></Link>
-                            {<ProfileDropdown />}
-                        </div>
-
-                    </>) : (<>
-                        <Link to="/login" style={{ textDecoration: 'none' }}><div className="right-header-links header-login-button" >Login</div></Link>
-                        <Link to="/signup" style={{ textDecoration: 'none' }}><div className="right-header-links header-signup-button" >Sign up</div></Link>
-                    </>)}
+<div className="right-header-container">
+    <div class="dropdown">
+        <button class="dropdown-button-header">En
+            <img src={dropdownbutton} class="dropdownicon"></img></button>
+        <div class="dropdown-content">
+            <a href="#" class="current-language">English - EN</a>
+            <hr class="language-section"></hr>
+            <a href="#" class="content">Hindi - HN</a>
+            <a href="#" class="content">Marathi - MR</a>
+            <a href="#" class="content">Bengali - BN</a>
+        </div>
+    </div>
 
 
+    {userLoggedIn ? (<>
+        <div className="right-header-links-container">
 
-                </div>
-                {/* <div class="right-slide">
-                    <ul class="right-nav-items">
-                        <li type="none"><Link className="slide-in-text custom-small-font" to="/user-account">Account</Link></li>
-                        <li type="none"><Link className="slide-in-text custom-small-font" to="/wishlist">Wishlist</Link></li>
-                        <li type="none"><Link className="slide-in-text custom-small-font" to="/past-orders">Orders</Link></li>
-                        <li type="none"><Link className="slide-in-text custom-small-font" to="/returns">Returns</Link></li>
-                        <li type="none"><Link className="slide-in-text custom-small-font" to="/cart">Cart</Link></li>
-                    </ul>
+            <Link to="/wishlist" style={{ textDecoration: 'none' }}><div className="right-header-links" ><img className="right-header-icon" src={wishlist}></img><div className="right-header-button">Wishlist</div></div></Link>
+            <Link to="/cart" style={{ textDecoration: 'none' }}><div className="right-header-links " ><img className="right-header-icon" src={cart}></img><div className="right-header-button"></div>Cart</div></Link>
+            {<ProfileDropdown />}
+        </div>
 
-                </div> */}
-            </nav>
+    </>) : (<>
+        <Link to="/login" style={{ textDecoration: 'none' }}><div className="right-header-links header-login-button" >Login</div></Link>
+        <Link to="/signup" style={{ textDecoration: 'none' }}><div className="right-header-links header-signup-button" >Sign up</div></Link>
+    </>)}
+
+
+
+</div>
+{/* <div class="right-slide">
+    <ul class="right-nav-items">
+        <li type="none"><Link className="slide-in-text custom-small-font" to="/user-account">Account</Link></li>
+        <li type="none"><Link className="slide-in-text custom-small-font" to="/wishlist">Wishlist</Link></li>
+        <li type="none"><Link className="slide-in-text custom-small-font" to="/past-orders">Orders</Link></li>
+        <li type="none"><Link className="slide-in-text custom-small-font" to="/returns">Returns</Link></li>
+        <li type="none"><Link className="slide-in-text custom-small-font" to="/cart">Cart</Link></li>
+    </ul>
+
+</div> */}
+</nav>
+
+
+        </div>
+            
 
 
         </>

@@ -92,6 +92,7 @@ const ProductDescriptionPage = () => {
 
     useEffect(() => {
         if (ProductDetails && ProductDetails.options && ProductDetails.options.length > 0) {
+            window.scrollTo(0, 0);
             setSelectedPrice(ProductDetails.options[0].price);
             setSelectedSize(ProductDetails.options[0].size);
             setSelectedColor(ProductDetails.options[0].color);
@@ -316,18 +317,16 @@ const ProductDescriptionPage = () => {
                 <div className="more-products-like-this-heading">More Products like this</div>
                 <div className="more-products-like-this-container">
                     {ProductDetails.subCategory?.product?.map((product, key) => (
-                        <div className="product-card">
+                        <div className="product-card"
+                        onClick={() => {
+                            dispatch(setProductId(product._id));
+                            navigate(`/products/${product._id}`);
+                        }}>
                             <div className="product-image-container">
                                 {product.images.map((image, key) => (
                                     <img
                                         className={`product-image `}
                                         src={image}
-
-                                        onClick={() => {
-                                            dispatch(setProductId(product._id));
-                                            navigate(`/products/${product._id}`);
-                                            window.scrollTo(0, 0);
-                                        }}
                                     />
                                 ))}
                                 <button className="add-to-wishlist-icon"
@@ -338,11 +337,7 @@ const ProductDescriptionPage = () => {
 
                             <div className="product-name-container">
                                 <div className="product-name-and-price">
-                                    <div className="product-name-detail" key={product._id} onClick={() => {
-                                        dispatch(setProductId(product._id));
-                                        navigate(`/products/${product._id}`);
-                                        window.scrollTo(0, 0);
-                                    }}>{product.name}</div>
+                                    <div className="product-name-detail" key={product._id}>{product.name}</div>
 
                                     <div className="product-price">
                                         <span>Starts at </span> Rs. {product.options[0].price}

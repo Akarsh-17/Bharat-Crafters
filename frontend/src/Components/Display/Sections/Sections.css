@@ -1,41 +1,106 @@
 .section-containers{
-    display: grid;
-    grid-template-rows: repeat(auto-fill, minmax(200px, 1fr));
+        width: 100%;
+        overflow-x: scroll;
+        padding: 1rem 3rem 0rem 3rem;
+        scrollbar-width: none;
+        -ms-overflow-style: none;  
+
+}
+
+.section-containers::-webkit-scrollbar {
+    display: none;
 }
 
 .section-container{
     display: grid;
-    margin: 0.8rem 3rem 0 3rem;
-    padding: 1rem;
-    background: linear-gradient(135deg, #b86349, #c5a693);
-
+    grid-auto-flow: column;
+    grid-auto-columns: 15rem;    
 }
 
 
 .section-header{
     font-size: 1.5rem;
     padding: 0.8rem 0;
-    color: white;
+    color: black;
     font-weight: 600;
-    
 }
 
-.section-container-item {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 0.8rem;
-  }
 
 .product-cards{
-    border-radius: 5px;
-    background-color: #f2f2f2;
-    padding: 1rem 1.2rem;
+
+    height: auto;
+    max-width: 13rem;
+    margin: 0.5rem 1rem 1rem 0rem;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    animation: bubbleUp 0.5s ease-out;
+}
+
+
+
+.product-cards:hover {
+    transform: translateY(-5px);
+}
+
+@keyframes bubbleUp {
+    0% {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.card-name-and-price-container{
     display: grid;
-    overflow-wrap: break-word;
+    grid-template-rows: 1fr auto;
+}
+
+
+.card-header{
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-top: 0.6rem;
+    display: flex;
+    flex-wrap: wrap;
+    flex-grow: 1;
+
+}
+
+.card-description {
+    font-size: 1rem;
+    font-weight: 600;
+    color: black;
     cursor: pointer;
 }
 
-.card-header{
-    font-size: 1rem;
-    font-weight: 600;
+.card-description span{
+    font-size: 0.82rem;
+    font-weight: 400;
+    margin-right: 0.2rem;
+
+}
+
+.card-image-container {
+    position: relative;
+    height: 13rem; 
+    width: 100%; 
+    flex-shrink: 0;
+}
+
+.card-image {
+    align-self: center;
+    justify-self: center;
+    position: absolute;
+    background-size: contain;
+    background-repeat: no-repeat;
+    overflow: hidden;
+    border-radius: 8px;
+    height: 100%;
+    width: 100%;
+    opacity: 1;
 }

@@ -1,18 +1,62 @@
-.search-bar-container{
-  display:flex;
-  flex:1;
+.search-bar-container {
+  display: flex;
+  flex: 1;
   align-items: center;
   justify-content: center;
+  position: relative;
+}
+
+
+.input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
 }
 
 .search-input {
-  width: 100%;
-  height: 2.8rem;
+  flex: 1;
+  height: 3rem;
   padding: 1rem 0.5rem;
-  position: relative;
-  font-size: 0.9rem;
+  font-size: 1rem;
   border: none;
   outline: none;
+  background-color: #F0F0F0;
+}
+
+/* case when have to remove the search container */
+
+.display-none-container {
+  display: none;
+}
+
+.suggestion-container {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  z-index: 99;
+  background-color: #f9f9f9;
+  margin: 0;
+  padding: 0;
+  border-radius: 0 0 8px 8px;
+  font-size: 0.95rem;
+}
+
+.suggestion-container ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.suggestion-container ul li {
+  padding: 0.65rem 1.2rem;
+  border-bottom: 1px solid #9d9d9d;
+  margin: 0;
+  cursor: pointer;
+}
+
+.suggestion-container ul li:hover {
   background-color: #F0F0F0;
 }
 
@@ -24,26 +68,26 @@
   background-color: #F0F0F0;
 }
 
-.header-search-icon{
-  height:1rem;
-  padding:0 1rem;
+.header-search-icon {
+  height: 1rem;
+  padding: 0 1rem;
 }
 
-.category-select-button{
+.category-select-button {
   display: flex;
   align-items: center;
   justify-self: center;
   height: 2.8rem;
-  width:3.3rem;
+  width: 3.3rem;
   position: relative;
   font-size: 0.9rem;
-  padding:1rem;
+  padding: 1rem;
   border-radius: 5px 0px 0px 5px;
   border: none;
   background-color: #F0F0F0;
 }
 
-.dropdownicon{
+.dropdownicon {
   height: 0.8rem;
   margin-left: 0.2rem;
 }
@@ -61,9 +105,9 @@
   padding: 18px;
 }
 
-.content{
+.content {
   text-decoration: none;
-  color:black;
+  color: black;
   font-weight: 400;
   text-align: left;
   font-size: 14px;
@@ -72,13 +116,13 @@
   background-color: transparent;
 }
 
-.apparel-section-hr{
-  margin:0.3rem;
-  border-color: hsla(0, 0%, 0%, 0.3); 
-width:80%;
+.apparel-section-hr {
+  margin: 0.3rem;
+  border-color: hsla(0, 0%, 0%, 0.3);
+  width: 80%;
 }
 
-.content:hover{
+.content:hover {
   font-weight: 500;
 }
 

@@ -230,7 +230,11 @@ const ProductCategory = () => {
 
                                     {
                                         SubCategoryData.product.length > 0 && SubCategoryData.product.map((product, productIndex) => (
-                                            <div className="product-card" key={product._id}>
+                                            <div className="product-card" key={product._id}
+                                            onClick={() => {
+                                                dispatch(setProductId(product._id));
+                                                navigate(`/products/${product._id}`);
+                                            }}>
                                                 <div className="product-image-container">
                                                     {product.images.map((image, imageIndex) => (
                                                         <img
@@ -239,10 +243,6 @@ const ProductCategory = () => {
                                                             src={imageIndex === hoveredImageIndex[product._id] ? product.images[(imageIndex + 1) % product.images.length] : image}
                                                             onMouseEnter={() => { handleMouseEnter(product._id, imageIndex) }}
                                                             onMouseLeave={() => { handleMouseLeave(product._id) }}
-                                                            onClick={() => {
-                                                                dispatch(setProductId(product._id));
-                                                                navigate(`/products/${product._id}`);
-                                                            }}
                                                         />
                                                     ))}
                                                     <button className="add-to-wishlist-icon"
@@ -252,10 +252,7 @@ const ProductCategory = () => {
                                                 </div>
                                                 <div className="product-name-container">
                                                     <div className="product-name-and-price">
-                                                        <div className="product-name-detail" key={product._id} onClick={() => {
-                                                            dispatch(setProductId(product._id));
-                                                            navigate(`/products/${product._id}`);
-                                                        }}>{product.name}</div>
+                                                        <div className="product-name-detail" key={product._id}>{product.name}</div>
 
 
                                                         <div className="product-price">
@@ -288,8 +285,12 @@ const ProductCategory = () => {
                                 <div className="product-container">
 
                                     {SubCategoryDetailsArray.length > 0 && SubCategoryDetailsArray.map((subcategory, key) => (
-                                        subcategory.product.map((product, productIndex) => (
-                                            <div className="product-card" key={product._id}>
+                                        subcategory.product.map((product) => (
+                                            <div className="product-card" key={product._id}
+                                            onClick={() => {
+                                                dispatch(setProductId(product._id));
+                                                navigate(`/products/${product._id}`);
+                                            }}>
                                                 <div className="product-image-container">
                                                     {product.images.map((image, imageIndex) => (
                                                         <img
@@ -298,10 +299,7 @@ const ProductCategory = () => {
                                                             src={imageIndex === hoveredImageIndex[product._id] ? product.images[(imageIndex + 1) % product.images.length] : image}
                                                             onMouseEnter={() => { handleMouseEnter(product._id, imageIndex) }}
                                                             onMouseLeave={() => { handleMouseLeave(product._id) }}
-                                                            onClick={() => {
-                                                                dispatch(setProductId(product._id));
-                                                                navigate(`/products/${product._id}`);
-                                                            }}
+                                                        
                                                         />
                                                     ))}
                                                     <button className="add-to-wishlist-icon"
@@ -311,10 +309,7 @@ const ProductCategory = () => {
                                                 </div>
                                                 <div className="product-name-container">
                                                     <div className="product-name-and-price">
-                                                        <div className="product-name-detail" key={product._id} onClick={() => {
-                                                            dispatch(setProductId(product._id));
-                                                            navigate(`/products/${product._id}`);
-                                                        }}>{product.name}</div>
+                                                        <div className="product-name-detail" key={product._id}>{product.name}</div>
 
                                                         <div className="product-price">
                                                             <span>Starts at </span> Rs. {product.options[0].price}

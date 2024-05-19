@@ -1,14 +1,27 @@
+
+.relative-navbar{
+  position: relative;
+  width: 100%;
+  padding-top: 12.3vh;
+}
+
 .custom-nav-class {
   width: 100%;
   padding: 2.5rem 3rem 2.5rem 3rem;
   align-items: center;
   margin: 0;
-  position: relative;
+  position: fixed; /* Fixed positioning */
+  top: 0; /* Stick to the top */
   top: 0;
   left: 0;
   height: 8vh;
   display: flex;
   background-color: white;
+  z-index: 100000;
+}
+
+.custom-nav-class.scrolled {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4); 
 }
 
 .logo {
