@@ -34,8 +34,6 @@ router.get('/getFullProductDetails/:id',getFullProductDetails)
 
 
 
-
-
 // search bar
 router.get('/searchBar',searchBar)
 router.get('/tribalArtAndCraft',tribalArtAndCraft)
