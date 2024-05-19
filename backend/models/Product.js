@@ -151,6 +151,21 @@ const productSchema=new mongoose.Schema({
     enum: ["Draft", "Published"],
   },
   createdAt: { type: Date, default: Date.now },
+
+  rating: {
+    type: Number,
+    default: 0,
+  },
+  peopleRated: {
+    type: Number,
+    default: 0,
+  },
+
+  review: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Review",
+  }],
+
 });
 
 productSchema.index(
@@ -246,3 +261,45 @@ module.exports=mongoose.model('Product',productSchema)
   //   },
   // ],
   //productSchema.path('images').validate(images => images.length >= 1, 'Please provide at least one photo.');
+
+
+
+  // Handle search button click event
+// $('#searchBtn').on('click', function() {
+//   const query = $('#searchInput').val(); // Get the search query from the input field
+//   const minPrice = $('#minPriceInput').val(); // Get the minimum price from input field
+//   const maxPrice = $('#maxPriceInput').val(); // Get the maximum price from input field
+
+//   // Make AJAX request to backend endpoint with search query and price range parameters
+//   $.get('/search', { q: query, minPrice: minPrice, maxPrice: maxPrice }, function(results) {
+//       // Handle search results, e.g., display them on the page
+//       console.log(results);
+//   });
+// });
+
+
+// Assuming you have already imported Axios
+
+// Handle search button click event
+// $('#searchBtn').on('click', async function() {
+//   const query = $('#searchInput').val(); // Get the search query from the input field
+//   const minPrice = $('#minPriceInput').val(); // Get the minimum price from input field
+//   const maxPrice = $('#maxPriceInput').val(); // Get the maximum price from input field
+
+//   try {
+//       // Make Axios request to backend endpoint with search query and price range parameters
+//       const response = await axios.get('/search', {
+//           params: {
+//               q: query,
+//               minPrice: minPrice,
+//               maxPrice: maxPrice
+//           }
+//       });
+
+//       // Handle search results, e.g., display them on the page
+//       console.log(response.data);
+//   } catch (error) {
+//       console.error('Error searching products:', error);
+//   }
+// });
+

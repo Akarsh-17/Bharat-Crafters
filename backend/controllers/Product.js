@@ -378,6 +378,12 @@ exports.getFullProductDetails=async(req,res)=>{
                 match: { status: "Published" },
             }
         })
+        .populate({
+            path:"review",
+            populate:{
+                path:"buyer"
+            }
+        })
         .exec()
         
         if (!productDetails) {
@@ -463,5 +469,183 @@ exports.deleteProduct=async(req,res)=>{
           message: "Server error",
           error: error.message,
         })
+    }
+}
+
+
+
+exports.newArrivals=async(req,res)=>{
+    try {
+        
+        const newProducts = await Product.find({ status: 'Published' }) 
+                                        .sort({ createdAt: -1 }) 
+                                        .limit(15); 
+    
+        res.json(newProducts); 
+      } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "Server error for new products",
+            error: error.message,
+        })
+      }
+}
+
+exports.newMensArrivals=async(req,res)=>{
+    try {
+        // Find the category document with the given name
+        const category = await Category.findOne({ name: "Men's Apparels" });
+    
+        if (!category) {
+          return "Category not found";
+        }
+    
+        // Extract the array of subcategory IDs associated with the category
+        const subCategoryIds = category.subCategory;
+    
+        // Query the products collection to find all products that belong to these subcategories
+        const products = await Product.find({ subCategory: { $in: subCategoryIds } })
+                                           .sort({ createdAt: -1 }) 
+                                           .limit(15); ;
+    
+        if (products.length === 0) {
+          return "No products found for the given category";
+        }
+    
+        res.json(products); // Return the products found
+      } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "Server error for men's clothing ",
+            error: error.message,
+        })
+      }
+}
+
+
+exports.newWomensArrivals=async(req,res)=>{
+    try {
+        // Find the category document with the given name
+        const category = await Category.findOne({ name: "Women's Apparels" });
+    
+        if (!category) {
+          return "Category not found";
+        }
+    
+        // Extract the array of subcategory IDs associated with the category
+        const subCategoryIds = category.subCategory;
+    
+        // Query the products collection to find all products that belong to these subcategories
+        const products = await Product.find({ subCategory: { $in: subCategoryIds } })
+                                           .sort({ createdAt: -1 }) 
+                                           .limit(15); ;
+    
+        if (products.length === 0) {
+          return "No products found for the given category";
+        }
+    
+        res.json(products); // Return the products found
+      } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "Server error for women's clothing ",
+            error: error.message,
+        })
+    }
+}
+
+exports.villageIndustryProducts=async(req,res)=>{
+    try {
+        // Find the category document with the given name
+        const category = await Category.findOne({ name: "Village Industry Products" });
+    
+        if (!category) {
+          return "Category not found";
+        }
+    
+        // Extract the array of subcategory IDs associated with the category
+        const subCategoryIds = category.subCategory;
+    
+        // Query the products collection to find all products that belong to these subcategories
+        const products = await Product.find({ subCategory: { $in: subCategoryIds } })
+                                           .sort({ createdAt: -1 }) 
+                                           .limit(15); ;
+    
+        if (products.length === 0) {
+          return "No products found for the given category";
+        }
+    
+        res.json(products); // Return the products found
+      } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "Server error for Village Industry Products ",
+            error: error.message,
+        })
+    }
+}
+
+exports.tribalArtAndCraft=async(req,res)=>{
+    try {
+        // Find the category document with the given name
+        const category = await Category.findOne({ name: "Tribal Art and Craft" });
+    
+        if (!category) {
+          return "Category not found";
+        }
+    
+        // Extract the array of subcategory IDs associated with the category
+        const subCategoryIds = category.subCategory;
+    
+        // Query the products collection to find all products that belong to these subcategories
+        const products = await Product.find({ subCategory: { $in: subCategoryIds } })
+                                           .sort({ createdAt: -1 }) 
+                                           .limit(15); ;
+    
+        if (products.length === 0) {
+          return "No products found for the given category";
+        }
+    
+        res.json(products); // Return the products found
+      } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "Server error for Tribal Art and Craft ",
+            error: error.message,
+        })
+    }
+}
+
+
+exports.searchBar=async(req,res)=>{
+    try {
+        const query = req.query.q; // Get the search query from request query parameters
+        const priceMin = req.query.minPrice; // Get the minimum price from query parameters
+        const priceMax = req.query.maxPrice; // Get the maximum price from query parameters
+
+        // Build the query object for Mongoose
+        const queryObject = { $text: { $search: query } };
+        console.log("queryObject ",queryObject)
+        // If price range is provided, add it to the query
+        if (priceMin && priceMax) {
+            queryObject['options.price'] = { $gte: parseFloat(priceMin), $lte: parseFloat(priceMax) };
+        } else if (priceMin) {
+            queryObject['options.price'] = { $gte: parseFloat(priceMin) };
+        } else if (priceMax) {
+            queryObject['options.price'] = { $lte: parseFloat(priceMax) };
+        }
+
+        // Perform text search and price range search using Mongoose
+        const results = await Product.find(queryObject)
+            .select('name brand description options.size options.color options.price')
+            .limit(10); // Limit the number of results to 10 for example
+        console.log(results)
+        res.json({
+            success:true,
+            data:results
+        }); // Return search results as JSON
+    } catch (error) {
+        console.error('Error searching products:', error);
+        res.status(500).json({ error: 'Internal server error' });
     }
 }

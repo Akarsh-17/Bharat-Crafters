@@ -7,7 +7,13 @@ const {
     editProduct,
     getSellerProducts,
     getFullProductDetails,
-    deleteProduct
+    deleteProduct,
+    searchBar,
+    tribalArtAndCraft,
+    villageIndustryProducts,
+    newWomensArrivals,
+    newMensArrivals,
+    newArrivals
 }=require('../controllers/Product')
 
 const{
@@ -30,15 +36,13 @@ router.get('/getFullProductDetails/:id',getFullProductDetails)
 
 
 
-
-
-
-
-
-
-
-
-
+// search bar
+router.get('/searchBar',searchBar)
+router.get('/tribalArtAndCraft',tribalArtAndCraft)
+router.get('/villageIndustryProducts',villageIndustryProducts)
+router.get('/newWomensArrivals',newWomensArrivals)
+router.get('/newMensArrivals',newMensArrivals)
+router.get('/newArrivals',newArrivals)
 
 
 

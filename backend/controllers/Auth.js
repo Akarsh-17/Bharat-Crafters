@@ -90,12 +90,14 @@ exports.signupBuyer=async (req,res)=>{
             email,
             password,
             confirmPassword,
-            otp
+            otp,
+            phoneNumber,
+            phoneCode
         }=req.body
 
         // The HTTP status code '403 forbidden—you don't have permission to access this resource' 
 
-        if(!firstName || !lastName || !email || !password || !confirmPassword || !otp)
+        if(!firstName || !lastName || !email || !password || !confirmPassword || !otp || !phoneCode || !phoneNumber)
         {
             return res.status(403).json({
               success:false,
@@ -157,8 +159,8 @@ exports.signupBuyer=async (req,res)=>{
             gender:null,
             dateOfBirth:null,
             address:null,
-            phoneNumber:null,
-            phoneCode:null
+            phoneNumber:phoneNumber,
+            phoneCode:phoneCode
         })
 
         const user=await Buyer.create({
@@ -274,15 +276,6 @@ exports.loginBuyer= async(req,res)=>{
         })
     }
 }
-
-
-
-
-
-
-
-
-
 
 
 
@@ -826,5 +819,44 @@ exports.loginAdmin= async(req,res)=>{
             success:false,
             message:'login failure'
         })
+    }
+}
+
+
+   
+
+exports.buyerWishList= async(req,res)=>{
+    try{
+        const buyerId=req.user.id
+
+        const user=await Buyer.findByIdAndUpdate(buyerId,
+            {
+                $set:{
+                wishlist:req.body.wishlist
+                },
+            },
+            {
+                new:true,
+            }
+        )
+        if(!user)
+        {
+            return res.status(401).json({
+                success:false,
+                message:'user not found'
+            })
+        }
+        return res.status(200).json({
+            success:true,
+            user
+        });
+    }
+    catch(error)
+    {
+        console.log(`Error getting wishlist: ${error}`);
+        return res.status(500).json({
+            success:false,
+            error: error.message,
+        });
     }
 }

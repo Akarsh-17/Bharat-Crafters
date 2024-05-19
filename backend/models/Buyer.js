@@ -49,7 +49,15 @@ const buyerSchema=new mongoose.Schema({
     accountType:{
         type:String,
         default:'buyer'
-    }
+    },
+    review:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'Review'
+    }],
+    wishlist: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Product",
+    }],
 },
  {timestamps:true}
 )

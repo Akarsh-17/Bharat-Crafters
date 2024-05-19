@@ -12,6 +12,7 @@ const{
     buyerChangePassword,
     sellerChangePassword,
     verifyOTP,
+    buyerWishList
 
 }=require('../controllers/Auth')
 
@@ -21,7 +22,11 @@ const{
     isBuyer,
 }=require('../middleware/auth')
 
-
+const {
+    updateBuyerProfile,
+    deleteBuyerAccount,
+    getPuchasedProducts
+}=require('../controllers/BuyerProfile')
 
 // ********************************************************************************************************
 //                                      Authentication routes
@@ -60,6 +65,19 @@ router.post('/buyerChangePassword',auth,isBuyer,buyerChangePassword)
 
 
 router.post('/sellerChangePassword',auth,isSeller,sellerChangePassword)
+
+
+
+
+// wishlist
+router.post('/buyerWishList',auth,isBuyer,buyerWishList)
+
+
+
+// BUYER PROFILE
+router.post("/updateBuyerProfile",auth,isBuyer,updateBuyerProfile)
+router.delete("/deleteBuyerAccount",auth,isBuyer,deleteBuyerAccount)
+router.delete("/getPuchasedProducts",auth,isBuyer,getPuchasedProducts)
 
 
 module.exports= router
