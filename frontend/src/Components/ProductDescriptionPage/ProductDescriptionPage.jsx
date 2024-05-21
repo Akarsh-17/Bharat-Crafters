@@ -11,6 +11,7 @@ import { setProductId } from '../store/slices/ProductIdSlice.js';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import sendMessageIcon from '../../Images/paper-plane (1).png'
+import toast from 'react-hot-toast'
 
 
 
@@ -32,6 +33,7 @@ const ProductDescriptionPage = () => {
 
     const { productId } = useParams()
     const ProductId = useSelector((state) => state.ProductId.ProductId);
+    const buyer=useSelector((state)=>state.CurrentUser.CurrentUser)
 
     const handle_add_to_wishlist = (productId) => {
         if (Wishlist.includes(productId)) {
@@ -177,8 +179,30 @@ const ProductDescriptionPage = () => {
 
         return skeletons;
     }
-
-
+    
+    const handleMessageSubmit=async(product)=>{
+        console.log(product)
+        if(buyer)
+        {
+            const groupTitle=product._id + buyer._id
+            const sellerId=product.seller._id
+            axios.post(`http://localhost:4000/api/v1/conversation/create-new-conversation`,{groupTitle,sellerId},
+            {
+                withCredentials: true
+            })
+            .then((res) => {
+                toast.success("room generated");
+                navigate(`/messages?${res.data.conversation._id}`);
+              })
+              .catch((error) => {
+                toast.error(error.response.data.message);
+            });
+        }
+        else{
+            toast.error("Please login for conversation")
+        }
+    }
+   
     return (
         <>
             <Header />
@@ -293,7 +317,7 @@ const ProductDescriptionPage = () => {
                     </div>
                     <div className="product-seller-container">
                         <div>Seller - <span class="product-seller">{ProductDetails.seller && ProductDetails.seller.firstName} {ProductDetails.seller && ProductDetails.seller.lastName}</span></div>
-                        <button className='send-a-message'><img src={sendMessageIcon} className='send-message-icon'></img>Message</button>
+                        <button className='send-a-message' onClick={()=>handleMessageSubmit(ProductDetails)}><img src={sendMessageIcon} className='send-message-icon'></img>Message</button>
                     </div>
                     <div className="product-reaching-date">Get it by Wed, 15 May</div>
                 </div>

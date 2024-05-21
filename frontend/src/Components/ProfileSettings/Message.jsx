@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react'
-import logo from '../../../../images/logo9.png'
+import './message.css'
 import { useSelector } from 'react-redux'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import {AiOutlineArrowRight} from 'react-icons/ai'
 import {AiOutlineSend} from 'react-icons/ai'
 import { TfiGallery } from "react-icons/tfi";
-import styles from './styles'
+import styles from './style'
 import { format } from "timeago.js";
 import socketIO from "socket.io-client";
 const ENDPOINT = "http://localhost:5000";
@@ -14,15 +14,15 @@ const socketId = socketIO(ENDPOINT, { transports: ["websocket"] })
 
 
 const Message = () => {
-  const seller=useSelector((state)=>state.auth.currentUser)
+  const buyer=useSelector((state)=>state.CurrentUser.CurrentUser)
   const [conversation,setConversation]=useState([])
   const [open,setOpen]=useState(false)
   const [arrivalMessage,setArrivalMessage]=useState(null)
   const [messages, setMessages] = useState([]);
   const [currentChat, setCurrentChat] = useState();
   const [newMessage,setNewMessage]=useState("")
-  const [buyer,setBuyer]=useState(null)
-  const [onlinebuyers,setOnlineBuyers]=useState([])
+  const [seller,setSeller]=useState(null)
+  const [onlineSellers,setOnlineSellers]=useState([])
   const [activeStatus, setActiveStatus] = useState(false);
   const [images, setImages] = useState();
   const scrollRef = useRef(null);
@@ -44,7 +44,7 @@ const Message = () => {
   }, [arrivalMessage, currentChat]);
 
   useEffect(()=>{
-   axios.get(`http://localhost:4000/api/v1/conversation/get-seller-conversation`,{withCredentials:true})
+   axios.get(`http://localhost:4000/api/v1/conversation/get-buyer-conversation`,{withCredentials:true})
    .then((res)=>{
     console.log(res)
     setConversation(res?.data?.conversation)
@@ -53,23 +53,23 @@ const Message = () => {
     console.log(error)
    })
    
-  },[seller])
+  },[buyer])
   
   
   useEffect(()=>{
-   if(seller)
+   if(buyer)
     {
-      const sellerId=seller?._id
-      socketId.emit("addUser",sellerId)
+      const buyerId=buyer?._id
+      socketId.emit("addUser",buyerId)
       socketId.on("getUsers",(data)=>{
-        setOnlineBuyers(data)
+        setOnlineSellers(data)
       })
     }
-  },[seller])
+  },[buyer])
 
   const onlineCheck=(chat)=>{
-    const chatMembers=chat.members.find((member)=>member !=seller?._id)
-    const online=onlinebuyers.find((user)=>user.userId===chatMembers)
+    const chatMembers=chat.members.find((member)=>member !=buyer?._id)
+    const online=onlineSellers.find((user)=>user.userId===chatMembers)
     return online?true :false
   }
 
@@ -77,7 +77,7 @@ const Message = () => {
     const getMessage = async () => {
       try {
         const id = currentChat?._id;
-        const response = await axios.get(`http://localhost:4000/api/v1/conversation/seller-getAllMessages/${id}`,{withCredentials:true})
+        const response = await axios.get(`http://localhost:4000/api/v1/conversation/buyer-getAllMessages/${id}`,{withCredentials:true})
         console.log(" h1 ",response)
         setMessages(response.data.messages);
       } catch (error) {
@@ -90,15 +90,15 @@ const Message = () => {
   const updateLastMessage = async () => {
     socketId.emit("updateLastMessage", {
       lastMessage: newMessage,
-      lastMessageId: seller._id,
+      lastMessageId: buyer._id,
     });
     const id = currentChat._id;
     await axios
       .put(
-        `http://localhost:4000/api/v1/conversation/get-seller-updatedLastMessage/${id}`,
+        `http://localhost:4000/api/v1/conversation/get-buyer-updatedLastMessage/${id}`,
         {
           lastMessage: newMessage,
-          lastMessageId: seller._id,
+          lastMessageId: buyer._id,
         },
         { withCredentials: true }
       )
@@ -115,17 +115,17 @@ const Message = () => {
     e.preventDefault();
 
     const message = {
-      sender: seller._id,
+      sender: buyer?._id,
       text: newMessage,
       conversationId: currentChat._id,
     };
 
     const receiverId = currentChat.members.find(
-      (member) => member.id !== seller._id
+      (member) => member.id !== buyer?._id
     );
-
+        
     socketId.emit("sendMessage", {
-      senderId: seller._id,
+      senderId: buyer._id,
       receiverId,
       text: newMessage,
     });
@@ -133,7 +133,7 @@ const Message = () => {
     try {
       if (newMessage !== "") {
         await axios
-          .post(`http://localhost:4000/api/v1/conversation/seller-createNewMessage`,message,{withCredentials:true})
+          .post(`http://localhost:4000/api/v1/conversation/buyer-createNewMessage`,message,{withCredentials:true})
           .then((res) => {
             console.log(res)
             setMessages([...messages, res?.data?.message]);
@@ -147,6 +147,8 @@ const Message = () => {
       console.log(error);
     }
   }
+
+  // console.log(currentChat,"jjjj")
 
   const handleImageUpload = async (e) => {
     const reader = new FileReader();
@@ -163,20 +165,20 @@ const Message = () => {
 
   const imageSendingHandler = async (e) => {
     const receiverId = currentChat.members.find(
-      (member) => member !== seller._id
+      (member) => member !== buyer._id
     );
 
     socketId.emit("sendMessage", {
-      senderId: seller._id,
+      senderId: buyer._id,
       receiverId,
       images: e,
     });
 
     try {
       await axios
-      .post(`http://localhost:4000/api/v1/conversation/seller-createNewMessage`, {
+      .post(`http://localhost:4000/api/v1/conversation/buyer-createNewMessage`, {
           images: e,
-          sender: seller._id,
+          sender: buyer._id,
           text: newMessage,
           conversationId: currentChat._id,
         },{withCredentials:true})
@@ -194,10 +196,10 @@ const Message = () => {
     const id = currentChat._id;
     await axios
       .put(
-        `http://localhost:4000/api/v1/conversation/get-seller-updatedLastMessage/${id}`,
+        `http://localhost:4000/api/v1/conversation/get-buyer-updatedLastMessage/${id}`,
       {
         lastMessage: "Photo",
-        lastMessageId: seller._id,
+        lastMessageId: buyer._id,
       }
     );
   };
@@ -207,13 +209,11 @@ const Message = () => {
   }, [messages]);
 
 
-  // console.log(currentChat,"jjjj")
-
   return (
-    <div className="w-[90%] bg-white h-screen rounded">
+    <div className="custom-class">
       {!open && (
         <>
-          <h1 className="text-center text-2xl py-3">All Messages</h1>
+          <h1 className="text">All Messages</h1>
           {/* all messages list  */}
           {conversation &&
             conversation.map((item, index) => (
@@ -223,8 +223,8 @@ const Message = () => {
                 index={index}
                 setOpen={setOpen}
                 setCurrentChat={setCurrentChat}
-                me={seller._id}
-                setBuyer={setBuyer}
+                me={buyer._id}
+                setSeller={setSeller}
                 online={onlineCheck(item)}
                 setActiveStatus={setActiveStatus}
               />
@@ -238,8 +238,8 @@ const Message = () => {
           setNewMessage={setNewMessage}
           sendMessageHandler={sendMessageHandler}
           messages={messages}
-          sellerId={seller?._id}
-          buyer={buyer}
+          buyerId={buyer?._id}
+          seller={seller}
           scrollRef={scrollRef}
           activeStatus={activeStatus}
           handleImageUpload={handleImageUpload}
@@ -249,7 +249,7 @@ const Message = () => {
   );
 }
 
-const Messagelist = ({ data, index, setOpen, setCurrentChat,me,setBuyer,online,setActiveStatus}) => {
+const Messagelist = ({ data, index, setOpen, setCurrentChat,me,setSeller,online,setActiveStatus}) => {
   const [active, setActive] = useState(0);
   const [user, setUser] = useState([]);
   const navigate = useNavigate();
@@ -260,11 +260,11 @@ const Messagelist = ({ data, index, setOpen, setCurrentChat,me,setBuyer,online,s
 
   useEffect(()=>{
     setActiveStatus(online)
-    const userId=data.members.find((user)=>user!==me)
+    const userId=data.members.find((user)=>user!=me)
 
-    const getBuyer=async()=>{
+    const getSeller=async()=>{
       try{
-         const res=await axios.get(`http://localhost:4000/api/v1/conversation/byerInfo/${userId}`,{withCredentials:true})
+         const res=await axios.get(`http://localhost:4000/api/v1/conversation/sellerInfo/${userId}`,{withCredentials:true})
          setUser(res.data.user)
       }
       catch(error)
@@ -273,30 +273,28 @@ const Messagelist = ({ data, index, setOpen, setCurrentChat,me,setBuyer,online,s
       }
     }
 
-    getBuyer()
+    getSeller()
   },[me,data])
   return (
     <div
-      className={`w-full flex  p-2 ${
-        active === index ?"bg-[#00000010]" : "bg-transparent"
-      } cursor-pointer `}
+      class={`full-width-flex-padding ${active === index ? 'bg-active' : 'bg-inactive'}`}
       onClick={(e) =>
-        setActive(index) || handleClick(data._id) || setCurrentChat(data) || setBuyer(user) || setActiveStatus(online)
+        setActive(index) || handleClick(data._id) || setCurrentChat(data) || setSeller(user) || setActiveStatus(online)
       }
     >
-      <div className="relative">
-        <img src={user?.image} className="w-[50px] h-[50px] rounded-full" />
+      <div className='rel'>
+        <img src={user?.image} className="circle" />
         {online ? (
-          <div className=" w-3 h-3 bg-caribbeangreen-200 rounded-full absolute top-[2px] right-[2px]" />
+          <div className=" small-green-dot" />
         ) : (
-          <div className="w-3 h-3 bg-[#c7b9b9] rounded-full absolute top-[2px] right-[2px]" />
+          <div className="small-gray-dot" />
         )}
       </div>
-      <div className="pl-3 ">
-        <h1 className="text-lg">
+      <div style={{ paddingLeft: '1rem' }}>
+        <h1 style={{ fontSize: '1.125rem',  fontWeight: 'bold'}}>
           {user?.firstName+ " " + user?.lastName}
         </h1>
-        <p className="text-sm ">
+        <p style={{ fontSize: '0.875rem', lineHeight: '1.25rem' }}>
           {
             data?.lastMessageId!==user?._id ?"You: " :user?.firstName+": "
           }
@@ -307,66 +305,65 @@ const Messagelist = ({ data, index, setOpen, setCurrentChat,me,setBuyer,online,s
   );
 };
 
-const SellerInbox = ({
-  setOpen,
+const SellerInbox = ({  
   scrollRef,
+  setOpen,
   setNewMessage,
   newMessage,
   sendMessageHandler,
   messages,
-  sellerId,
-  buyer,
+  buyerId,
+  seller,
   activeStatus,
   handleImageUpload
 }) => {
   const navigate=useNavigate()
   return (
-    <div className="w-full min-h-full flex flex-col justify-between">
-      <div className="w-full flex p-3 items-center justify-between bg-pure-greys-100">
-        <div className="flex">
-          <img src={buyer?.image} alt="" className="w-[60px] h-[60px] rounded-full" />
-          <div className="pl-3">
-            <h1 className="text-[18px] font-[600]">{buyer?.firstName+ " " +buyer?.lastName}</h1>
-            <h1>{activeStatus ? "Active Now" : ""}</h1>
+    <div className="full-width-full-height">
+      <div className="full-width-flex-padding-align">
+        <div style={{display:'flex'}}>
+          <img src={seller?.image} alt="" className="circle" />
+          <div style={{ fontSize: '0.875rem', lineHeight: '1.25rem' }}>
+            <h1 style={{ fontSize: '18px', fontWeight: 600 }}>{seller?.firstName+ " " +seller?.lastName}</h1>
+            <h1 style={{ fontSize: '12px', fontWeight: 500 }}>{activeStatus ? "Active Now" : ""}</h1>
           </div>
         </div>
         <AiOutlineArrowRight
           size={20}
-          className="cursor-pointer"
+          style={{ cursor: 'pointer' }}
           onClick={() => {setOpen(false) 
-            navigate("/dashboard/messages")}}
+            navigate("/settings/messages")}}
         />
       </div>
 
       {/* messages */}
-      <div className="px-3 h-[80vh] overflow-y-scroll">
+      <div className="scrollable-container">
         {messages &&
           messages.map((item, index) => (
             <div
             key={index}
-            className={`flex w-full my-2 ${
-              item.sender === sellerId ? "justify-end" : "justify-start"
-            }`}
+            className={`custom-flex-container ${item.sender === buyerId ? "justify-end" : ""}`}
             ref={scrollRef}
             >
-              {item.sender !== sellerId && (
+              {item.sender !== buyerId && (
                 <img
-                  src={buyer.image}
-                  className=" w-10 h-10 rounded-full mr-3"
+                  src={seller.image}
+                  className=" circle-icon"
                   alt=""
                 />
               )}
               {item.images && (
                   <img
                     src={`${item.images?.url}`}
-                    className="w-[300px] h-[300px] object-cover rounded-[10px] mr-2"
+                    alt='image'
+                    class="custom-image"
                   />
                 )}
               <div>
-                <div className=" bg-richblack-25 h-min w-max p-2  rounded">
+                <div className=" custom-bg">
                   <p>{item.text}</p>
                 </div>
-                <p className=" text-xs font text-[#000000d3] pt-1">
+                <p className=" custom-text">
                   {format(item.createdAt)}
                 </p>
               </div>
@@ -376,22 +373,23 @@ const SellerInbox = ({
 
       <form
         aria-required={true}
-        className="p-3 relative w-full flex justify-between items-center"
+        className="form"
         onSubmit={sendMessageHandler}
       >
-        <div className="w-[30px]">
+        <div className='input'>
+        <div style={{width:'30px'}}>
           <input
             type="file"
             name=""
             id="image"
-            className="hidden"
+            style={{ display: 'none' }}
             // onChange={handleImageUpload}
           />
           <label htmlFor="image">
-            <TfiGallery className="cursor-pointer" size={20} />
+            <TfiGallery style={{ cursor: 'pointer' }} size={20} />
           </label>
         </div>
-        <div className="w-full">
+        <div style={{ width:'100%'}}>
           <input
             type="text"
             required
@@ -400,13 +398,14 @@ const SellerInbox = ({
             onChange={(e) => setNewMessage(e.target.value)}
             className={`${styles.input}`}
           />
-          <input type="submit" value="Send" className="hidden" id="send" />
+          <input type="submit" value="Send" style={{ display: 'none' }} id="send" />
           <label htmlFor="send">
             <AiOutlineSend
               size={20}
-              className="absolute right-4 top-5 cursor-pointer"
+              className="custom-positioning"
             />
           </label>
+        </div>
         </div>
       </form>
     </div>

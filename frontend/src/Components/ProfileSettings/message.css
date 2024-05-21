@@ -1,0 +1,148 @@
+.custom-class {
+    width: 90%;
+    background-color: white;
+    height: 1000vh; 
+    border-radius: 0.25rem; 
+}
+.rel{
+    position: relative;
+}
+.text{
+    text-align: center;          
+    font-size: 1.5rem;           
+    padding-top: 0.75rem;      
+    padding-bottom: 0.75rem;    
+}
+
+.full-width-flex-padding {
+    width: 100%;                 /* 'w-full' in Tailwind */
+    display: flex;               /* 'flex' in Tailwind */
+    padding: 0.5rem;             /* 'p-2' in Tailwind, which corresponds to 0.5rem padding */
+    cursor: pointer;             /* 'cursor-pointer' in Tailwind */
+}
+
+.bg-active {
+    background-color: rgba(0, 0, 0, 0.0625);  /*'bg-[#00000010]' in Tailwind, which is black at 10% opacity */
+}
+
+.bg-inactive {
+    background-color: transparent; /* 'bg-transparent' in Tailwind */
+}
+
+
+.small-green-dot {
+    width: 0.75rem;              /* 'w-3' in Tailwind, which corresponds to 0.75rem */
+    height: 0.75rem;             /* 'h-3' in Tailwind, which corresponds to 0.75rem */
+    background-color: #3dd5a6;   /* 'bg-caribbeangreen-200' in Tailwind, assuming the color is #3dd5a6 */
+    border-radius: 50%;          /* 'rounded-full' in Tailwind */
+    position: absolute;          /* 'absolute' in Tailwind */
+    top: 2px;                    /* 'top-[2px]' in Tailwind */
+    right: 2px;                  /* 'right-[2px]' in Tailwind */
+}
+
+.circle {
+    width: 50px;                /* 'w-[50px]' in Tailwind */
+    height: 50px;               /* 'h-[50px]' in Tailwind */
+    border-radius: 50%;         /* 'rounded-full' in Tailwind */
+}
+
+
+.small-gray-dot {
+    width: 0.75rem;              /* 'w-3' in Tailwind, which corresponds to 0.75rem */
+    height: 0.75rem;             /* 'h-3' in Tailwind, which corresponds to 0.75rem */
+    background-color: #c7b9b9;   /* 'bg-[#c7b9b9]' in Tailwind */
+    border-radius: 50%;          /* 'rounded-full' in Tailwind */
+    position: absolute;          /* 'absolute' in Tailwind */
+    top: 2px;                    /* 'top-[2px]' in Tailwind */
+    right: 2px;                  /* 'right-[2px]' in Tailwind */
+}
+
+.full-width-full-height {
+    width: 100%;            /* 'w-full' in Tailwind */
+    min-height: 100%;       /* 'min-h-full' in Tailwind */
+    display: flex;          /* 'flex' in Tailwind */
+    flex-direction: column; /* 'flex-col' in Tailwind */
+}
+
+
+.full-width-flex-padding-align {
+    width: 100%;                   /* 'w-full' in Tailwind */
+    display: flex;                 /* 'flex' in Tailwind */
+    padding: 0.75rem;              /* 'p-3' in Tailwind, which corresponds to 0.75rem padding */
+    align-items: center;           /* 'items-center' in Tailwind */
+    justify-content: space-between; /* 'justify-between' in Tailwind */
+    background-color: #f5f5f5;     /* 'bg-pure-greys-100' in Tailwind, assuming this color */
+}
+
+.circle-icon {
+    width: 2.5rem;     /* 'w-10' in Tailwind, which corresponds to 2.5rem */
+    height: 2.5rem;    /* 'h-10' in Tailwind, which corresponds to 2.5rem */
+    border-radius: 9999px; /* 'rounded-full' in Tailwind, making it fully rounded */
+    margin-right: 0.75rem; /* 'mr-3' in Tailwind, which corresponds to 0.75rem right margin */
+}
+
+
+.scrollable-container {
+    padding-left: 0.75rem;   /* 'px-3' in Tailwind, which corresponds to 0.75rem left padding */
+    padding-right: 0.75rem;  /* 'px-3' in Tailwind, which corresponds to 0.75rem right padding */
+    height: 80vh;            /* 'h-[80vh]' in Tailwind, which sets the height to 80% of the viewport height */
+    overflow-y: scroll;      /* 'overflow-y-scroll' in Tailwind, which enables vertical scrolling */
+}
+
+.custom-flex-container {
+    display: flex;         /* 'flex' in Tailwind */
+    width: 100%;           /* 'w-full' in Tailwind */
+    margin-top: 0.5rem;    /* 'my-2' in Tailwind, which corresponds to 0.5rem margin on the y-axis */
+    justify-content: flex-start; /* Default value, overridden conditionally */
+}
+
+.custom-flex-container.justify-end {
+    justify-content: flex-end; /* 'justify-end' in Tailwind */
+}
+
+
+.custom-bg {
+    background-color: rgba(0, 0, 0, 0.25);  /* 'bg-richblack-25' in Tailwind */
+    min-height: 0;   /* 'h-min' in Tailwind, allowing the height to shrink to fit content */
+    width: max-content; /* 'w-max' in Tailwind, sets width to fit the content */
+    padding: 0.5rem; /* 'p-2' in Tailwind, which corresponds to 0.5rem padding */
+    border-radius: 0.25rem; /* 'rounded' in Tailwind */
+}
+
+
+.custom-text {
+    font-size: 0.75rem;      /* 'text-xs' in Tailwind, which corresponds to 0.75rem font size */
+    font-weight: normal;      /* Default font weight */
+    color: rgba(0, 0, 0, 0.83); /* 'text-[#000000d3]' in Tailwind */
+    padding-top: 0.25rem;    /* 'pt-1' in Tailwind, which corresponds to 0.25rem padding on the top */
+}
+
+.form{
+    padding: 0.75rem;            /* 'p-3' in Tailwind, which corresponds to 0.75rem padding */
+    position: relative;          /* 'relative' in Tailwind */
+    width: 100%;                 /* 'w-full' in Tailwind */
+    display: flex;               /* 'flex' in Tailwind */
+    justify-content: space-between; /* 'justify-between' in Tailwind */
+    align-items: center;         /* 'items-center' in Tailwind */
+}
+
+.input{
+    display: flex;
+    
+}
+
+.custom-positioning {
+    position: absolute; /* 'absolute' in Tailwind */
+    right: 1rem;        /* 'right-4' in Tailwind, which corresponds to 1rem */
+    top: 1.25rem;       /* 'top-5' in Tailwind, which corresponds to 1.25rem */
+    cursor: pointer;    /* 'cursor-pointer' in Tailwind */
+}
+
+
+.custom-image {
+    width: 200px;       /* 'w-[300px]' in Tailwind */
+    height: 200px;      /* 'h-[300px]' in Tailwind */
+    object-fit: cover;  /* 'object-cover' in Tailwind */
+    border-radius: 10px; /* 'rounded-[10px]' in Tailwind */
+    margin-right: 0.5rem; /* 'mr-2' in Tailwind, which corresponds to 0.5rem right margin */
+}

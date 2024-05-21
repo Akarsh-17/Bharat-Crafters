@@ -14,6 +14,7 @@ import { Toaster } from 'react-hot-toast';
 import ProfileSettings from './Components/ProfileSettings/ProfileSettings.jsx';
 import Wishlist from './Components/Wishlist/Wishlist.jsx';
 import Cart from './Components/Cart/Cart.jsx';
+import MessageComponent from './Components/ProfileSettings/MessageComponent.jsx';
 
 
 
@@ -35,6 +36,7 @@ function App() {
               <Route exact path="/category/:categoryId" element={<ProductCategory />} />
               <Route exact path="/products/:productId" element={<ProductDescriptionPage />} />
               <Route exact path = "/settings/my-profile" element ={<ProfileSettings/>}/>
+              <Route exact path = "/settings/messages" element ={<MessageComponent/>}/>
               <Route exact path = "/wishlist" element ={<Wishlist/>}/>
               <Route exact path = "/cart" element ={<Cart/>}/>
 

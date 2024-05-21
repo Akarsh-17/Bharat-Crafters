@@ -4,7 +4,7 @@ const Seller = require('../models/Seller');
 const SubCategory = require('../models/Subcategory');
 const { uploadImageToCloudinary } = require('../utilis/imageUploader');
 const Category = require('../models/Category');
-const { match } = require('assert');
+
 
 require("dotenv").config();
 

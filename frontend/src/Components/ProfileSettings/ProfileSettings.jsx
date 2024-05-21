@@ -1,16 +1,18 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './ProfileSettings.css';
 import Header from '../Header/Header.jsx'
 import editIcon from '../../Images/edit-text.png'
 import logout from '../../operations/auth.js';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, matchPath, useLocation, useNavigate } from 'react-router-dom';
+import { sidebarLinks } from './link.js';
 
 const ProfileSettings = () => {
   const [activeTab, setActiveTab] = useState('Account Settings');
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state) => state.CurrentUser.CurrentUser);
+  const location=useLocation()
 
   const [userInfo, setUserInfo] = useState({
     firstName: user.firstName,
@@ -22,8 +24,24 @@ const ProfileSettings = () => {
   const [editable, setEditable] = useState([]);
   const [isdisabled, setisdisabled] = useState(true);
 
+  // const handleTabClick = (tab) => {
+  //   setActiveTab(tab);
+  // };
+
+  useEffect(() => {
+    // Set the initial active tab based on the current route
+    sidebarLinks.forEach((tab) => {
+      if (matchPath({ path: tab.path }, location.pathname)) {
+        setActiveTab(tab.name);
+      }
+    });
+  }, [location.pathname]);
+
   const handleTabClick = (tab) => {
-    setActiveTab(tab);
+    if (matchPath({ path: tab.path }, location.pathname)) {
+      setActiveTab(tab.name);
+    }
+    navigate(tab.path);
   };
 
   const handleInputChange = (e) => {
@@ -63,14 +81,14 @@ const ProfileSettings = () => {
       <div className="profile-settings-container">
         <h2 className="profile-setting-heading">Profile Settings</h2>
         <div className="profile-content">
-          <ul className="profile-setting-lists">
-            {['Account Settings', 'Change Password', 'Advanced Settings'].map((tab) => (
+        <ul className="profile-setting-lists">
+            {sidebarLinks.map((tab) => (
               <li
-                key={tab}
-                className={activeTab === tab ? 'active' : ''}
+                key={tab.id}
+                className={activeTab === tab.name ? 'active' : ''}
                 onClick={() => handleTabClick(tab)}
               >
-                {tab}
+                {tab.name}
               </li>
             ))}
           </ul>

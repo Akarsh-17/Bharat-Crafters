@@ -15,6 +15,7 @@ const userRoutes=require('./routes/User')
 const categoryRoutes=require('./routes/Category')
 const productRoutes=require('./routes/Product')
 const reviewRoutes=require('./routes/Review')
+const conversationRoutes=require('./routes/Conversation')
 
 
 const app=express();
@@ -91,6 +92,7 @@ app.use('/api/v1/auth',userRoutes);
 app.use('/api/v1/category',categoryRoutes);
 app.use('/api/v1/product',productRoutes);
 app.use('/api/v1/review',reviewRoutes);
+app.use('/api/v1/conversation',conversationRoutes);
 
 
 app.listen(PORT,()=>{
