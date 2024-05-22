@@ -151,11 +151,11 @@ function SignUp() {
     return (
         <div className="outer-container">
             <header className="header">
-                <img src={logo} alt="Company Logo" className="company-logo" />
+                <img src={logo} alt="Company Logo" class="header-logo" />
             </header>
             <div className="form-container">
                 <form className="form" onSubmit={handleSubmit}>
-                    <div className="heading">Sign Up as a Seller</div>
+                    <div className="heading">Sign Up as a Buyer</div>
                     <div className="name">
                         <input
                             type="text"

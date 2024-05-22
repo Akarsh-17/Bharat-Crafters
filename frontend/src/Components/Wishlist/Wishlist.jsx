@@ -1,11 +1,110 @@
-import React from 'react'
+
+import React, { useEffect, useState } from 'react'
+import './Wishlist.css';
+import Header from '../Header/Header';
+import close_button from '../../Images/close.png'
+import removeFromWishlist from '../../Images/dislike.png'
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch , useSelector} from 'react-redux';
+import { setProductId } from '../store/slices/ProductIdSlice.js';
+import {removeWishlistProduct} from '../store/slices/WishlistSlice.js'
+
 
 const Wishlist = () => {
-  return (
-    <div>
-      
-    </div>
-  )
-}
+    const navigate= useNavigate()
+    const dispatch= useDispatch()
+    const [WishlistData, setWishlistData] = useState(null);
+    const [WishlistEmpty, setWishlistEmpty] = useState(false);
+    const Wishlist = useSelector((state) => state.Wishlist.Wishlist);
 
-export default Wishlist
+
+
+    useEffect(() => {
+        if (Wishlist && Wishlist.length> 0) {
+            setWishlistData(Wishlist);
+        }
+        else {
+            setWishlistEmpty(true);
+        }
+    }, [Wishlist]);
+
+
+    const handle_remove_from_wishlist = (id)=>{
+        dispatch(removeWishlistProduct(id));
+        if(Wishlist.length===0){
+            setWishlistEmpty(true);
+        }
+    }
+
+    return (
+        <>
+            <Header />
+            <div className="wishlist-outer-container">
+                <div className="wishlist-heading-container">
+                    <div className="wishlist-heading">Wishlist</div>
+                    <div className="wishlist-filter-container">
+                        {/* <div className="filter-applied-container">
+                            <div className="filter-name">XL</div>
+                            <img className="filter-remove-icon" src={close_button}></img>
+                        </div> */}
+
+                    </div>
+                    <button className="add-all-to-bag">Move all to Bag</button>
+                </div>
+                <div className="wishlist-container">
+                    
+                    {(WishlistEmpty) ?
+                        <div>No products in wishlist</div>
+                        :
+                        <>
+                            {
+                                WishlistData && WishlistData.map((product, productIndex) => (
+                                    <div className="wishlist-product-card" key={product._id}>
+                                        <div className="product-image-container">
+                                            <img
+                                                                        onClick={() => {
+                                            dispatch(setProductId(product._id));
+                                            navigate(`/products/${product._id}`);
+                                        }}
+                                                    className='product-image'
+                                                    src={product.images[0]}
+                                                 
+                                                />
+                                            <button className="remove-from-wishlist-icon"
+                                                onClick={() => { handle_remove_from_wishlist(product._id); }}
+                                                >
+                                                <img src={removeFromWishlist}></img>
+                                            </button>
+                                        </div>
+                                        <div className="product-name-container">
+                                            <div className="product-name-and-price">
+                                                <div className="product-name-detail" key={product._id}
+                                onClick={() => {
+                                                dispatch(setProductId(product._id));
+                                                navigate(`/products/${product._id}`);
+                                            }}>{product.name}</div>
+
+
+                                                <div className="product-price">
+                                                    <span>Starts at </span> Rs. {product.options[0].price}
+                                                </div>
+                                             
+
+                                            </div>
+                                            <div className="add-to-cart-icon">Add + </div>
+                                        </div>
+                                    </div>
+                                ))
+                            }
+                        </>
+                    }
+
+                </div>
+            </div>
+
+        </>
+    );
+};
+
+export default Wishlist;

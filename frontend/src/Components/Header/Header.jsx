@@ -51,7 +51,7 @@ const Header = () => {
         <nav className={`custom-nav-class ${scrolled ? 'scrolled' : ''}`}>
 
 <Link to="/" className='logo-link'><img src={logo} class="logo"></img></Link>
-<SearchBar />
+<SearchBar/>
 
 {/* <button class="navbar-toggler" type="button" onClick={showRightHeader} >
     <span className="navbar-toggler-icon"></span>

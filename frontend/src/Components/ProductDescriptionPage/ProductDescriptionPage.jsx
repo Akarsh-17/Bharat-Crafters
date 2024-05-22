@@ -192,7 +192,7 @@ const ProductDescriptionPage = () => {
             })
             .then((res) => {
                 toast.success("room generated");
-                navigate(`/messages?${res.data.conversation._id}`);
+                navigate(`/settings/messages?${res.data.conversation._id}`);
               })
               .catch((error) => {
                 toast.error(error.response.data.message);

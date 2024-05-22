@@ -76,7 +76,7 @@ const SearchBar = () => {
           <button className="category-select-button" onClick={handleDropdown}>All <img src={dropdownbutton} className="dropdownicon" alt="dropdown icon" /></button>
           {showDropdown && (
             <div className="dropdown-category-content">
-              {CategoryDataArray.map((category, key) => (
+              {CategoryDataArray && CategoryDataArray.map((category, key) => (
                 <>
                   <button className="content" key={key}
                     onClick={() => {

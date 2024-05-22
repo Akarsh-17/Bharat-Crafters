@@ -11,6 +11,7 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setProductId } from '../store/slices/ProductIdSlice.js';
+import { setWishlistProduct, removeWishlistProduct } from '../store/slices/WishlistSlice.js'
 import { useParams } from "react-router-dom"
 import { setCategoryId } from '../store/slices/CategoryIdSlice.js';
 
@@ -29,18 +30,26 @@ const ProductCategory = () => {
 
 
     const CategoryId = useSelector((state) => state.CategoryId.CategoryId);
+
     // changes
     useEffect(() => {
         dispatch(setCategoryId(categoryId))
         //   check if required Akarsh has doubt 
         //   dispatch(setProductId(null))
     }, [])
-    const handle_add_to_wishlist = (productId) => {
+
+    const handle_add_to_wishlist = (product) => {
+        console.log(product);
+        const productId= product._id;
         if (Wishlist.includes(productId)) {
             setWishlist(Wishlist.filter((id) => id !== productId));
+            dispatch(removeWishlistProduct(productId));
+
         }
         else {
             setWishlist([...Wishlist, productId]);
+            dispatch(setWishlistProduct(product));
+            saveWishlistedProduct(product);
         }
     }
 
@@ -110,6 +119,18 @@ const ProductCategory = () => {
             setSubCategoryDataExists(true);
             setFilter(true);
 
+
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    const saveWishlistedProduct= async (product)=>{
+        try {
+            const response = await axios.post(`http://localhost:4000/api/v1/auth/buyerWishList`, product, {
+                withCredentials: true
+            });
+            console.log(response);
 
         } catch (error) {
             console.error(error);
@@ -230,14 +251,14 @@ const ProductCategory = () => {
 
                                     {
                                         SubCategoryData.product.length > 0 && SubCategoryData.product.map((product, productIndex) => (
-                                            <div className="product-card" key={product._id}
-                                            onClick={() => {
-                                                dispatch(setProductId(product._id));
-                                                navigate(`/products/${product._id}`);
-                                            }}>
+                                            <div className="product-card" key={product._id}>
                                                 <div className="product-image-container">
                                                     {product.images.map((image, imageIndex) => (
                                                         <img
+                                                        onClick={() => {
+                                                            dispatch(setProductId(product._id));
+                                                            navigate(`/products/${product._id}`);
+                                                        }}
                                                             key={imageIndex}
                                                             className={`product-image ${imageIndex === hoveredImageIndex[product._id] ? 'product-image-hidden' : ''}`}
                                                             src={imageIndex === hoveredImageIndex[product._id] ? product.images[(imageIndex + 1) % product.images.length] : image}
@@ -246,13 +267,18 @@ const ProductCategory = () => {
                                                         />
                                                     ))}
                                                     <button className="add-to-wishlist-icon"
-                                                        onClick={() => { handle_add_to_wishlist(product._id); }}>
+                                                        onClick={() => { handle_add_to_wishlist(product); }}>
                                                         <img src={isWishlisted(product._id) ? added_to_wishlist : add_to_wishlist} alt="wishlist"></img>
                                                     </button>
                                                 </div>
                                                 <div className="product-name-container">
                                                     <div className="product-name-and-price">
-                                                        <div className="product-name-detail" key={product._id}>{product.name}</div>
+                                                        <div className="product-name-detail" key={product._id}
+                                                         onClick={() => {
+                                                            dispatch(setProductId(product._id));
+                                                            navigate(`/products/${product._id}`);
+                                                        }}
+                                                        >{product.name}</div>
 
 
                                                         <div className="product-price">
@@ -287,13 +313,14 @@ const ProductCategory = () => {
                                     {SubCategoryDetailsArray.length > 0 && SubCategoryDetailsArray.map((subcategory, key) => (
                                         subcategory.product.map((product) => (
                                             <div className="product-card" key={product._id}
-                                            onClick={() => {
-                                                dispatch(setProductId(product._id));
-                                                navigate(`/products/${product._id}`);
-                                            }}>
+                                            >
                                                 <div className="product-image-container">
                                                     {product.images.map((image, imageIndex) => (
                                                         <img
+                                                        onClick={() => {
+                                                            dispatch(setProductId(product._id));
+                                                            navigate(`/products/${product._id}`);
+                                                        }}
                                                             key={imageIndex}
                                                             className={`product-image ${imageIndex === hoveredImageIndex[product._id] ? 'product-image-hidden' : ''}`}
                                                             src={imageIndex === hoveredImageIndex[product._id] ? product.images[(imageIndex + 1) % product.images.length] : image}
@@ -303,13 +330,17 @@ const ProductCategory = () => {
                                                         />
                                                     ))}
                                                     <button className="add-to-wishlist-icon"
-                                                        onClick={() => { handle_add_to_wishlist(product._id); }}>
+                                                        onClick={() => { handle_add_to_wishlist(product); }}>
                                                         <img src={isWishlisted(product._id) ? added_to_wishlist : add_to_wishlist} alt="wishlist"></img>
                                                     </button>
                                                 </div>
                                                 <div className="product-name-container">
                                                     <div className="product-name-and-price">
-                                                        <div className="product-name-detail" key={product._id}>{product.name}</div>
+                                                        <div className="product-name-detail" key={product._id}
+                                                         onClick={() => {
+                                                            dispatch(setProductId(product._id));
+                                                            navigate(`/products/${product._id}`);
+                                                        }}>{product.name}</div>
 
                                                         <div className="product-price">
                                                             <span>Starts at </span> Rs. {product.options[0].price}

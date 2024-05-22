@@ -1,20 +1,24 @@
-.custom-class {
-    width: 90%;
+
+.message-component-container {
+    width: 100%;
     background-color: white;
-    height: 1000vh; 
+    height: 100%; 
     border-radius: 0.25rem; 
+    border: 1px solid black;
+    overflow-y: hidden;
 }
-.rel{
+
+.person-profile-pic-container{
     position: relative;
 }
-.text{
+.message-container-heading{
     text-align: center;          
     font-size: 1.5rem;           
     padding-top: 0.75rem;      
     padding-bottom: 0.75rem;    
 }
 
-.full-width-flex-padding {
+.message-person-outer-container {
     width: 100%;                 /* 'w-full' in Tailwind */
     display: flex;               /* 'flex' in Tailwind */
     padding: 0.5rem;             /* 'p-2' in Tailwind, which corresponds to 0.5rem padding */
@@ -40,7 +44,7 @@
     right: 2px;                  /* 'right-[2px]' in Tailwind */
 }
 
-.circle {
+.person-profile-pic {
     width: 50px;                /* 'w-[50px]' in Tailwind */
     height: 50px;               /* 'h-[50px]' in Tailwind */
     border-radius: 50%;         /* 'rounded-full' in Tailwind */
@@ -57,20 +61,42 @@
     right: 2px;                  /* 'right-[2px]' in Tailwind */
 }
 
-.full-width-full-height {
+.message-person-name-container{
+    padding-left: 1rem;
+}
+
+.message-person-name{
+    font-size: 1.125rem;
+    font-weight: 700;
+}
+
+.last-message-by{
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+}
+
+.chat-outer-container {
     width: 100%;            /* 'w-full' in Tailwind */
-    min-height: 100%;       /* 'min-h-full' in Tailwind */
     display: flex;          /* 'flex' in Tailwind */
     flex-direction: column; /* 'flex-col' in Tailwind */
+    height: 70vh;
+}
+
+.chat-header-container{
+    width: 100%;                   /* 'w-full' in Tailwind */
+    display: flex;                 /* 'flex' in Tailwind */
+    padding: 0.3rem 0.75rem;              /* 'p-3' in Tailwind, which corresponds to 0.75rem padding */
+    align-items: center;           /* 'items-center' in Tailwind */
+    justify-content: space-between; /* 'justify-between' in Tailwind */
+    background-color: #f5f5f5; 
 }
 
 
-.full-width-flex-padding-align {
+.chat-name-container {
     width: 100%;                   /* 'w-full' in Tailwind */
     display: flex;                 /* 'flex' in Tailwind */
     padding: 0.75rem;              /* 'p-3' in Tailwind, which corresponds to 0.75rem padding */
     align-items: center;           /* 'items-center' in Tailwind */
-    justify-content: space-between; /* 'justify-between' in Tailwind */
     background-color: #f5f5f5;     /* 'bg-pure-greys-100' in Tailwind, assuming this color */
 }
 
@@ -82,60 +108,42 @@
 }
 
 
-.scrollable-container {
+.main-chat-container {
     padding-left: 0.75rem;   /* 'px-3' in Tailwind, which corresponds to 0.75rem left padding */
     padding-right: 0.75rem;  /* 'px-3' in Tailwind, which corresponds to 0.75rem right padding */
-    height: 80vh;            /* 'h-[80vh]' in Tailwind, which sets the height to 80% of the viewport height */
     overflow-y: scroll;      /* 'overflow-y-scroll' in Tailwind, which enables vertical scrolling */
+    height:100%;
+    background-color: rgb(255, 255, 255);
 }
 
-.custom-flex-container {
+.message-container {
     display: flex;         /* 'flex' in Tailwind */
     width: 100%;           /* 'w-full' in Tailwind */
     margin-top: 0.5rem;    /* 'my-2' in Tailwind, which corresponds to 0.5rem margin on the y-axis */
     justify-content: flex-start; /* Default value, overridden conditionally */
 }
 
-.custom-flex-container.justify-end {
+.message-container-justify-end {
     justify-content: flex-end; /* 'justify-end' in Tailwind */
 }
 
 
-.custom-bg {
-    background-color: rgba(0, 0, 0, 0.25);  /* 'bg-richblack-25' in Tailwind */
+
+.message-background {
+    background-color: rgba(119, 177, 208, 0.25);  /* 'bg-richblack-25' in Tailwind */
     min-height: 0;   /* 'h-min' in Tailwind, allowing the height to shrink to fit content */
     width: max-content; /* 'w-max' in Tailwind, sets width to fit the content */
-    padding: 0.5rem; /* 'p-2' in Tailwind, which corresponds to 0.5rem padding */
+    padding: 0.3rem 0.5rem; /* 'p-2' in Tailwind, which corresponds to 0.5rem padding */
     border-radius: 0.25rem; /* 'rounded' in Tailwind */
+    margin:0;
 }
 
 
-.custom-text {
+.message-send-timing{
     font-size: 0.75rem;      /* 'text-xs' in Tailwind, which corresponds to 0.75rem font size */
     font-weight: normal;      /* Default font weight */
     color: rgba(0, 0, 0, 0.83); /* 'text-[#000000d3]' in Tailwind */
     padding-top: 0.25rem;    /* 'pt-1' in Tailwind, which corresponds to 0.25rem padding on the top */
-}
-
-.form{
-    padding: 0.75rem;            /* 'p-3' in Tailwind, which corresponds to 0.75rem padding */
-    position: relative;          /* 'relative' in Tailwind */
-    width: 100%;                 /* 'w-full' in Tailwind */
-    display: flex;               /* 'flex' in Tailwind */
-    justify-content: space-between; /* 'justify-between' in Tailwind */
-    align-items: center;         /* 'items-center' in Tailwind */
-}
-
-.input{
-    display: flex;
-    
-}
-
-.custom-positioning {
-    position: absolute; /* 'absolute' in Tailwind */
-    right: 1rem;        /* 'right-4' in Tailwind, which corresponds to 1rem */
-    top: 1.25rem;       /* 'top-5' in Tailwind, which corresponds to 1.25rem */
-    cursor: pointer;    /* 'cursor-pointer' in Tailwind */
 }
 
 
@@ -146,3 +154,48 @@
     border-radius: 10px; /* 'rounded-[10px]' in Tailwind */
     margin-right: 0.5rem; /* 'mr-2' in Tailwind, which corresponds to 0.5rem right margin */
 }
+
+
+.message-form-container{
+    padding: 0.75rem;            /* 'p-3' in Tailwind, which corresponds to 0.75rem padding */
+    position: relative;          /* 'relative' in Tailwind */
+    width: 100%;                 /* 'w-full' in Tailwind */
+    display: flex;               /* 'flex' in Tailwind */
+    justify-content: space-between; /* 'justify-between' in Tailwind */
+    align-items: center;         /* 'items-center' in Tailwind */
+}
+
+.chat-input-container{
+    display: grid;
+    grid-template-columns: auto 1fr;
+    padding: 1rem;
+    justify-content: center;
+    align-items: center;
+    background-color: #e9e9e9;
+
+}
+
+.message-typing-input-container{
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.message-typing-input {
+    width: 100%;
+    box-sizing: border-box;
+    margin-left: 0.8rem;
+    padding: 0.55rem 1rem;
+    border-radius: 8px;
+    border: none;
+    outline:none;
+  }
+
+  .message-send-icon {
+    position: absolute;
+    right: 10px; 
+    cursor: pointer;
+    color: #000; 
+  }
+  

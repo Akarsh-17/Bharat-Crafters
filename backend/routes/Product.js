@@ -10,6 +10,7 @@ const {
     deleteProduct,
     searchBar,
     tribalArtAndCraft,
+    khadiProducts,
     villageIndustryProducts,
     newWomensArrivals,
     newMensArrivals,
@@ -37,6 +38,7 @@ router.get('/getFullProductDetails/:id',getFullProductDetails)
 // search bar
 router.get('/searchBar',searchBar)
 router.get('/tribalArtAndCraft',tribalArtAndCraft)
+router.get('/khadiProducts',khadiProducts)
 router.get('/villageIndustryProducts',villageIndustryProducts)
 router.get('/newWomensArrivals',newWomensArrivals)
 router.get('/newMensArrivals',newMensArrivals)

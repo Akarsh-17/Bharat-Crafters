@@ -3,7 +3,7 @@ import './message.css'
 import { useSelector } from 'react-redux'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
-import {AiOutlineArrowRight} from 'react-icons/ai'
+import {AiOutlineArrowLeft} from 'react-icons/ai'
 import {AiOutlineSend} from 'react-icons/ai'
 import { TfiGallery } from "react-icons/tfi";
 import styles from './style'
@@ -210,10 +210,10 @@ const Message = () => {
 
 
   return (
-    <div className="custom-class">
+    <div className="message-component-container">
       {!open && (
         <>
-          <h1 className="text">All Messages</h1>
+          <h1 className="message-container-heading">All Messages</h1>
           {/* all messages list  */}
           {conversation &&
             conversation.map((item, index) => (
@@ -277,24 +277,24 @@ const Messagelist = ({ data, index, setOpen, setCurrentChat,me,setSeller,online,
   },[me,data])
   return (
     <div
-      class={`full-width-flex-padding ${active === index ? 'bg-active' : 'bg-inactive'}`}
+      class={`message-person-outer-container ${active === index ? 'bg-active' : 'bg-inactive'}`}
       onClick={(e) =>
         setActive(index) || handleClick(data._id) || setCurrentChat(data) || setSeller(user) || setActiveStatus(online)
       }
     >
-      <div className='rel'>
-        <img src={user?.image} className="circle" />
+      <div className='person-profile-pic-container'>
+        <img src={user?.image} className="person-profile-pic" />
         {online ? (
           <div className=" small-green-dot" />
         ) : (
           <div className="small-gray-dot" />
         )}
       </div>
-      <div style={{ paddingLeft: '1rem' }}>
-        <h1 style={{ fontSize: '1.125rem',  fontWeight: 'bold'}}>
+      <div className='message-person-name-container'>
+        <h1 className="message-person-name" >
           {user?.firstName+ " " + user?.lastName}
         </h1>
-        <p style={{ fontSize: '0.875rem', lineHeight: '1.25rem' }}>
+        <p className="last-message-by">
           {
             data?.lastMessageId!==user?._id ?"You: " :user?.firstName+": "
           }
@@ -316,33 +316,35 @@ const SellerInbox = ({
   seller,
   activeStatus,
   handleImageUpload
+
 }) => {
   const navigate=useNavigate()
   return (
-    <div className="full-width-full-height">
-      <div className="full-width-flex-padding-align">
-        <div style={{display:'flex'}}>
-          <img src={seller?.image} alt="" className="circle" />
-          <div style={{ fontSize: '0.875rem', lineHeight: '1.25rem' }}>
-            <h1 style={{ fontSize: '18px', fontWeight: 600 }}>{seller?.firstName+ " " +seller?.lastName}</h1>
-            <h1 style={{ fontSize: '12px', fontWeight: 500 }}>{activeStatus ? "Active Now" : ""}</h1>
-          </div>
-        </div>
-        <AiOutlineArrowRight
-          size={20}
-          style={{ cursor: 'pointer' }}
+    <div className="chat-outer-container">
+      <div className="chat-header-container">
+      <AiOutlineArrowLeft
+          size={23}
+          style={{ cursor: 'pointer' , marginRight: "10px"}}
           onClick={() => {setOpen(false) 
             navigate("/settings/messages")}}
         />
+        <div className="chat-name-container" >
+          <img src={seller?.image} alt="" className="person-profile-pic" />
+          <div className='message-person-name-container'>
+            <h1 className="message-person-name">{seller?.firstName+ " " +seller?.lastName}</h1>
+            <h1 className="last-message-by">{activeStatus ? "Active Now" : ""}</h1>
+          </div>
+        </div>
+       
       </div>
 
       {/* messages */}
-      <div className="scrollable-container">
+      <div className="main-chat-container">
         {messages &&
           messages.map((item, index) => (
             <div
             key={index}
-            className={`custom-flex-container ${item.sender === buyerId ? "justify-end" : ""}`}
+            className={`message-container ${item.sender === buyerId ? "message-container-justify-end" : ""}`}
             ref={scrollRef}
             >
               {item.sender !== buyerId && (
@@ -360,10 +362,10 @@ const SellerInbox = ({
                   />
                 )}
               <div>
-                <div className=" custom-bg">
-                  <p>{item.text}</p>
+                <div className="message-background">
+                {item.text}
                 </div>
-                <p className=" custom-text">
+                <p className="message-send-timing">
                   {format(item.createdAt)}
                 </p>
               </div>
@@ -373,40 +375,38 @@ const SellerInbox = ({
 
       <form
         aria-required={true}
-        className="form"
+        className='chat-input-container'
         onSubmit={sendMessageHandler}
       >
-        <div className='input'>
-        <div style={{width:'30px'}}>
+        <div >
           <input
             type="file"
             name=""
             id="image"
             style={{ display: 'none' }}
+            className='image-upload-container'
             // onChange={handleImageUpload}
           />
           <label htmlFor="image">
             <TfiGallery style={{ cursor: 'pointer' }} size={20} />
           </label>
         </div>
-        <div style={{ width:'100%'}}>
+        <div className='message-typing-input-container'>
           <input
             type="text"
             required
             placeholder="Enter your message..."
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
-            className={`${styles.input}`}
+            className="message-typing-input"
           />
-          <input type="submit" value="Send" style={{ display: 'none' }} id="send" />
-          <label htmlFor="send">
-            <AiOutlineSend
+          {/* <input type="submit" value="Send" style={{ display: 'none' }} id="send" /> */}
+          <AiOutlineSend
               size={20}
-              className="custom-positioning"
+              className="message-send-icon"
             />
-          </label>
         </div>
-        </div>
+
       </form>
     </div>
   );

@@ -3,6 +3,7 @@
     margin: 0;
     height: 100vh;
     width: 100%;
+    overflow: hidden;
 }
 
 .header-login {
@@ -11,7 +12,7 @@
     padding: 0.7rem 0;
 }
 
-.company-logo {
+.header-logo {
     align-self: center;
     height: 3.5rem;
     justify-self: center;
@@ -19,7 +20,7 @@
 
 .form-container-login {
     display: flex;
-    padding: 8rem;
+    padding: 8rem ;
     justify-content: center;
     background-color: #F08A5D;
     height: 100vh;
@@ -27,7 +28,7 @@
 
 .heading-login {
     font-weight: 600;
-    font-size: 1.1rem;
+    font-size: 1.25rem;
     margin: 1rem;
     color: white;
 }
@@ -35,6 +36,7 @@
 .form {
     text-align: center;
     max-width: 18rem;
+
 }
 
 .input {
@@ -52,6 +54,14 @@
     font-size: 0.9rem;
     font-weight: 500;
     cursor: pointer;
+    display: flex;
+    background-color: transparent;
+    border: none;
+    align-self: center;
+    justify-self: center;
+    margin: 0 auto;
+    padding-top: 1rem;
+    font-weight: 600;
 }
 
 .paragraph-login:hover{

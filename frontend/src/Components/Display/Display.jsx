@@ -3,11 +3,11 @@ import Carousel from './Carousel/Carousel.jsx'
 import Columns from './Columns/Columns.jsx'
 import Sections from './Sections/Sections.jsx'
 
-const Display = () => {
+const Display = ({CategoryDataArray}) => {
   return (
     <>
       <Carousel/>
-      <Columns/>
+      <Columns CategoryDataArray={CategoryDataArray}/>
       <Sections/>
     </>
   )

@@ -408,8 +408,12 @@ exports.signupSeller=async (req,res)=>{
 
 exports.buyerChangePassword=async(req,res)=>{
     try{
+
         const {oldPassword, newPassword, confirmPassword}=req.body;
-        const user=await Buyer.findById(req.user.id);
+        console.log(oldPassword, newPassword, confirmPassword)
+
+        const buyerId= req.user.id;
+        const user=await Buyer.findById(buyerId)
 
         if(!oldPassword || !newPassword || !confirmPassword)
         {

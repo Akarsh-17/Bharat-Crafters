@@ -65,7 +65,6 @@ function Login() {
     //SUBMITING INPUT FIELD VALUES
 
     const handleSubmit = (e) => {
-        e.preventDefault();
         sendFormData(formData);
 
     };
@@ -74,11 +73,11 @@ function Login() {
     return (
         <div class="outer-container-login">
             <header className="header-login">
-                <img src={logo} alt="Company Logo" class="company-logo" />
+                <img src={logo} alt="Company Logo" class="header-logo" />
             </header>
             <div className="form-container-login">
-                <form className="form" onSubmit={handleSubmit}>
-                    <div class="heading-login">Login as a Seller</div>
+                <div className="form" >
+                    <div class="heading-login">Login as a Buyer</div>
                 
 
                     <input
@@ -98,10 +97,12 @@ function Login() {
                         onChange={handleChange}
                         maxLength={8}
                     />
+                    <button type="submit" className="button-login"
+                    onClick={()=>{handleSubmit()}}
+                    >Login</button>
+                                        <button className="paragraph-login" onClick={()=>{navigate('/signup')}}>or Signup if not a user</button>
 
-                    <p className="paragraph-login">or login as a seller</p>
-                    <button type="submit" className="button-login">Login</button>
-                </form>
+                </div>
             </div>
         </div>
     );

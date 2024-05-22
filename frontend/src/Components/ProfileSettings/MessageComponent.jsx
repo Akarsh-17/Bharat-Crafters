@@ -87,9 +87,9 @@ const MessageComponent= () => {
               </li>
             ))}
           </ul>
-          <div>
+        
             <Message/>
-          </div>
+          
         </div>
 
       </div>    
