@@ -30,6 +30,7 @@ const ProductCategory = () => {
 
 
     const CategoryId = useSelector((state) => state.CategoryId.CategoryId);
+    const buyerWishlist=useSelector((state)=>state.Wishlist.Wishlist)
 
     // changes
     useEffect(() => {
@@ -38,19 +39,27 @@ const ProductCategory = () => {
         //   dispatch(setProductId(null))
     }, [])
 
-    const handle_add_to_wishlist = (product) => {
+    const handle_add_to_wishlist = async(product) => {
         console.log(product);
+        console.log("buyerWishlist ",buyerWishlist)
         const productId= product._id;
         if (Wishlist.includes(productId)) {
             setWishlist(Wishlist.filter((id) => id !== productId));
-            dispatch(removeWishlistProduct(productId));
-
+            dispatch(removeWishlistProduct(productId)); 
         }
         else {
             setWishlist([...Wishlist, productId]);
             dispatch(setWishlistProduct(product));
-            saveWishlistedProduct(product);
+            //saveWishlistedProduct(product);
         }
+        console.log("updating redux ",buyerWishlist)
+        await axios.post('http://localhost:4000/api/v1/auth/buyerWishList',{buyerWishlist},{withCredentials:true})
+        .then((res)=>{
+            console.log("wishilist for user ",res)
+        })
+        .catch((error)=>{
+            console.log("error for buyer wishlist",error)
+        })
     }
 
     const isWishlisted = (productId) => {

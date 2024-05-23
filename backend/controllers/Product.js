@@ -649,3 +649,130 @@ exports.searchBar=async(req,res)=>{
         res.status(500).json({ error: 'Internal server error' });
     }
 }
+
+
+
+// from subCategory
+exports.khadiProduct=async(req,res)=>{
+    try{
+       const subCategory=await SubCategory.findOne({name:"Khadi products"})
+
+       if(!SubCategory)
+       {
+        return "Sub Category not found";
+       }
+
+       
+       const products = await Product.find({ subCategory: subCategory._id  })
+                                           .sort({ createdAt: -1 }) 
+                                           .limit(15); ;
+    
+        if (products.length === 0) {
+          return "No products found for the given sub category";
+        }
+    
+        res.json({products,subCategory}); // Return the products found
+    }
+    catch(error)
+    {
+        return res.status(500).json({
+            success: false,
+            message: "Server error for Khadi sub Category clothing ",
+            error: error.message,
+        })        
+    }
+}
+
+exports.woodworkProduct=async(req,res)=>{
+    try{
+       const subCategory=await SubCategory.findOne({name:"Woodworks"})
+
+       if(!SubCategory)
+       {
+        return "Sub Category not found";
+       }
+
+       
+       const products = await Product.find({ subCategory: subCategory._id  })
+                                           .sort({ createdAt: -1 }) 
+                                           .limit(15); ;
+    
+        if (products.length === 0) {
+          return "No products found for the given sub category";
+        }
+    
+        res.json({products,subCategory}); // Return the products found
+    }
+    catch(error)
+    {
+        return res.status(500).json({
+            success: false,
+            message: "Server error for Khadi sub Category clothing ",
+            error: error.message,
+        })        
+    }
+}
+
+
+exports.bambooCraftProduct=async(req,res)=>{
+    try{
+       const subCategory=await SubCategory.findOne({name:"Bamboo craft"})
+
+       if(!SubCategory)
+       {
+        return "Sub Category not found";
+       }
+
+       
+       const products = await Product.find({ subCategory: subCategory._id  })
+                                           .sort({ createdAt: -1 }) 
+                                           .limit(15); ;
+    
+        if (products.length === 0) {
+          return "No products found for the given sub category";
+        }
+    
+        res.json({products,subCategory}); // Return the products found
+    }
+    catch(error)
+    {
+        return res.status(500).json({
+            success: false,
+            message: "Server error for Khadi sub Category clothing ",
+            error: error.message,
+        })        
+    }
+}
+
+
+exports.dorkaMetalCratProduct=async(req,res)=>{
+    try{
+       const subCategory=await SubCategory.findOne({name:"Dokra metal craft"})
+
+       if(!SubCategory)
+       {
+        return "Sub Category not found";
+       }
+
+       
+       const products = await Product.find({ subCategory: subCategory._id  })
+                                           .sort({ createdAt: -1 }) 
+                                           .limit(15); ;
+    
+        if (products.length === 0) {
+          return "No products found for the given sub category";
+        }
+    
+        res.json({products,subCategory}); // Return the products found
+    }
+    catch(error)
+    {
+        return res.status(500).json({
+            success: false,
+            message: "Server error for Khadi sub Category clothing ",
+            error: error.message,
+        })        
+    }
+}
+
+// Pottery and Ceramics

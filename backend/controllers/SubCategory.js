@@ -1,5 +1,6 @@
 const SubCategory=require('../models/Subcategory');
 const Category=require('../models/Category');
+const Product=require('../models/Product')
 
 // only for admin
 exports.createSubCategory= async(req,res)=>{
@@ -177,3 +178,38 @@ exports.subCategoryPageDetails=async(req,res)=>{
         })
     }
 }
+
+
+exports.getMaxRangeProductsFromSubCategory=async(req,res)=>{
+    try {
+      const { subCategoryId } = req.params;
+      const { maxPrice } = req.body;
+  
+      if (!subCategoryId || !maxPrice) {
+        return res.status(400).json({ message: 'SUB Category ID and max price are required.' });
+      }
+  
+      // Validate maxPrice to ensure it is a number
+      const maxPriceNumber = parseFloat(maxPrice);
+      if (isNaN(maxPriceNumber)) {
+        return res.status(400).json({ message: 'Max price must be a number.' });
+      }
+  
+      // Query the database
+      const products = await Product.find({
+        subCategory: subCategoryId,
+        'options.price': { $lt: maxPriceNumber }
+      });
+  
+      res.status(200).json(products);
+    }catch(error)
+    {
+      return res.status(500).json({
+        success: false,
+        message: "Internal server error",
+        error: error.message,
+      })    
+    }
+  }
+
+  

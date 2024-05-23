@@ -30,11 +30,19 @@ const Wishlist = () => {
     }, [Wishlist]);
 
 
-    const handle_remove_from_wishlist = (id)=>{
+    const handle_remove_from_wishlist = async (id)=>{
         dispatch(removeWishlistProduct(id));
         if(Wishlist.length===0){
             setWishlistEmpty(true);
         }
+        console.log("updating redux ",Wishlist)
+        await axios.post('http://localhost:4000/api/v1/auth/buyerWishList',{buyerWishlist:Wishlist},{withCredentials:true})
+        .then((res)=>{
+            console.log("wishilist for user ",res)
+        })
+        .catch((error)=>{
+            console.log("error for buyer wishlist",error)
+        })
     }
 
     return (
@@ -68,7 +76,7 @@ const Wishlist = () => {
                                             navigate(`/products/${product._id}`);
                                         }}
                                                     className='product-image'
-                                                    src={product.images[0]}
+                                                    src={product?.images[0]}
                                                  
                                                 />
                                             <button className="remove-from-wishlist-icon"

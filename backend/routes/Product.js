@@ -10,11 +10,14 @@ const {
     deleteProduct,
     searchBar,
     tribalArtAndCraft,
-    khadiProducts,
     villageIndustryProducts,
     newWomensArrivals,
     newMensArrivals,
-    newArrivals
+    newArrivals,
+    khadiProduct,
+    woodworkProduct,
+    bambooCraftProduct,
+    dorkaMetalCratProduct
 }=require('../controllers/Product')
 
 const{
@@ -38,13 +41,16 @@ router.get('/getFullProductDetails/:id',getFullProductDetails)
 // search bar
 router.get('/searchBar',searchBar)
 router.get('/tribalArtAndCraft',tribalArtAndCraft)
-router.get('/khadiProducts',khadiProducts)
 router.get('/villageIndustryProducts',villageIndustryProducts)
 router.get('/newWomensArrivals',newWomensArrivals)
 router.get('/newMensArrivals',newMensArrivals)
 router.get('/newArrivals',newArrivals)
 
-
+//4 boxes implementation home page sub category
+router.get('/khadiProduct',khadiProduct)
+router.get('/woodworkProduct',woodworkProduct)
+router.get('/bambooCraftProduct',bambooCraftProduct)
+router.get('/dorkaMetalCratProduct',dorkaMetalCratProduct)
 
 
 module.exports= router

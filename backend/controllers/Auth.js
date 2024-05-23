@@ -832,11 +832,11 @@ exports.loginAdmin= async(req,res)=>{
 exports.buyerWishList= async(req,res)=>{
     try{
         const buyerId=req.user.id
-
+        console.log("body ",req.body.buyerWishlist)
         const user=await Buyer.findByIdAndUpdate(buyerId,
             {
                 $set:{
-                wishlist:req.body.wishlist
+                wishlist:req.body.buyerWishlist
                 },
             },
             {
@@ -850,6 +850,7 @@ exports.buyerWishList= async(req,res)=>{
                 message:'user not found'
             })
         }
+        console.log("user list ",user.wishlist)
         return res.status(200).json({
             success:true,
             user
