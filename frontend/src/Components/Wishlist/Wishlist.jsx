@@ -8,7 +8,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch , useSelector} from 'react-redux';
 import { setProductId } from '../store/slices/ProductIdSlice.js';
-import {removeWishlistProduct} from '../store/slices/WishlistSlice.js'
+import {removeWishlistProduct, setWishlistProduct} from '../store/slices/WishlistSlice.js'
 
 
 const Wishlist = () => {
@@ -21,28 +21,42 @@ const Wishlist = () => {
 
 
     useEffect(() => {
-        if (Wishlist && Wishlist.length> 0) {
-            setWishlistData(Wishlist);
-        }
-        else {
-            setWishlistEmpty(true);
-        }
+        console.log("hell")
+        // if (Wishlist && Wishlist.length> 0) {
+        //     setWishlistData(Wishlist);
+        // }
+        console.log("hel)")
+        // else {
+        //     setWishlistEmpty(true);
+        // }
+        const backendupdate=async ()=>{
+            await axios.post('http://localhost:4000/api/v1/auth/buyerWishList',{buyerWishlist:Wishlist},{withCredentials:true})
+            .then((res)=>{
+                console.log("wishilist for user ",res)
+            })
+            .catch((error)=>{
+                console.log("error for buyer wishlist",error)
+            })
+           }
+        backendupdate()
     }, [Wishlist]);
 
 
-    const handle_remove_from_wishlist = async (id)=>{
-        dispatch(removeWishlistProduct(id));
-        if(Wishlist.length===0){
-            setWishlistEmpty(true);
-        }
+    const handle_remove_from_wishlist = async (product)=>{
+        console.log("red 1",Wishlist)
+        dispatch(setWishlistProduct(product));
+        console.log("red 2",Wishlist)
+        // if(Wishlist.length===0){
+        //     setWishlistEmpty(true);
+        // }
         console.log("updating redux ",Wishlist)
-        await axios.post('http://localhost:4000/api/v1/auth/buyerWishList',{buyerWishlist:Wishlist},{withCredentials:true})
-        .then((res)=>{
-            console.log("wishilist for user ",res)
-        })
-        .catch((error)=>{
-            console.log("error for buyer wishlist",error)
-        })
+        // await axios.post('http://localhost:4000/api/v1/auth/buyerWishList',{buyerWishlist:Wishlist},{withCredentials:true})
+        // .then((res)=>{
+        //     console.log("wishilist for user ",res)
+        // })
+        // .catch((error)=>{
+        //     console.log("error for buyer wishlist",error)
+        // })
     }
 
     return (
@@ -62,12 +76,12 @@ const Wishlist = () => {
                 </div>
                 <div className="wishlist-container">
                     
-                    {(WishlistEmpty) ?
+                    {(Wishlist?.length===0) ?
                         <div>No products in wishlist</div>
                         :
                         <>
                             {
-                                WishlistData && WishlistData.map((product, productIndex) => (
+                                Wishlist && Wishlist.map((product, productIndex) => (
                                     <div className="wishlist-product-card" key={product._id}>
                                         <div className="product-image-container">
                                             <img
@@ -80,7 +94,7 @@ const Wishlist = () => {
                                                  
                                                 />
                                             <button className="remove-from-wishlist-icon"
-                                                onClick={() => { handle_remove_from_wishlist(product._id); }}
+                                                onClick={() => { handle_remove_from_wishlist(product); }}
                                                 >
                                                 <img src={removeFromWishlist}></img>
                                             </button>

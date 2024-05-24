@@ -14,7 +14,7 @@ const Sidebar = () => {
 
   return (
     <>
-    <div className='flex  min-w-[220px] flex-col border-r-[1px] border-r-richblack-700 bg-richblack-800 py-10'>
+    <div className='flex  min-w-[220px] flex-col border-r-[1px] border-r-richblack-700 bg-richblack-800 py-10'  style={{background:'#d5ca77'}}>
         <div className="flex flex-col px-4">
           {sidebarLinks.map((link) => {
             if (link.acc_type && user?.accountType !== link.acc_type) return null

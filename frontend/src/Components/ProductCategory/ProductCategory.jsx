@@ -14,12 +14,13 @@ import { setProductId } from '../store/slices/ProductIdSlice.js';
 import { setWishlistProduct, removeWishlistProduct } from '../store/slices/WishlistSlice.js'
 import { useParams } from "react-router-dom"
 import { setCategoryId } from '../store/slices/CategoryIdSlice.js';
+import toast from 'react-hot-toast'
 
 const ProductCategory = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { categoryId } = useParams()
-    const [Wishlist, setWishlist] = useState([]);
+    // const [Wishlist, setWishlist] = useState([]);
     const [CategoryIdForAPI, setCategoryIdForAPI] = useState(0);
     const [CategoryDetailsArray, setCategoryDetailsArray] = useState([]);
     const [SubCategoryDetailsArray, setSubCategoryDetailsArray] = useState([]);
@@ -31,6 +32,7 @@ const ProductCategory = () => {
 
     const CategoryId = useSelector((state) => state.CategoryId.CategoryId);
     const buyerWishlist=useSelector((state)=>state.Wishlist.Wishlist)
+    const CurrentUser=useSelector((state)=>state.CurrentUser.CurrentUser)
 
     // changes
     useEffect(() => {
@@ -39,19 +41,51 @@ const ProductCategory = () => {
         //   dispatch(setProductId(null))
     }, [])
 
+    useEffect(() => {
+        console.log("updating redux in effect ", buyerWishlist);
+        const backendupdate=async ()=>{
+        await axios.post('http://localhost:4000/api/v1/auth/buyerWishList',{buyerWishlist},{withCredentials:true})
+        .then((res)=>{
+            console.log("wishilist for user ",res)
+        })
+        .catch((error)=>{
+            console.log("error for buyer wishlist",error)
+        })
+       }
+       backendupdate()
+    }, [buyerWishlist]);
+
+    const handle_add_Towishlist=async(product)=>{
+        if(CurrentUser ===null)
+        {
+            return toast.error("user not logged in")
+        }
+        dispatch(setWishlistProduct(product))
+
+        // console.log("upating redux",buyerWishlist)
+        
+
+    }
+
+
     const handle_add_to_wishlist = async(product) => {
+        if(CurrentUser ===null)
+        {
+           return toast.error("user not logged in")
+        }
         console.log(product);
         console.log("buyerWishlist ",buyerWishlist)
         const productId= product._id;
-        if (Wishlist.includes(productId)) {
-            setWishlist(Wishlist.filter((id) => id !== productId));
-            dispatch(removeWishlistProduct(productId)); 
-        }
-        else {
-            setWishlist([...Wishlist, productId]);
-            dispatch(setWishlistProduct(product));
-            //saveWishlistedProduct(product);
-        }
+        dispatch(setWishlistProduct(product))
+        // if (Wishlist.includes(productId)) {
+        //     setWishlist(Wishlist.filter((id) => id !== productId));
+        //     dispatch(removeWishlistProduct(productId)); 
+        // }
+        // else {
+        //     setWishlist([...Wishlist, productId]);
+        //     dispatch(setWishlistProduct(product));
+        //     //saveWishlistedProduct(product);
+        // }
         console.log("updating redux ",buyerWishlist)
         await axios.post('http://localhost:4000/api/v1/auth/buyerWishList',{buyerWishlist},{withCredentials:true})
         .then((res)=>{
@@ -62,10 +96,13 @@ const ProductCategory = () => {
         })
     }
 
-    const isWishlisted = (productId) => {
-        return Wishlist.includes(productId);
-    };
+    // const isWishlisted = (productId) => {
+    //     return buyerWishlist.includes(productId);
+    // };
 
+    const isWishlisted = (productId) => {
+        return buyerWishlist.some(product => product._id === productId);
+    };
     const [Price, setPrice] = useState(2000);
 
 
@@ -276,7 +313,7 @@ const ProductCategory = () => {
                                                         />
                                                     ))}
                                                     <button className="add-to-wishlist-icon"
-                                                        onClick={() => { handle_add_to_wishlist(product); }}>
+                                                        onClick={() => { handle_add_Towishlist(product); }}>
                                                         <img src={isWishlisted(product._id) ? added_to_wishlist : add_to_wishlist} alt="wishlist"></img>
                                                     </button>
                                                 </div>
@@ -339,7 +376,7 @@ const ProductCategory = () => {
                                                         />
                                                     ))}
                                                     <button className="add-to-wishlist-icon"
-                                                        onClick={() => { handle_add_to_wishlist(product); }}>
+                                                        onClick={() => { handle_add_Towishlist(product); }}>
                                                         <img src={isWishlisted(product._id) ? added_to_wishlist : add_to_wishlist} alt="wishlist"></img>
                                                     </button>
                                                 </div>

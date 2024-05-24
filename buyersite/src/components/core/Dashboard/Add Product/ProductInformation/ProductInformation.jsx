@@ -43,8 +43,12 @@ const ProductInformation = () => {
             }
             setLoading(false)
         }
-
-        if(editProduct)
+        
+        getCategories()
+    },[])   
+    
+    useEffect(()=>{
+      if(editProduct && product)
         {
           setValue("name",product.name)
           setValue("brand",product.brand)
@@ -66,10 +70,12 @@ const ProductInformation = () => {
           console.log(product.subCategory)
           console.log(getValues("subCategory"))
         }
-
-        getCategories()
-
-    },[])
+        console.log("editProduct:", editProduct);
+        console.log("product:", product);
+        
+    },[editProduct,product,categories,setValue])
+      
+        
 
     const isFormUpdated=()=>{
         const currentValues=getValues();
@@ -241,80 +247,86 @@ const ProductInformation = () => {
       navigate("/dashboard/my-products")
     }
   return (
-    <form 
-     onSubmit={handleSubmit(onSubmit)}
-    className="space-y-8 rounded-md border-[1px] border-richblack-100 bg-richblack-100 p-6"
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="space-y-8 rounded-md border-[1px] border-richblack-100 bg-richblack-100 p-6"
     >
-        <div className="flex flex-col space-y-2">
-            <label htmlFor='name' className="text-sm" >
-                Product Name <sup className="text-pink-200">*</sup>
-            </label>
-            <input
-              id="name"
-              placeholder='Enter Product Title'
-              {...register("name",{required:true})}
-            />
-            {
-                errors.name && (
-                    <span className="ml-2 text-xs tracking-wide text-pink-200">
-                        Product name is required
-                    </span>
-                )
-            }
-        </div>
+      <div className="flex flex-col space-y-2">
+        <label htmlFor="name" className="text-sm">
+          Product Name <sup className="text-pink-200">*</sup>
+        </label>
+        <input
+          id="name"
+          placeholder="Enter Product Title"
+          {...register("name", { required: true })}
+        />
+        {errors.name && (
+          <span className="ml-2 text-xs tracking-wide text-pink-200">
+            Product name is required
+          </span>
+        )}
+      </div>
 
-        <div className="flex flex-col space-y-2"> 
-            <label htmlFor='brand' className="text-sm" >
-                Product Brand <sup className="text-pink-200">*</sup>
-            </label>
-            <input
-              id="brand"
-              placeholder='Enter Product Brand'
-              {...register("brand",{required:true})}
-              className="form-style w-full"
-            />
-            {
-                errors.brand && (
-                    <span className="ml-2 text-xs tracking-wide text-pink-200">
-                        Product brand is required
-                    </span>
-                )
-            }
-        </div>
+      <div className="flex flex-col space-y-2">
+        <label htmlFor="brand" className="text-sm">
+          Product Brand <sup className="text-pink-200">*</sup>
+        </label>
+        <input
+          id="brand"
+          placeholder="Enter Product Brand"
+          {...register("brand", { required: true })}
+          className="form-style w-full"
+        />
+        {errors.brand && (
+          <span className="ml-2 text-xs tracking-wide text-pink-200">
+            Product brand is required
+          </span>
+        )}
+      </div>
 
-        <div className="flex flex-col space-y-2">
-            <label className="text-sm" htmlFor="description">
-              Product  Description <sup className="text-pink-200">*</sup>
-            </label>
-            <textarea
-              id="description"
-              placeholder="Enter Description"
-              {...register("description", { required: true })}
-              className="form-style resize-x-none min-h-[130px] w-full"
-            />
-            {errors.description && (
-              <span className="ml-2 text-xs tracking-wide text-pink-200">
-                Product Description is required
-              </span>
-            )}
-        </div>
-        {console.log("1 ",getValues("category"))}
-        {console.log("2 ",getValues("subCategory"))}
-        {/* category not to included in form just for fetching category */}
-        <div className="flex flex-col space-y-2">
-            <label className="text-sm" htmlFor="category">
-                Product Category <sup className="text-pink-200">*</sup>
-            </label>
-            <select
-              {...register("category", { required: true })}
-              defaultValue=""
-              id="category"
-              className="form-style w-full"
-              onChange={handleCategoryChange}
-            >
-                <option value="" disabled>
-                    Choose category
-                </option>
+      <div className="flex flex-col space-y-2">
+        <label className="text-sm" htmlFor="description">
+          Product Description <sup className="text-pink-200">*</sup>
+        </label>
+        <textarea
+          id="description"
+          placeholder="Enter Description"
+          {...register("description", { required: true })}
+          className="form-style resize-x-none min-h-[130px] w-full"
+        />
+        {errors.description && (
+          <span className="ml-2 text-xs tracking-wide text-pink-200">
+            Product Description is required
+          </span>
+        )}
+      </div>
+      {console.log("1 ", getValues("category"))}
+      {console.log("2 ", getValues("subCategory"))}
+      {/* category not to included in form just for fetching category */}
+      <div className="flex flex-col space-y-2">
+        <label className="text-sm" htmlFor="category">
+          Product Category <sup className="text-pink-200">*</sup>
+        </label>
+        <select
+          {...register("category", { required: true })}
+          defaultValue={editProduct && product ? product?.category._id : ""}
+          id="category"
+          className="form-style w-full"
+          onChange={handleCategoryChange}
+        >
+          <option value="" disabled>
+            Choose category
+          </option>
+          {/* {
+                  editProduct && product && (!loading && (
+                    
+                    categories?.map((category,index)=>(
+                        <option key={index} value={product?.category._id} selected={product?.category._id === category._id}>
+                            {category.name} 
+                        </option>
+                    ))
+                ))
+                }
                 {
                     !loading && (
                         categories?.map((category,index)=>(
@@ -323,250 +335,260 @@ const ProductInformation = () => {
                             </option>
                         ))
                     )
-                }
-            </select>
-            {
-                errors.category && (
-                    <span className="ml-2 text-xs tracking-wide text-pink-200">
-                        Please select a category
-                    </span>
-                )
-            }
-        </div>
-        {console.log("3 ",getValues("category"))}
-        {console.log("4 ",getValues("subCategory"))}
-        {/* subCategories */}
-        <div className="flex flex-col space-y-2">
-            <label className="text-sm" htmlFor="subCategory">
-                Product Sub Category <sup className="text-pink-200">*</sup>
-            </label>
-            <select
-              {...register("subCategory", { required: true })}
-              defaultValue=""
-              id="subCategory"
-              className="form-style w-full"
-              disabled={!getValues("category")}
-            
-            >
-              {console.log("5 ",getValues("category"))}
-              {console.log("6 ",getValues("subCategory"))}
-                <option value="" disabled>
-                    Choose Sub Category
+                } */}
+          {/* {editProduct && product && !loading
+            ? categories?.map((category, index) => (
+                <option
+                  key={index}
+                  value={category._id}
+                  selected={product?.category._id === category._id}
+                >
+                  {category.name}
                 </option>
+              ))
+            : categories?.map((category, index) => (
+                <option key={index} value={category._id}>
+                  {category.name}
+                </option>
+              ))} */}
+              {
+        !loading && categories?.map((category, index) => (
+            <option key={index} value={category._id}>
+                {category.name}
+            </option>
+        ))
+    }
+        </select>
+        {errors.category && (
+          <span className="ml-2 text-xs tracking-wide text-pink-200">
+            Please select a category
+          </span>
+        )}
+      </div>
+      {console.log("3 ", getValues("category"))}
+      {console.log("4 ", getValues("subCategory"))}
+      {/* subCategories */}
+      <div className="flex flex-col space-y-2">
+        <label className="text-sm" htmlFor="subCategory">
+          Product Sub Category <sup className="text-pink-200">*</sup>
+        </label>
+        <select
+          {...register("subCategory", { required: true })}
+          defaultValue=""
+          id="subCategory"
+          className="form-style w-full"
+          disabled={!getValues("category")}
+        >
+          {console.log("5 ", getValues("category"))}
+          {console.log("6 ", getValues("subCategory"))}
+          <option value="" disabled>
+            Choose Sub Category
+          </option>
 
-                {
-                  !loading && subCategories?.length>0?(subCategories?.map(subcategory => (
-                    <option key={subcategory._id} value={subcategory._id}>
-                        {subcategory.name}
-                    </option>
-                  ))  
-                 ):(
-                    <option disabled>no sub category found</option>
-                 )
-                }
-            </select>
-            {
-                errors.subCategory && (
-                    <span className="ml-2 text-xs tracking-wide text-pink-200">
-                        Please select a category first
-                    </span>
-                )
-            }
-        </div>
-        
-        {/* special features */}
-        <StringField
-            name="specialFeatures"
-            label="Special Features"
-            register={register}
-            setValue={setValue}
-            errors={errors}
-            getValues={getValues}
-            placeholder="Key attraction Points"
+          {!loading && subCategories?.length > 0 ? (
+            subCategories?.map((subcategory) => (
+              <option key={subcategory._id} value={subcategory._id}>
+                {subcategory.name}
+              </option>
+            ))
+          ) : (
+            <option disabled>no sub category found</option>
+          )}
+        </select>
+        {errors.subCategory && (
+          <span className="ml-2 text-xs tracking-wide text-pink-200">
+            Please select a category first
+          </span>
+        )}
+      </div>
+
+      {/* special features */}
+      <StringField
+        name="specialFeatures"
+        label="Special Features"
+        register={register}
+        setValue={setValue}
+        errors={errors}
+        getValues={getValues}
+        placeholder="Key attraction Points"
+      />
+
+      {/* components */}
+      <StringField
+        name="components"
+        label="Components"
+        register={register}
+        setValue={setValue}
+        errors={errors}
+        getValues={getValues}
+        placeholder="enter quantity also"
+      />
+
+      {/* photos size 640*640 and less than 300kb */}
+      <Upload
+        name="images"
+        label="Product Images"
+        register={register}
+        setValue={setValue}
+        errors={errors}
+        editData={editProduct ? product?.images : null}
+      />
+
+      {/* material */}
+      <div className="flex flex-col space-y-2">
+        <label htmlFor="material" className="text-sm">
+          Product Material
+        </label>
+        <input
+          id="material"
+          placeholder="Enter Product Material"
+          {...register("material")}
+          className="form-style w-full"
         />
-        
-        {/* components */}
-        <StringField
-            name="components"
-            label="Components"
-            register={register}
-            setValue={setValue}
-            errors={errors}
-            getValues={getValues}
-            placeholder="enter quantity also"
+      </div>
+
+      {/* weight */}
+      <div className="flex flex-col space-y-2">
+        <label htmlFor="weight" className="text-sm">
+          Product Weight <sup className="text-pink-200">*</sup>
+        </label>
+        <input
+          id="weight"
+          type="number"
+          step="any"
+          placeholder="Enter Product Weight in Kgs"
+          {...register("weight", { required: true, valueAsNumber: true })}
+          className="form-style w-full"
         />
+        {errors.weight && (
+          <span className="ml-2 text-xs tracking-wide text-pink-200">
+            Product Weight is required
+          </span>
+        )}
+      </div>
 
-        {/* photos size 640*640 and less than 300kb */}
-        <Upload
-         name="images"
-         label="Product Images"
-         register={register}
-         setValue={setValue}
-         errors={errors}
-         editData={editProduct?product?.images:null}
+      {/* shape */}
+      <div className="flex flex-col space-y-2">
+        <label htmlFor="shape" className="text-sm">
+          Product Shape
+        </label>
+        <input
+          id="shape"
+          type="text"
+          placeholder="Enter Product Shape"
+          {...register("shape")}
+          className="form-style w-full"
         />
-        
+      </div>
 
-        {/* material */}
-        <div className="flex flex-col space-y-2"> 
-            <label htmlFor='material' className="text-sm" >
-                Product Material
-            </label>
-            <input
-              id="material"
-              placeholder='Enter Product Material'
-              {...register("material",)}
-              className="form-style w-full"
-            />
-        </div>
-
-        {/* weight */}
-        <div className="flex flex-col space-y-2"> 
-            <label htmlFor='weight' className="text-sm" >
-                Product Weight <sup className="text-pink-200">*</sup>
-            </label>
-            <input
-              id="weight"
-              type='number'
-              step="any"
-              placeholder='Enter Product Weight in Kgs'
-              {...register("weight",{required:true,valueAsNumber: true,})}
-              className="form-style w-full"
-            />
-            {
-                errors.weight && (
-                    <span className="ml-2 text-xs tracking-wide text-pink-200">
-                        Product Weight is required
-                    </span>
-                )
-            }
-        </div>
-
-        
-        {/* shape */}
-        <div className="flex flex-col space-y-2"> 
-            <label htmlFor='shape' className="text-sm" >
-                Product Shape
-            </label>
-            <input
-              id="shape"
-              type='text'
-              placeholder='Enter Product Shape'
-              {...register("shape",)}
-              className="form-style w-full"
-            />
-        </div>
-
-        {/* style */}
-        <div className="flex flex-col space-y-2"> 
-            <label htmlFor='style' className="text-sm" >
-                Product Style
-            </label>
-            <input
-              id="style"
-              type='text'
-              placeholder='Enter Product Style'
-              {...register("style",)}
-              className="form-style w-full"
-            />
-        </div>
-
-        {/* height */}
-        <div className="flex flex-col space-y-2"> 
-            <label htmlFor='height' className="text-sm" >
-                Product Height
-            </label>
-            <input
-              id="height"
-              type='number'
-              step="any"
-              placeholder='Enter Product Height in cm(s)'
-              {...register("height",{valueAsNumber:true})}
-              className="form-style w-full"
-            />
-        </div>
-
-        {/* width */}
-        <div className="flex flex-col space-y-2"> 
-            <label htmlFor='width' className="text-sm" >
-                Product Width
-            </label>
-            <input
-              id="width"
-              type='number'
-              step="any"
-              placeholder='Enter Product Width in cm(s)'
-              {...register("width",{valueAsNumber:true})}
-              className="form-style w-full"
-            />
-        </div>
-
-        {/* length */}
-        <div className="flex flex-col space-y-2"> 
-            <label htmlFor='length' className="text-sm" >
-                Product Length
-            </label>
-            <input
-              id="length"
-              type='number'
-              step="any"
-              placeholder='Enter Product Length in cm(s)'
-              {...register("length",{valueAsNumber:true})}
-              className="form-style w-full"
-            />
-        </div>
-
-        {/* pattern */}
-        <div className="flex flex-col space-y-2"> 
-            <label htmlFor='pattern' className="text-sm" >
-                Product Pattern
-            </label>
-            <input
-              id="pattern"
-              placeholder='Enter Product Pattern'
-              {...register("pattern",)}
-              className="form-style w-full"
-            />
-        </div>
-        
-
-        <ProductOptions
-           register={register}
-           setValue={setValue}
-           errors={errors}
-           getValues={getValues}
+      {/* style */}
+      <div className="flex flex-col space-y-2">
+        <label htmlFor="style" className="text-sm">
+          Product Style
+        </label>
+        <input
+          id="style"
+          type="text"
+          placeholder="Enter Product Style"
+          {...register("style")}
+          className="form-style w-full"
         />
+      </div>
 
-        {/* Next Button */}
-        <div className="flex justify-end gap-x-2">
-            {editProduct && (
-                <div className='flex gap-x-1'>
-                  <button
-                    onClick={() => dispatch(setStep(2))}
-                    disabled={loading}
-                    className={`flex cursor-pointer items-center gap-x-2 rounded-md bg-richblack-300 py-[8px] px-[20px] font-semibold text-richblack-900`}
-                  >
-                    Continue Wihout Saving
-                  </button>
-                  <button
-                   disabled={loading}
-                   onClick={() => goToProduct()}
-                   className={`flex cursor-pointer items-center gap-x-2 rounded-md bg-richblack-300 py-[8px] px-[20px] font-semibold text-richblack-900`}
-                  >
-                    Cancel Edit
-                  </button>
-                </div>
-            )}
-            <IconBtn
+      {/* height */}
+      <div className="flex flex-col space-y-2">
+        <label htmlFor="height" className="text-sm">
+          Product Height
+        </label>
+        <input
+          id="height"
+          type="number"
+          step="any"
+          placeholder="Enter Product Height in cm(s)"
+          {...register("height", { valueAsNumber: true })}
+          className="form-style w-full"
+        />
+      </div>
+
+      {/* width */}
+      <div className="flex flex-col space-y-2">
+        <label htmlFor="width" className="text-sm">
+          Product Width
+        </label>
+        <input
+          id="width"
+          type="number"
+          step="any"
+          placeholder="Enter Product Width in cm(s)"
+          {...register("width", { valueAsNumber: true })}
+          className="form-style w-full"
+        />
+      </div>
+
+      {/* length */}
+      <div className="flex flex-col space-y-2">
+        <label htmlFor="length" className="text-sm">
+          Product Length
+        </label>
+        <input
+          id="length"
+          type="number"
+          step="any"
+          placeholder="Enter Product Length in cm(s)"
+          {...register("length", { valueAsNumber: true })}
+          className="form-style w-full"
+        />
+      </div>
+
+      {/* pattern */}
+      <div className="flex flex-col space-y-2">
+        <label htmlFor="pattern" className="text-sm">
+          Product Pattern
+        </label>
+        <input
+          id="pattern"
+          placeholder="Enter Product Pattern"
+          {...register("pattern")}
+          className="form-style w-full"
+        />
+      </div>
+
+      <ProductOptions
+        register={register}
+        setValue={setValue}
+        errors={errors}
+        getValues={getValues}
+      />
+
+      {/* Next Button */}
+      <div className="flex justify-end gap-x-2">
+        {editProduct && (
+          <div className="flex gap-x-1">
+            <button
+              onClick={() => dispatch(setStep(2))}
               disabled={loading}
-              text={!editProduct ? "Next" : "Save Changes"}
+              className={`flex cursor-pointer items-center gap-x-2 rounded-md bg-richblack-300 py-[8px] px-[20px] font-semibold text-richblack-900`}
             >
-              <MdNavigateNext />
-            </IconBtn>
-        </div>
-
+              Continue Wihout Saving
+            </button>
+            <button
+              disabled={loading}
+              onClick={() => goToProduct()}
+              className={`flex cursor-pointer items-center gap-x-2 rounded-md bg-richblack-300 py-[8px] px-[20px] font-semibold text-richblack-900`}
+            >
+              Cancel Edit
+            </button>
+          </div>
+        )}
+        <IconBtn
+          disabled={loading}
+          text={!editProduct ? "Next" : "Save Changes"}
+        >
+          <MdNavigateNext />
+        </IconBtn>
+      </div>
     </form>
-  )
+  );
 }
 
 export default ProductInformation

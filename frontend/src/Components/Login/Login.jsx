@@ -3,9 +3,10 @@ import logo from '../../Images/logo9.png';
 import axios from 'axios';
 import './Login.css'
 import {useNavigate} from 'react-router-dom'
-import { useDispatch} from 'react-redux'
+import { useDispatch, useSelector} from 'react-redux'
 import { setCurrentUser } from '../store/slices/AuthSlice.js';
 import toast from 'react-hot-toast';
+import { setWishlist } from '../store/slices/WishlistSlice.js';
 
 
 
@@ -13,7 +14,7 @@ import toast from 'react-hot-toast';
 function Login() {
 
     const [loading, setLoading] = useState(false);
-
+    const {Wishlist}=useSelector((state)=>state.Wishlist)
     //API ROUTE
 
     const navigate= useNavigate();
@@ -36,6 +37,8 @@ function Login() {
        toast.success('User logged in successfully!');
 
                 navigate('/');
+                 dispatch(setWishlist(response.data?.user?.wishlist))
+                 console.log("wihlist after login ",Wishlist)
             })
             .catch(error => {
                 console.log(error)

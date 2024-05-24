@@ -213,7 +213,7 @@ exports.loginBuyer= async(req,res)=>{
             })
         }
 
-        const user=await Buyer.findOne({email}).populate("additionalDetail")
+        const user=await Buyer.findOne({email}).populate("additionalDetail").populate("wishlist")
 
         if(!user)
         {

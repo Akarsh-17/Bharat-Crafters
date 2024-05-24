@@ -161,7 +161,7 @@ const ProductTable = ({products,setProducts}) => {
             }
         </Tbody>
       </Table>
-      {confirmationModal && <ConfirmationModal modalData={confirmationModal} />}
+      {confirmationModal && <ConfirmationModal modal={confirmationModal}/>}
     </>
   )
 }
