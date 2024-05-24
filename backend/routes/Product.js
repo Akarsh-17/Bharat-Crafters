@@ -17,7 +17,9 @@ const {
     khadiProduct,
     woodworkProduct,
     bambooCraftProduct,
-    dorkaMetalCratProduct
+    dorkaMetalCratProduct,
+    kurtaPyjamas,
+    Dresses,
 }=require('../controllers/Product')
 
 const{
@@ -51,6 +53,8 @@ router.get('/khadiProduct',khadiProduct)
 router.get('/woodworkProduct',woodworkProduct)
 router.get('/bambooCraftProduct',bambooCraftProduct)
 router.get('/dorkaMetalCratProduct',dorkaMetalCratProduct)
+router.get('/kurtaPyjamas', kurtaPyjamas)
+router.get('/Dresses', Dresses)
 
 
 module.exports= router

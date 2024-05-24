@@ -8,16 +8,58 @@
         display: grid;
         grid-template-columns: 1fr 2fr 1fr;
         gap: 0.8rem;
+        height: 20rem; /* Fixed height for all boxes */
+        padding: 1rem 0;
+        margin-bottom: 4rem;
+
     }
     
     .section2{
         display: grid;
-        grid-template-columns: 2fr 1fr;
+        grid-template-columns: 1fr;
         gap: 0.8rem;
+        height: 20rem; /* Fixed height for all boxes */
+
+    }
+    .box1, .box2,.box2-grid, .box3, .box4, .box5, .product-box, .box3-item {
+        position: relative;
+        overflow: hidden;
+        height: 100%; /* Fixed height for all boxes */
+        background-color: rgb(189, 187, 187);
+        padding: 0.65rem;
     }
     
-    .box1, .box2, .box3 , .box4, .box5{
-        background-color: #f2f2f2;
-        padding: 20px;
+    .box1 img, .box2 img, .box3 img, .box4 img, .box5 img, .product-box img, .box3-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        padding:1rem 0;
+    }
+    
+    .box1 span, .box2 span, .box3 span, .box4 span, .box5 span, .product-box span, .box3-item span {
+        top: 1rem;
+        left: 0;
+        width: 100%;
         text-align: center;
-      }
+        color: rgb(51, 51, 51);
+        font-weight: 600;
+        font-size: 1.1rem;
+        /* background: rgba(0, 0, 0, 0.5); */
+        margin-bottom: 30px;
+        box-sizing: border-box;
+        z-index: 99;
+        padding-left: 0.5rem;
+    }
+    
+    .box2-grid {
+        display: grid;
+        grid-auto-flow: column; /* Adjust minmax value as needed */
+        grid-gap: 10px; /* Adjust gap as needed */
+    }
+
+    .box2-item {
+        position: relative;
+        overflow: hidden;
+        /* height: 20rem; Fixed height for all items */
+    }

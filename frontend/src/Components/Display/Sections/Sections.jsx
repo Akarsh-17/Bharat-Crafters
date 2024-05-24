@@ -65,7 +65,7 @@ const Sections = () => {
     }
   };
   useEffect(() => {
-    Promise.all([getnewArrivalsData(), getMenData()]).then(() => {
+    Promise.all([getnewArrivalsData(), getMenData(), getWomenData()]).then(() => {
       setLoading(false);
     }).catch((error) => {
       setLoading(false);

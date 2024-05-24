@@ -775,4 +775,64 @@ exports.dorkaMetalCratProduct=async(req,res)=>{
     }
 }
 
-// Pottery and Ceramics
+exports.kurtaPyjamas=async(req,res)=>{
+    try{
+       const subCategory=await SubCategory.findOne({name:"Kurta Pyjamas"})
+
+       if(!SubCategory)
+       {
+        return "Sub Category not found";
+       }
+
+       
+       const products = await Product.find({ subCategory: subCategory._id  })
+                                           .sort({ createdAt: -1 }) 
+                                           .limit(15); ;
+    
+        if (products.length === 0) {
+          return "No products found for the given sub category";
+        }
+    
+        res.json({products,subCategory}); // Return the products found
+    }
+    catch(error)
+    {
+        return res.status(500).json({
+            success: false,
+            message: "Server error for Khadi sub Category clothing ",
+            error: error.message,
+        })        
+    }
+}
+
+
+
+exports.Dresses=async(req,res)=>{
+    try{
+       const subCategory=await SubCategory.findOne({name:"Dresses"})
+
+       if(!SubCategory)
+       {
+        return "Sub Category not found";
+       }
+
+       
+       const products = await Product.find({ subCategory: subCategory._id  })
+                                           .sort({ createdAt: -1 }) 
+                                           .limit(15); ;
+    
+        if (products.length === 0) {
+          return "No products found for the given sub category";
+        }
+    
+        res.json({products,subCategory}); // Return the products found
+    }
+    catch(error)
+    {
+        return res.status(500).json({
+            success: false,
+            message: "Server error for Khadi sub Category clothing ",
+            error: error.message,
+        })        
+    }
+}
