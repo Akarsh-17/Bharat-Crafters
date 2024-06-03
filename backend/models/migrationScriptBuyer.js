@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Product = require('./Product'); // Update the path to your User model
 
 // Connect to MongoDB
-mongoose.connect('mongodb+srv://akarsh01ynr:tbJJVEcF1VGOOdwv@cluster0.ij7ebv6.mongodb.net/DAK_GHAR', {
+mongoose.connect('bd_url', {
   useNewUrlParser: true,
   useUnifiedTopology: true
 })
