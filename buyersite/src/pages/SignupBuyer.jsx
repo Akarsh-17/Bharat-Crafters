@@ -333,7 +333,7 @@ function SignupBuyer() {
 
     const sendFormData = async (formData) => {
         try {
-            const sendOtpResponse = await axios.post(`http://localhost:4000/api/v1/auth/sendOTP`, 
+            const sendOtpResponse = await axios.post(`https://bharat-crafters-backend.onrender.com/api/v1/auth/sendOTP`, 
             { email: formData.email });
             toggleOverlay(true);
 
@@ -347,7 +347,7 @@ function SignupBuyer() {
         const otp = sessionStorage.getItem('otp');
 
             
-                axios.post(`http://localhost:4000/api/v1/auth/verifyOTP`, { enteredOTP: formData.otp , otp: otp})
+                axios.post(`https://bharat-crafters-backend.onrender.com/api/v1/auth/verifyOTP`, { enteredOTP: formData.otp , otp: otp})
                     .then(response => {
                         console.log(response.data);
                         alert('verification successful!');
@@ -359,7 +359,7 @@ function SignupBuyer() {
 
                     console.log("otp verified")
                     console.log(formData)
-                    axios.post(`http://localhost:4000/api/v1/auth/signupSeller`, formData)
+                    axios.post(`https://bharat-crafters-backend.onrender.com/api/v1/auth/signupSeller`, formData)
                     .then(response => {
                         console.log(response.data);
                         alert('registeration successful!');

@@ -44,7 +44,8 @@ app.use(
 app.use((req, res, next) => {
 	res.setHeader(
 	  "Access-Control-Allow-Origin",
-	  "http://localhost:3000","http://localhost:3001",
+	  "https://bharat-crafters.vercel.app","https://bharat-crafters-git-main-akarshs-projects-734b263f.vercel.app","https://vercel.com/akarshs-projects-734b263f/bharat-crafters/7BisHbZb4BnZn2JyrsN5XAmJqUip",
+	  "https://bharat-crafters-seller.vercel.app","https://vercel.com/akarshs-projects-734b263f/bharat-crafters-seller/5GDQsb1q1KerYpNUu7t341yoA79L","https://bharat-crafters-seller-git-main-akarshs-projects-734b263f.vercel.app"
 	);
 	res.setHeader(
 	  "Access-Control-Allow-Methods",
@@ -63,7 +64,9 @@ app.use((req, res, next) => {
 
   app.use(
 	cors({
-	  origin: ["http://localhost:3000","http://localhost:3001"],
+	  origin: ["https://bharat-crafters.vercel.app","https://bharat-crafters-git-main-akarshs-projects-734b263f.vercel.app","https://vercel.com/akarshs-projects-734b263f/bharat-crafters/7BisHbZb4BnZn2JyrsN5XAmJqUip",
+		"https://bharat-crafters-seller.vercel.app","https://vercel.com/akarshs-projects-734b263f/bharat-crafters-seller/5GDQsb1q1KerYpNUu7t341yoA79L","https://bharat-crafters-seller-git-main-akarshs-projects-734b263f.vercel.app"
+	  ],
 	  credentials: true,
 	})
   );

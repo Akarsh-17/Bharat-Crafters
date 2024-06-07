@@ -44,7 +44,7 @@ const Message = () => {
   }, [arrivalMessage, currentChat]);
 
   useEffect(()=>{
-   axios.get(`http://localhost:4000/api/v1/conversation/get-seller-conversation`,{withCredentials:true})
+   axios.get(`https://bharat-crafters-backend.onrender.com/api/v1/conversation/get-seller-conversation`,{withCredentials:true})
    .then((res)=>{
     console.log(res)
     setConversation(res?.data?.conversation)
@@ -77,7 +77,7 @@ const Message = () => {
     const getMessage = async () => {
       try {
         const id = currentChat?._id;
-        const response = await axios.get(`http://localhost:4000/api/v1/conversation/seller-getAllMessages/${id}`,{withCredentials:true})
+        const response = await axios.get(`https://bharat-crafters-backend.onrender.com/api/v1/conversation/seller-getAllMessages/${id}`,{withCredentials:true})
         console.log(" h1 ",response)
         setMessages(response.data.messages);
       } catch (error) {
@@ -95,7 +95,7 @@ const Message = () => {
     const id = currentChat._id;
     await axios
       .put(
-        `http://localhost:4000/api/v1/conversation/get-seller-updatedLastMessage/${id}`,
+        `https://bharat-crafters-backend.onrender.com/api/v1/conversation/get-seller-updatedLastMessage/${id}`,
         {
           lastMessage: newMessage,
           lastMessageId: seller._id,
@@ -133,7 +133,7 @@ const Message = () => {
     try {
       if (newMessage !== "") {
         await axios
-          .post(`http://localhost:4000/api/v1/conversation/seller-createNewMessage`,message,{withCredentials:true})
+          .post(`https://bharat-crafters-backend.onrender.com/api/v1/conversation/seller-createNewMessage`,message,{withCredentials:true})
           .then((res) => {
             console.log(res)
             setMessages([...messages, res?.data?.message]);
@@ -174,7 +174,7 @@ const Message = () => {
 
     try {
       await axios
-      .post(`http://localhost:4000/api/v1/conversation/seller-createNewMessage`, {
+      .post(`https://bharat-crafters-backend.onrender.com/api/v1/conversation/seller-createNewMessage`, {
           images: e,
           sender: seller._id,
           text: newMessage,
@@ -194,7 +194,7 @@ const Message = () => {
     const id = currentChat._id;
     await axios
       .put(
-        `http://localhost:4000/api/v1/conversation/get-seller-updatedLastMessage/${id}`,
+        `https://bharat-crafters-backend.onrender.com/api/v1/conversation/get-seller-updatedLastMessage/${id}`,
       {
         lastMessage: "Photo",
         lastMessageId: seller._id,
@@ -264,7 +264,7 @@ const Messagelist = ({ data, index, setOpen, setCurrentChat,me,setBuyer,online,s
 
     const getBuyer=async()=>{
       try{
-         const res=await axios.get(`http://localhost:4000/api/v1/conversation/byerInfo/${userId}`,{withCredentials:true})
+         const res=await axios.get(`https://bharat-crafters-backend.onrender.com/api/v1/conversation/byerInfo/${userId}`,{withCredentials:true})
          setUser(res.data.user)
       }
       catch(error)

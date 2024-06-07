@@ -30,7 +30,7 @@ const Wishlist = () => {
         //     setWishlistEmpty(true);
         // }
         const backendupdate=async ()=>{
-            await axios.post('http://localhost:4000/api/v1/auth/buyerWishList',{buyerWishlist:Wishlist},{withCredentials:true})
+            await axios.post('https://bharat-crafters-backend.onrender.com/api/v1/auth/buyerWishList',{buyerWishlist:Wishlist},{withCredentials:true})
             .then((res)=>{
                 console.log("wishilist for user ",res)
             })
@@ -50,7 +50,7 @@ const Wishlist = () => {
         //     setWishlistEmpty(true);
         // }
         console.log("updating redux ",Wishlist)
-        // await axios.post('http://localhost:4000/api/v1/auth/buyerWishList',{buyerWishlist:Wishlist},{withCredentials:true})
+        // await axios.post('https://bharat-crafters-backend.onrender.com/api/v1/auth/buyerWishList',{buyerWishlist:Wishlist},{withCredentials:true})
         // .then((res)=>{
         //     console.log("wishilist for user ",res)
         // })

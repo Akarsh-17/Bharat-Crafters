@@ -55,7 +55,7 @@ const ProductDescriptionPage = () => {
 
     const getProductData = async () => {
         try {
-            const response = await axios.get(`http://localhost:4000/api/v1/product/getFullProductDetails/${ProductIdForAPI}`, {
+            const response = await axios.get(`https://bharat-crafters-backend.onrender.com/api/v1/product/getFullProductDetails/${ProductIdForAPI}`, {
                 withCredentials: true
             });
             console.log(response)
@@ -186,7 +186,7 @@ const ProductDescriptionPage = () => {
         {
             const groupTitle=product._id + buyer._id
             const sellerId=product.seller._id
-            axios.post(`http://localhost:4000/api/v1/conversation/create-new-conversation`,{groupTitle,sellerId},
+            axios.post(`https://bharat-crafters-backend.onrender.com/api/v1/conversation/create-new-conversation`,{groupTitle,sellerId},
             {
                 withCredentials: true
             })
