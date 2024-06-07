@@ -82,6 +82,7 @@ const Header = () => {
     </>) : (<>
         <Link to="/login" style={{ textDecoration: 'none' }}><div className="right-header-links header-login-button" >Login</div></Link>
         <Link to="/signup" style={{ textDecoration: 'none' }}><div className="right-header-links header-signup-button" >Sign up</div></Link>
+        <Link to="" style={{ textDecoration: 'none' }}><div className="right-header-links header-signup-button" >Become Seller</div></Link>
     </>)}
 
 
