@@ -17,7 +17,7 @@ function SignUp() {
         setLoading(true);
         toast.loading('Loading...');
         try {
-            const sendOtpResponse = await axios.post(`https://bharat-crafters-backend.onrender.com/api/v1/auth/sendOTP`, 
+            const sendOtpResponse = await axios.post(`http://localhost:4000/api/v1/auth/sendOTP`, 
             { email: formData.email }
             , {
                 withCredentials: true
@@ -34,7 +34,7 @@ function SignUp() {
         const otp = sessionStorage.getItem('otp');
 
 
-                axios.post(`https://bharat-crafters-backend.onrender.com/api/v1/auth/verifyOTP`, { enteredOTP: formData.otp , otp: otp}, {
+                axios.post(`http://localhost:4000/api/v1/auth/verifyOTP`, { enteredOTP: formData.otp , otp: otp}, {
                     withCredentials: true
                 })
                     .then(response => {
@@ -48,7 +48,7 @@ function SignUp() {
 
                     console.log("otp verified")
                     console.log(formData)
-                    axios.post(`https://bharat-crafters-backend.onrender.com/api/v1/auth/signupBuyer`, formData, {
+                    axios.post(`http://localhost:4000/api/v1/auth/signupBuyer`, formData, {
                         withCredentials: true
                     })
                     .then(response => {

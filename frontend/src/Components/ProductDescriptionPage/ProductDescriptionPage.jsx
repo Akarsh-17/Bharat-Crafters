@@ -12,6 +12,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import sendMessageIcon from '../../Images/paper-plane (1).png'
 import toast from 'react-hot-toast'
+import { addToCart } from '../store/slices/cartSlice.js'
 
 
 
@@ -28,7 +29,7 @@ const ProductDescriptionPage = () => {
     const [SelectedPrice, setSelectedPrice] = useState(null);
     const [SelectedSize, setSelectedSize] = useState(null);
     const [SelectedColor, setSelectedColor] = useState(null);
-
+    const loginCart = () => toast("Login to add product to Cart.");
 
 
     const { productId } = useParams()
@@ -55,7 +56,7 @@ const ProductDescriptionPage = () => {
 
     const getProductData = async () => {
         try {
-            const response = await axios.get(`https://bharat-crafters-backend.onrender.com/api/v1/product/getFullProductDetails/${ProductIdForAPI}`, {
+            const response = await axios.get(`http://localhost:4000/api/v1/product/getFullProductDetails/${ProductIdForAPI}`, {
                 withCredentials: true
             });
             console.log(response)
@@ -186,7 +187,7 @@ const ProductDescriptionPage = () => {
         {
             const groupTitle=product._id + buyer._id
             const sellerId=product.seller._id
-            axios.post(`https://bharat-crafters-backend.onrender.com/api/v1/conversation/create-new-conversation`,{groupTitle,sellerId},
+            axios.post(`http://localhost:4000/api/v1/conversation/create-new-conversation`,{groupTitle,sellerId},
             {
                 withCredentials: true
             })
@@ -201,6 +202,38 @@ const ProductDescriptionPage = () => {
         else{
             toast.error("Please login for conversation")
         }
+    }
+    
+    const addProductToCart=(product,selectedOption,selectedColor,selectedPrice,selectedSize)=>{
+      if(!buyer)
+      {
+        loginCart();
+        return;
+      }
+
+      if(!selectedOption)
+      {
+        toast("Please an option");
+        return;
+      }
+    //   const check={
+    //     ...ProductDetails,
+    //         selectedOption,
+    //         SelectedColor:SelectedColor[0],
+    //         SelectedPrice,
+    //         SelectedSize
+    //   }
+    //   console.log(check);
+      dispatch(
+        addToCart({
+            ...product,
+            selectedOption,
+            selectedColor:selectedColor[0],
+            selectedPrice,
+            selectedSize,
+            selectedQuantity:1,
+        })
+      )
     }
    
     return (
@@ -268,7 +301,7 @@ const ProductDescriptionPage = () => {
                             {ProductDetails?.options && (
                                 <>
 
-                                    {ProductDetails.options.map((option) => (
+                                    {ProductDetails?.options?.map((option) => (
 
                                         <>
 
@@ -312,7 +345,7 @@ const ProductDescriptionPage = () => {
                     </div>
 
                     <div className="product-buy-container">
-                        <button className="add-product-to-bag">Add to Bag</button>
+                        <button className="add-product-to-bag" onClick={()=>addProductToCart(ProductDetails,selectedOption,SelectedColor,SelectedPrice,SelectedSize)}>Add to Bag</button>
                         <button className="add-to-wishlist-button">Add to Wishlist</button>
                     </div>
                     <div className="product-seller-container">

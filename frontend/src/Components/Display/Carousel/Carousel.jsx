@@ -33,7 +33,7 @@ const MyCarousel = () => {
         {
           images.map((image, index) => {
             return (
-              <div className="carousel-image-container" >
+              <div className="carousel-image-container" key={index}>
                 <img src={image.image_url} key={index} className='carousel-images'></img>
                 <div className="carousel-image-overlay">
                   <Link className='overlay-link'><div className="overlay-shop-in">{image.shop}</div>

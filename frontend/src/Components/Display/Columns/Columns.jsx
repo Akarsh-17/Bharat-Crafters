@@ -25,7 +25,7 @@ const Columns = () => {
 
     const getKhadiProducts = async () => {
         try {
-            const Data = await axios.get(`https://bharat-crafters-backend.onrender.com/api/v1/product/khadiProduct`,
+            const Data = await axios.get(`http://localhost:4000/api/v1/product/khadiProduct`,
                 { withCredentials: true });
 
             console.log(Data.data)
@@ -39,7 +39,7 @@ const Columns = () => {
 
     const getWoodworkProducts = async () => {
         try {
-            const Data = await axios.get(`https://bharat-crafters-backend.onrender.com/api/v1/product/woodworkProduct`,
+            const Data = await axios.get(`http://localhost:4000/api/v1/product/woodworkProduct`,
                 { withCredentials: true });
 
             setBox1Data(Data.data);
@@ -52,7 +52,7 @@ const Columns = () => {
 
     const getBambooProducts = async () => {
         try {
-            const Data = await axios.get(`https://bharat-crafters-backend.onrender.com/api/v1/product/bambooCraftProduct`,
+            const Data = await axios.get(`http://localhost:4000/api/v1/product/bambooCraftProduct`,
                 { withCredentials: true });
 
             setBox3Data(Data.data);
@@ -65,7 +65,7 @@ const Columns = () => {
 
     const getKurtaPyjamas = async () => {
         try {
-            const Data = await axios.get(`https://bharat-crafters-backend.onrender.com/api/v1/product/kurtaPyjamas`,
+            const Data = await axios.get(`http://localhost:4000/api/v1/product/kurtaPyjamas`,
                 { withCredentials: true });
 
             setBox4Data(Data.data);
@@ -78,7 +78,7 @@ const Columns = () => {
 
     const getDresses = async () => {
         try {
-            const Data = await axios.get(`https://bharat-crafters-backend.onrender.com/api/v1/product/Dresses`,
+            const Data = await axios.get(`http://localhost:4000/api/v1/product/Dresses`,
                 { withCredentials: true });
 
                 console.log(Data.data)

@@ -58,6 +58,15 @@ const buyerSchema=new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Product",
     }],
+    cartSummary:{
+        type:Number,
+        default:0
+    },
+    cart:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"Cart",
+        require:true
+    }
 },
  {timestamps:true}
 )

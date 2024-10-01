@@ -44,7 +44,7 @@ const ProductCategory = () => {
     useEffect(() => {
         console.log("updating redux in effect ", buyerWishlist);
         const backendupdate=async ()=>{
-        await axios.post('https://bharat-crafters-backend.onrender.com/api/v1/auth/buyerWishList',{buyerWishlist},{withCredentials:true})
+        await axios.post('http://localhost:4000/api/v1/auth/buyerWishList',{buyerWishlist},{withCredentials:true})
         .then((res)=>{
             console.log("wishilist for user ",res)
         })
@@ -87,7 +87,7 @@ const ProductCategory = () => {
         //     //saveWishlistedProduct(product);
         // }
         console.log("updating redux ",buyerWishlist)
-        await axios.post('https://bharat-crafters-backend.onrender.com/api/v1/auth/buyerWishList',{buyerWishlist},{withCredentials:true})
+        await axios.post('http://localhost:4000/api/v1/auth/buyerWishList',{buyerWishlist},{withCredentials:true})
         .then((res)=>{
             console.log("wishilist for user ",res)
         })
@@ -132,7 +132,7 @@ const ProductCategory = () => {
 
     const getCategoryData = async () => {
         try {
-            const response = await axios.get(`https://bharat-crafters-backend.onrender.com/api/v1/category/categoryPageDetails/${CategoryIdForAPI}`, {
+            const response = await axios.get(`http://localhost:4000/api/v1/category/categoryPageDetails/${CategoryIdForAPI}`, {
                 withCredentials: true
             });
             const subCategoryDetails = response.data.data.selectedCategory.subCategory;
@@ -153,7 +153,7 @@ const ProductCategory = () => {
     const getSubcategory = async (SubCategoryIdForAPI) => {
 
         try {
-            const response = await axios.get(`https://bharat-crafters-backend.onrender.com/api/v1/category/subCategoryPageDetails/${SubCategoryIdForAPI}`, {
+            const response = await axios.get(`http://localhost:4000/api/v1/category/subCategoryPageDetails/${SubCategoryIdForAPI}`, {
                 withCredentials: true
             });
             const subCategoryDetails = response.data.data;
@@ -173,7 +173,7 @@ const ProductCategory = () => {
 
     const saveWishlistedProduct= async (product)=>{
         try {
-            const response = await axios.post(`https://bharat-crafters-backend.onrender.com/api/v1/auth/buyerWishList`, product, {
+            const response = await axios.post(`http://localhost:4000/api/v1/auth/buyerWishList`, product, {
                 withCredentials: true
             });
             console.log(response);

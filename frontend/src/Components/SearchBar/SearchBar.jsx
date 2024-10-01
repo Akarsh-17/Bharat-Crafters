@@ -24,7 +24,7 @@ const SearchBar = () => {
 
   const getCategoriesData = async () => {
     try {
-      const CategoryData = await axios.get(`https://bharat-crafters-backend.onrender.com/api/v1/category/showAllCategories`,
+      const CategoryData = await axios.get(`http://localhost:4000/api/v1/category/showAllCategories`,
         { withCredentials: true });
       console.log(CategoryData);
 
@@ -38,7 +38,7 @@ const SearchBar = () => {
   const debouncedSearch = debounce(async (input) => {
     try {
 
-      const response = await axios.get(`https://bharat-crafters-backend.onrender.com/api/v1/product/searchBar?q=${input}`);
+      const response = await axios.get(`http://localhost:4000/api/v1/product/searchBar?q=${input}`);
       console.log("debounced");
       console.log(response.data.data);
       setSuggestions(response.data.data);

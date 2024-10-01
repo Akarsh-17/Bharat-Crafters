@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
-const Product = require('./Product'); // Update the path to your User model
-
+const Buyer = require('./Buyer'); // Update the path to your User model
+const Cart=require("./Cart");
 // Connect to MongoDB
-mongoose.connect('bd_url', {
+mongoose.connect('mongodb+srv://akarsh01ynr:tbJJVEcF1VGOOdwv@cluster0.ij7ebv6.mongodb.net/DAK_GHAR', {
   useNewUrlParser: true,
   useUnifiedTopology: true
 })
@@ -22,15 +22,16 @@ async function migrateUsers() {
     // Add new fields to existing documents
     console.log('Starting migration...');
     // Find documents that need to be updated
-    const usersToUpdate = await Product.find({ review: { $exists: false } });
+    const usersToUpdate = await Buyer.find({});
     console.log(`Found ${usersToUpdate.length} documents to update.`);
 
     // Update each document individually
     let updatedCount = 0;
     for (const user of usersToUpdate) {
-      user.review =[];
-      user.peopleRated = 0;
-      user.rating = 0;
+      const newCart=new Cart();
+      await newCart.save()
+      user.cartSummary=0;
+      user.cart=newCart._id
       await user.save();
       updatedCount++;
       console.log(updatedCount+" "+user)

@@ -25,7 +25,7 @@ function Login() {
         toast.loading('Loading...');
 
         console.log(formData)
-        axios.post(`https://bharat-crafters-backend.onrender.com/api/v1/auth/loginBuyer`, formData,
+        axios.post(`http://localhost:4000/api/v1/auth/loginBuyer`, formData,
         {
             withCredentials: true
         }

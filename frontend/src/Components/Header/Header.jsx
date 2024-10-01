@@ -10,8 +10,13 @@ import wishlist from '../../Images/icons8-heart-50 (1).png'
 import dropdownbutton from '../../Images/icons8-dropdown-30.png';
 import SearchBar from '../SearchBar/SearchBar.jsx';
 import ProfileDropdown from '../ProfileDropdown/ProfileDropdown.jsx';
-
-
+import { Badge } from "@mui/material";
+import {
+    // FavoriteBorder,
+    // Search,
+    // ShoppingBagOutlined,
+    ShoppingCartOutlined,
+  } from "@mui/icons-material";
 
 
 // const showRightHeader = () => {
@@ -25,8 +30,7 @@ const Header = () => {
     const navigate = useNavigate();
     const userLoggedIn = useSelector((state) => state.CurrentUser.CurrentUser)
     const [scrolled, setScrolled] = useState(false);
-
-
+    const cart = useSelector((state) => state.Cart);
     useEffect(() => {
         const Scroll = () => {
             if (window.scrollY > 50) {
@@ -42,8 +46,13 @@ const Header = () => {
         };
     }, []);
 
+   useEffect(()=>{
+    if(cart?.length>=1)
+        {
+         console.log(cart?.length)
+        }     
 
-
+   },[cart])
     return (
         <>
         <div className="relative-navbar">
@@ -75,7 +84,22 @@ const Header = () => {
         <div className="right-header-links-container">
 
             <Link to="/wishlist" style={{ textDecoration: 'none' }}><div className="right-header-links" ><img className="right-header-icon" src={wishlist}></img><div className="right-header-button">Wishlist</div></div></Link>
-            <Link to="/cart" style={{ textDecoration: 'none' }}><div className="right-header-links " ><img className="right-header-icon" src={cart}></img><div className="right-header-button"></div>Cart</div></Link>
+            {/* <Link to="/cart" style={{ textDecoration: 'none' }}>
+               <Badge badgeContent={Cart?.length} color="secondary">
+                <div className="right-header-links " >
+                    <img className="right-header-icon" src={cart}></img>
+                    <div className="right-header-button"></div>
+                    Cart
+                </div>
+                </Badge>
+            </Link> */}
+            <Link
+                to="/cart"
+                style={{ textDecoration: "none", color: "inherit" }}>
+                <Badge badgeContent={cart?.products?.length} color="secondary">
+                  <ShoppingCartOutlined />
+                </Badge>
+              </Link>
             {<ProfileDropdown />}
         </div>
 

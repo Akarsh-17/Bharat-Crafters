@@ -17,7 +17,7 @@ const Sections = () => {
 
   const getnewArrivalsData = async () => {
     try {
-      const Data = await axios.get(`https://bharat-crafters-backend.onrender.com/api/v1/product/newArrivals`,
+      const Data = await axios.get(`http://localhost:4000/api/v1/product/newArrivals`,
         { withCredentials: true });
       console.log(Data);
 
@@ -33,7 +33,7 @@ const Sections = () => {
 
   const getMenData = async () => {
     try {
-      const Data = await axios.get(`https://bharat-crafters-backend.onrender.com/api/v1/product/newMensArrivals`,
+      const Data = await axios.get(`http://localhost:4000/api/v1/product/newMensArrivals`,
         { withCredentials: true });
       console.log("mens",Data);
 
@@ -50,7 +50,7 @@ const Sections = () => {
 
   const getWomenData = async () => {
     try {
-      const Data = await axios.get(`https://bharat-crafters-backend.onrender.com/api/v1/product/newWomensArrivals`,
+      const Data = await axios.get(`http://localhost:4000/api/v1/product/newWomensArrivals`,
         { withCredentials: true });
       console.log("womens",Data);
 
@@ -81,8 +81,8 @@ const Sections = () => {
 
   return (
     <div className="all-sections-container">
-      {sectionData && Object.entries(sectionData).map(([sectionName, sectionProducts]) => (
-      <div className="section-containers">
+      {sectionData && Object.entries(sectionData).map(([sectionName, sectionProducts],index) => (
+      <div className="section-containers" key={index}>
       <div className="section-header">{sectionName}</div>
 
       <div className="section-container">

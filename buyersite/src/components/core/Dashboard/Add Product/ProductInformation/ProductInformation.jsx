@@ -1,251 +1,250 @@
-import React, { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { useDispatch, useSelector } from 'react-redux'
-import {MdNavigateNext} from 'react-icons/md'
-import {resetProductState, setProduct, setStep} from '../../../../../slices/productSlice'
-import StringField from './StringField'
-import { showCategories } from '../../../../../services/operations/categoryApis'
-import Upload from './Upload'
-import ProductOptions from './ProductOptions'
-import IconBtn from '../../../../common/IconBtn'
-import { PRODUCT_STATUS } from '../../../../../utils/constants'
-import toast from 'react-hot-toast'
-import { createProductDetails, editProductDetails } from '../../../../../services/operations/productApis'
-import { useNavigate } from 'react-router-dom'
-
+import React, { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { MdNavigateNext } from "react-icons/md";
+import {
+  resetProductState,
+  setProduct,
+  setStep,
+} from "../../../../../slices/productSlice";
+import StringField from "./StringField";
+import { showCategories } from "../../../../../services/operations/categoryApis";
+import Upload from "./Upload";
+import ProductOptions from "./ProductOptions";
+import IconBtn from "../../../../common/IconBtn";
+import { PRODUCT_STATUS } from "../../../../../utils/constants";
+import toast from "react-hot-toast";
+import {
+  createProductDetails,
+  editProductDetails,
+} from "../../../../../services/operations/productApis";
+import { useNavigate } from "react-router-dom";
 
 const ProductInformation = () => {
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
+  const [categories, setCategories] = useState([]);
+  const [subCategories, setSubCategories] = useState([]);
 
-    const dispatch=useDispatch()
-    const [loading,setLoading]=useState(false)
-    const [categories,setCategories]=useState([])
-    const [subCategories,setSubCategories]=useState([])
-  
-    const {
-        register,
-        handleSubmit,
-        setValue,
-        getValues,
-        formState: {errors}
-    } = useForm()
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    getValues,
+    formState: { errors },
+  } = useForm();
 
-    const user=useSelector((state)=>state.auth.currentUser)
-    const {product,editProduct}=useSelector((state)=>state.product)
-  
+  const user = useSelector((state) => state.auth.currentUser);
+  const { product, editProduct } = useSelector((state) => state.product);
 
+  useEffect(() => {
+    const getCategories = async () => {
+      setLoading(true);
+      const categories = await showCategories();
+      if (categories?.length > 0) {
+        setCategories(categories);
+      }
+      setLoading(false);
+    };
 
-    useEffect(()=>{
-        const getCategories = async () => {
-            setLoading(true)
-            const categories = await showCategories()
-            if (categories?.length > 0) {
-              setCategories(categories)
-            }
-            setLoading(false)
-        }
-        
-        getCategories()
-    },[])   
-    
-    useEffect(()=>{
-      if(editProduct && product)
-        {
-          setValue("name",product.name)
-          setValue("brand",product.brand)
-          setValue("description",product.description)
-          setValue("weight",product.weight)
-          setValue("material",product.material)
-          setValue("shape",product.shape)
-          setValue("height",product.height) 
-          setValue("width",product.width)
-          setValue("length",product.length)
-          setValue("pattern",product.pattern)
-          setValue("style",product.style)
-          setValue("specialFeatures",product.specialFeatures)
-          setValue("components",product.components)
-          setValue("images",product.images)
-          setValue("specialFeatures",product.specialFeatures)
-          setValue("category",product.category)
-          setValue("subCategory",product.subCategory)
-          console.log(product.subCategory)
-          console.log(getValues("subCategory"))
-        }
-        console.log("editProduct:", editProduct);
-        console.log("product:", product);
-        
-    },[editProduct,product,categories,setValue])
-      
-        
+    getCategories();
+  }, []);
 
-    const isFormUpdated=()=>{
-        const currentValues=getValues();
-        if(
-          currentValues.name !== product.name ||
-          currentValues.brand !== product.brand ||
-          currentValues.description !== product.description ||
-          currentValues.subCategory._id !== product.subCategory._id ||
-          currentValues.category._id !== product.category._id ||
-          currentValues.weight!== product.weight ||
-          currentValues.material!== product.material ||
-          currentValues.shape!== product.shape ||
-          currentValues.height!== product.height ||
-          currentValues.width!== product.width ||
-          currentValues.length!== product.length ||
-          currentValues.pattern!== product.pattern ||
-          currentValues.style!== product.style ||
-          currentValues.length!== product.length ||
-          currentValues.specialFeatures.toString() !== product.specialFeatures.toString() ||
-          currentValues.components.toString() !== product.components.toString() ||
-          currentValues.options.toString() !== product.options.toString() ||
-          currentValues.images.toString() !== product.images.toString()
-  
-        )
-        {
-          return true;
-        }
-        return false;
+  useEffect(() => {
+    if (editProduct && product) {
+      setValue("name", product.name);
+      setValue("brand", product.brand);
+      setValue("description", product.description);
+      setValue("weight", product.weight);
+      setValue("material", product.material);
+      setValue("shape", product.shape);
+      setValue("height", product.height);
+      setValue("width", product.width);
+      setValue("length", product.length);
+      setValue("pattern", product.pattern);
+      setValue("style", product.style);
+      setValue("specialFeatures", product.specialFeatures);
+      setValue("components", product.components);
+      setValue("images", product.images);
+      setValue("specialFeatures", product.specialFeatures);
+      setValue("category", product.category?._id);
+      setSubCategories(product?.category?.subCategory);
+      setValue("subCategory", product.subCategory._id);
+      console.log(product.subCategory);
+      console.log(getValues("subCategory"));
     }
-    
-    const handleCategoryChange=async(e)=>{
-        setSubCategories()
+    console.log("editProduct:", editProduct);
+    console.log("product:", product);
+  }, [editProduct, product, categories, setValue]);
 
-        setValue("subCategory", "");
-
-        setValue("category",e.target.value)
-        const categoryId=getValues("category")
-
-        
-        setLoading(true)
-        const selectedCategory = categories.find(category => category._id === e.target.value);
-        const subCategories=selectedCategory.subCategory
-
-        setSubCategories(subCategories)
-
-        setLoading(false)
-                
+  const isFormUpdated = () => {
+    const currentValues = getValues();
+    if (
+      currentValues.name !== product.name ||
+      currentValues.brand !== product.brand ||
+      currentValues.description !== product.description ||
+      currentValues.subCategory._id !== product.subCategory._id ||
+      currentValues.category._id !== product.category._id ||
+      currentValues.weight !== product.weight ||
+      currentValues.material !== product.material ||
+      currentValues.shape !== product.shape ||
+      currentValues.height !== product.height ||
+      currentValues.width !== product.width ||
+      currentValues.length !== product.length ||
+      currentValues.pattern !== product.pattern ||
+      currentValues.style !== product.style ||
+      currentValues.length !== product.length ||
+      currentValues.specialFeatures.toString() !==
+        product.specialFeatures.toString() ||
+      currentValues.components.toString() !== product.components.toString() ||
+      currentValues.options.toString() !== product.options.toString() ||
+      currentValues.images.toString() !== product.images.toString()
+    ) {
+      return true;
     }
+    return false;
+  };
 
-    const onSubmit=async(data)=>{
+  const handleCategoryChange = async (e) => {
+    setSubCategories();
 
-       console.log(data)
+    setValue("subCategory", "");
 
-        if(editProduct)
-        {
-          if(isFormUpdated())
-          { 
-            const currentValues=getValues();
-            const formData=new FormData()
+    setValue("category", e.target.value);
+    console.log("skldfjdslkjfdskjf: ", e.target.value);
+    const categoryId = getValues("category");
 
-            formData.append("productId", product._id)
-            if (currentValues.name !== product.name) {
-                formData.append("name",data.name)
-            }
-            if (currentValues.brand !== product.brand) {
-              formData.append("brand", data.brand)
-            }
-            if (currentValues.description !== product.description) {
-              formData.append("description", data.description)
-            }
-            if (currentValues.weight !== product.weight) {
-                formData.append("weight", data.weight)
-            }
-            if (currentValues.material !== product.material) {
-              formData.append("material", data.material)
-            }
-            if (currentValues.shape !== product.shape) {
-                formData.append("shape", data.shape)
-            }
-            if (currentValues.height !== product.height) {
-                formData.append("height", data.height)
-            }
-            if (currentValues.width !== product.width) {
-                formData.append("width", data.width)
-            }
-            if (currentValues.length !== product.length) {
-                formData.append("length", data.length)
-            }
-            if (currentValues.pattern !== product.pattern) {
-                formData.append("pattern", data.pattern)
-            } 
-            if (currentValues.style !== product.style) {
-              formData.append("style", data.style)
-            }
-            if (currentValues.specialFeatures.toString() !== product.specialFeatures.toString()) {
-              formData.append("specialFeatures", JSON.stringify(data.specialFeatures))
-            }
-            if (currentValues.components.toString() !== product.components.toString()) {
-                formData.append("components", JSON.stringify(data.components))
-            }
-            if (currentValues.options.toString() !== product.options.toString()) {
-                formData.append("options", JSON.stringify(data.options))
-            }
-            if (currentValues.images.toString() !== product.images.toString()) {
-              data.images.forEach((image) => {
-                formData.append("images", image);
-              });
-            }
-            if (currentValues.subCategory._id !== product.subCategory._id) {
-                formData.append("subCategory", data.subCategory)
-            }
-            if (currentValues.category._id !== product.category._id) {
-              formData.append("category", data.category)
-            }
-            // console.log("Edit Form data: ", formData)
-            setLoading(true)
-            const result= await editProductDetails(formData)
-            setLoading(false)
-            if(result)
-            {
-              dispatch(setStep(2))
-              dispatch(setProduct(result))
-            }
-            
-          }else{
-            toast.error("No changes Made")
-          }
-          return
+    setLoading(true);
+    const selectedCategory = categories.find(
+      (category) => category._id === e.target.value
+    );
+    const subCategories = selectedCategory.subCategory;
+
+    setSubCategories(subCategories);
+
+    setLoading(false);
+  };
+
+  const onSubmit = async (data) => {
+    console.log(data);
+
+    if (editProduct) {
+      if (isFormUpdated()) {
+        const currentValues = getValues();
+        const formData = new FormData();
+
+        formData.append("productId", product._id);
+        if (currentValues.name !== product.name) {
+          formData.append("name", data.name);
         }
-
-
-        const formData=new FormData()
-        formData.append("name",data.name)
-        formData.append("brand",data.brand)
-        formData.append("description",data.description)
-        formData.append("weight",data.weight)
-        formData.append("material",data.material)
-        formData.append("shape",data.shape)
-        formData.append("height",data.height)
-        formData.append("width",data.width)
-        formData.append("length",data.length)
-        formData.append("pattern",data.pattern)
-        formData.append("style",data.style)
-        formData.append("specialFeatures", JSON.stringify(data.specialFeatures))
-        formData.append("components", JSON.stringify(data.components))
-        formData.append("options", JSON.stringify(data.options))
-        data.images.forEach((image) => {
-          formData.append("images", image);
-        });
-        formData.append("status", PRODUCT_STATUS.DRAFT)
-        formData.append("subCategory",data.subCategory)
-        formData.append("category",data.category)
-        setLoading(true)
-        const result = await createProductDetails(formData)
+        if (currentValues.brand !== product.brand) {
+          formData.append("brand", data.brand);
+        }
+        if (currentValues.description !== product.description) {
+          formData.append("description", data.description);
+        }
+        if (currentValues.weight !== product.weight) {
+          formData.append("weight", data.weight);
+        }
+        if (currentValues.material !== product.material) {
+          formData.append("material", data.material);
+        }
+        if (currentValues.shape !== product.shape) {
+          formData.append("shape", data.shape);
+        }
+        if (currentValues.height !== product.height) {
+          formData.append("height", data.height);
+        }
+        if (currentValues.width !== product.width) {
+          formData.append("width", data.width);
+        }
+        if (currentValues.length !== product.length) {
+          formData.append("length", data.length);
+        }
+        if (currentValues.pattern !== product.pattern) {
+          formData.append("pattern", data.pattern);
+        }
+        if (currentValues.style !== product.style) {
+          formData.append("style", data.style);
+        }
+        if (
+          currentValues.specialFeatures.toString() !==
+          product.specialFeatures.toString()
+        ) {
+          formData.append(
+            "specialFeatures",
+            JSON.stringify(data.specialFeatures)
+          );
+        }
+        if (
+          currentValues.components.toString() !== product.components.toString()
+        ) {
+          formData.append("components", JSON.stringify(data.components));
+        }
+        if (currentValues.options.toString() !== product.options.toString()) {
+          formData.append("options", JSON.stringify(data.options));
+        }
+        if (currentValues.images.toString() !== product.images.toString()) {
+          data.images.forEach((image) => {
+            formData.append("images", image);
+          });
+        }
+        if (currentValues.subCategory._id !== product.subCategory._id) {
+          formData.append("subCategory", data.subCategory);
+        }
+        if (currentValues.category._id !== product.category._id) {
+          formData.append("category", data.category);
+        }
+        // console.log("Edit Form data: ", formData)
+        setLoading(true);
+        const result = await editProductDetails(formData);
+        setLoading(false);
         if (result) {
-          dispatch(setStep(2))
-          dispatch(setProduct(result))
+          dispatch(setStep(2));
+          dispatch(setProduct(result));
         }
-        setLoading(false)
-        // console.log(formData)
-        // console.log(formData.get("name"));
-
-
-
+      } else {
+        toast.error("No changes Made");
+      }
+      return;
     }
-    const navigate=useNavigate()
-    const goToProduct = () => {
-      dispatch(resetProductState())
-      navigate("/dashboard/my-products")
+
+    const formData = new FormData();
+    formData.append("name", data.name);
+    formData.append("brand", data.brand);
+    formData.append("description", data.description);
+    formData.append("weight", data.weight);
+    formData.append("material", data.material);
+    formData.append("shape", data.shape);
+    formData.append("height", data.height);
+    formData.append("width", data.width);
+    formData.append("length", data.length);
+    formData.append("pattern", data.pattern);
+    formData.append("style", data.style);
+    formData.append("specialFeatures", JSON.stringify(data.specialFeatures));
+    formData.append("components", JSON.stringify(data.components));
+    formData.append("options", JSON.stringify(data.options));
+    data.images.forEach((image) => {
+      formData.append("images", image);
+    });
+    formData.append("status", PRODUCT_STATUS.DRAFT);
+    formData.append("subCategory", data.subCategory);
+    formData.append("category", data.category);
+    setLoading(true);
+    const result = await createProductDetails(formData);
+    if (result) {
+      dispatch(setStep(2));
+      dispatch(setProduct(result));
     }
+    setLoading(false);
+    // console.log(formData)
+    // console.log(formData.get("name"));
+  };
+  const navigate = useNavigate();
+  const goToProduct = () => {
+    dispatch(resetProductState());
+    navigate("/dashboard/my-products");
+  };
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -309,7 +308,7 @@ const ProductInformation = () => {
         </label>
         <select
           {...register("category", { required: true })}
-          defaultValue={editProduct && product ? product?.category._id : ""}
+          // defaultValue={editProduct && product ? product?.category._id : ""}
           id="category"
           className="form-style w-full"
           onChange={handleCategoryChange}
@@ -351,13 +350,12 @@ const ProductInformation = () => {
                   {category.name}
                 </option>
               ))} */}
-              {
-        !loading && categories?.map((category, index) => (
-            <option key={index} value={category._id}>
+          {!loading &&
+            categories?.map((category, index) => (
+              <option key={index} value={category._id}>
                 {category.name}
-            </option>
-        ))
-    }
+              </option>
+            ))}
         </select>
         {errors.category && (
           <span className="ml-2 text-xs tracking-wide text-pink-200">
@@ -589,6 +587,6 @@ const ProductInformation = () => {
       </div>
     </form>
   );
-}
+};
 
-export default ProductInformation
+export default ProductInformation;

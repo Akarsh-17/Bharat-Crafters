@@ -16,7 +16,7 @@ const ChangePassword = () => {
 
     const setNewPassword =async(passwordData)=>{
         try {
-            const response = await axios.post(`https://bharat-crafters-backend.onrender.com/api/v1/auth/buyerChangePassword`, 
+            const response = await axios.post(`http://localhost:4000/api/v1/auth/buyerChangePassword`, 
              passwordData 
             , {
                 withCredentials: true
