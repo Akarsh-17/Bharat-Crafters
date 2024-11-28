@@ -7,7 +7,7 @@ const BuyerProfile=require('../models/BuyerProfile')
 const otpGenerator=require('otp-generator')
 const bcrypt=require('bcrypt');
 const jwt=require('jsonwebtoken');
-
+const Cart=require("../models/Cart");
 exports.sendOTP= async(req,res)=>{
     try{
         const {email}=req.body;
@@ -24,7 +24,7 @@ exports.sendOTP= async(req,res)=>{
 
         var otp= otpGenerator.generate(6,{
             upperCaseAlphabets:false,
-            lowerCaseAlphabets:false,
+            lowerCaseAlphabets:true,
             specialChars:false
         })
         
@@ -33,7 +33,7 @@ exports.sendOTP= async(req,res)=>{
         while(result){
             otp= otpGenerator.generate(6,{
                 upperCaseAlphabets:false,
-                lowerCaseAlphabets:false,
+                lowerCaseAlphabets:ture,
                 specialChars:false
             })
         }
@@ -173,6 +173,11 @@ exports.signupBuyer=async (req,res)=>{
             image:`https://api.dicebear.com/5.x/initials/svg?seed=${firstName}${lastName}`
         })
 
+        const newCart=new Cart();
+        await newCart.save()
+        user.cartSummary=0;
+        user.cart=newCart._id
+        await user.save();
 
         return res.status(200).json({
             success:true,
@@ -213,7 +218,41 @@ exports.loginBuyer= async(req,res)=>{
             })
         }
 
-        const user=await Buyer.findOne({email}).populate("additionalDetail").populate("wishlist")
+        const user=await Buyer.findOne({email})
+                    .populate("additionalDetail")
+                    .populate("wishlist")
+                    .populate({
+                        path:"cart",
+                        populate:{
+                            path:"productList.productInfo",
+                        }
+                    }).lean()
+                    .exec();
+
+        user?.cart?.productList?.forEach((item) => {
+            const selectedOptionId = item?.selectedOption; 
+            const productOptions = item?.productInfo?.options; 
+
+            const selectedOption = productOptions?.find(
+                (option) => option?._id.toString() === selectedOptionId.toString()
+              );
+            
+            if (selectedOption) {
+                // item['hii']="hello";
+                item["selectedOptionObject"]=selectedOption;
+            console.log(" aaa",selectedOption)
+                // Logging the new field with full option object
+                console.log("Printing selectedOptionObject", item.selectedOptionObject); // Full option object
+              }else {
+                console.log("Option not found for item", item);
+            }
+            console.log("Printing selectedOption (still ObjectId)", item); // ObjectId
+            console.log("inside user printing",user?.cart?.productList[0])
+        });
+
+        
+
+        console.log("Inside user printing after updates:", user.cart.productList[0]); // Should show updated object
 
         if(!user)
         {
@@ -246,10 +285,9 @@ exports.loginBuyer= async(req,res)=>{
             // plsease this article of more clearity
             // https://gemini.google.com/app/9ab264853e8d2f45
             const options = {
-                httpOnly: false,  // Ensures the cookie is sent only over HTTP(S), not accessible by JavaScript
-                // expires: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),  // Corrected from expiresIN to expires
-                 secure: true,  // Ensures the cookie is sent over HTTPS only
-                sameSite: 'None',  // Needed if your frontend and backend are not on the same domain
+                httpOnly: false,  
+                secure: true,  
+                sameSite: 'None',  
                 domain:'.localhost',
                 //  maxAge: 60000 //1 min
                 maxAge: 172800000 //2 days
@@ -276,8 +314,6 @@ exports.loginBuyer= async(req,res)=>{
         })
     }
 }
-
-
 
 
 /*
@@ -529,10 +565,9 @@ exports.loginSeller= async(req,res)=>{
             // })
 
             const options = {
-                httpOnly: false,  // Ensures the cookie is sent only over HTTP(S), not accessible by JavaScript
-                // expires: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),  // Corrected from expiresIN to expires
-                 secure: true,  // Ensures the cookie is sent over HTTPS only
-                sameSite: 'None',  // Needed if your frontend and backend are not on the same domain
+                httpOnly: false,  
+                secure: true,  
+                sameSite: 'None', 
                 domain:'.localhost',
                 //  maxAge: 60000 //1 min
                 maxAge: 172800000 //2 days
@@ -862,6 +897,50 @@ exports.buyerWishList= async(req,res)=>{
         return res.status(500).json({
             success:false,
             error: error.message,
+        });
+    }
+}
+
+exports.buyerLogout=async(req,res)=>{
+    try{
+        const { cartProduct, cartSummary } = req.body;
+        const buyerId=req.user.id;
+
+
+        const user=await  Buyer.findByIdAndUpdate(buyerId,{
+            $set:{cartSummary}
+        })
+        if (!user) {
+            return res.status(404).json({ success: false, message: "Buyer not found" });
+        }
+        const cart= await Cart.findByIdAndUpdate(user?.cart,{
+            $set:{productList:cartProduct},
+        })
+        if (!cart) {
+            return res.status(404).json({ success: false, message: "Cart not found" });
+        }
+        console.log("line 895",user)
+        console.log("line 896",cart)
+
+        return res
+        .clearCookie("token", {
+          sameSite: "none",
+          secure: true,
+        })
+        .status(200).json({
+            success: true,
+            message:"logout successfull",
+        })
+        // .send("You logged out successfully.");
+ 
+    }
+    catch(error)
+    {
+        console.log(`Error while updating user during logout: ${error}`);
+        return res.status(500).json({
+            success: false,
+            message: "Server error during logout",
+            error: error.message, // Optional: You can decide whether to include this
         });
     }
 }

@@ -1,7 +1,23 @@
 import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { FaCirclePlus } from "react-icons/fa6";
+import { FaCircleMinus } from "react-icons/fa6";
+import { PiTrashThin } from "react-icons/pi";
+import { useDispatch } from "react-redux";
+import { decreaseQuantity, increaseQuantity, removeFromCart } from "../store/slices/cartSlice";
+
 const CartProductCard = ({ info }) => {
+  const dispatch=useDispatch()
+  const productQuantity=(type,_id,selectedOption,selectedSize,selectedColor,selectedPrice,selectedQuantity)=>{
+    type==="increase"
+    ?dispatch(increaseQuantity({_id,selectedOption,selectedSize,selectedColor,selectedPrice,selectedQuantity}))
+    :dispatch(decreaseQuantity({_id,selectedOption,selectedSize,selectedColor,selectedPrice,selectedQuantity}))
+  }
+
+  const removeProductFromCart=(_id,selectedOption,selectedSize,selectedColor,selectedPrice,selectedQuantity)=>{
+    dispatch(removeFromCart({_id,selectedOption,selectedSize,selectedColor,selectedPrice,selectedQuantity}))
+  }
   return (
     <React.Fragment>
       <Product>
@@ -33,14 +49,59 @@ const CartProductCard = ({ info }) => {
               Color:
               <ProductColor>{info?.selectedColor}</ProductColor>
             </InfoWrapper>
+
             <DropDownWrapper>
               <InfoWrapper>
                 Size:
                 <ProductSize>{info?.selectedSize}</ProductSize>
               </InfoWrapper>
+
+              <InfoWrapper>
+                Quantity:
+                <ProductQuantity>{info?.selectedQuantity}</ProductQuantity>
+              </InfoWrapper>
+              <FaCirclePlus style={{cursor:"pointer",fontSize:"25px"}}
+               onClick={(e)=>{
+                // e.preventDefault()
+                productQuantity(
+                  "increase",
+                  info?._id,
+                  info?.selectedOption,
+                  info?.selectedSize,
+                  info?.selectedColor,
+                  info?.selectedPrice,
+                  info?.selectedQuantity
+                )
+               }}
+              />
+              <FaCircleMinus style={{cursor: "pointer" ,fontSize:"25px"}}
+              onClick={()=>{
+                productQuantity(
+                  "decrease",
+                  info?._id,
+                  info?.selectedOption,
+                  info?.selectedSize,
+                  info?.selectedColor,
+                  info?.selectedPrice,
+                  info?.selectedQuantity
+                )
+               }}/>
             </DropDownWrapper>
           </Detail>
-          <UtilityWrapper></UtilityWrapper>
+          <UtilityWrapper>
+            <PiTrashThin style={{cursor:"pointer",fontSize:"25px"}}
+              onClick={()=>{
+                removeProductFromCart(
+                  info?._id,
+                  info?.selectedOption,
+                  info?.selectedSize,
+                  info?.selectedColor,
+                  info?.selectedPrice,
+                  info?.selectedQuantity
+                )
+              }}
+            />            
+          </UtilityWrapper>
         </DetailWrapper>
       </Product>
       <Hr />
@@ -152,4 +213,12 @@ const ProductSize = styled.div`
   font-size: 17px;
   font-family: "Nunito", sans-serif;
   font-weight: 600;
+`;
+
+const ProductQuantity=styled.p`
+ margin: 0px;
+ display: flex;
+ align-items: center;
+ font-size: 17px;
+ font-family: "Nunito", sans-serif;
 `;

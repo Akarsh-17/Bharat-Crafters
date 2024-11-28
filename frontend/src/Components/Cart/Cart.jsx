@@ -1,11 +1,21 @@
 import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import Header from "../Header/Header";
 import CartProductCard from "./CartProductCard";
-
+import CartSummary from "./CartSummary"
+import { handlePayment } from "../../operations/handlePayment";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
 const Cart = () => {
   const cart = useSelector((state) => state.Cart);
+  const user = useSelector((state) => state.CurrentUser.CurrentUser);
+
+  const dispatch =useDispatch();
+  const navigate = useNavigate();
+
+  const loginPayment = () => toast.error("Login to proceed for payment.");
+  const orderSuccessful = () => toast.success("Order completed successfully.");
   const EmptyCart =
     "https://res.cloudinary.com/additya/image/upload/v1692355550/urban%20shoes/ojxpihqnktxexshwn3ts.png";
 
@@ -13,6 +23,16 @@ const Cart = () => {
     console.log(cart);
   }, [cart]);
 
+  const openPayment = () => {
+    handlePayment(
+      user,
+      cart,
+      dispatch,
+      navigate,
+      loginPayment,
+      orderSuccessful
+    );
+  };
   return (
     <>
       <Header />
@@ -36,7 +56,8 @@ const Cart = () => {
             </ProductInfoWrapper>
           </LeftWrapper>
           <RightWrapper>
-            {/* <CartSummary cart={cart} openPayment={openPayment} /> */}
+            <CartSummary cart={cart} openPayment={openPayment} />
+            {/* <CartSummary cart={cart}  /> */}
           </RightWrapper>
         </Container>
       </Wrapper>
@@ -55,7 +76,7 @@ const Wrapper = styled.div`
 `;
 
 const Container=styled.div`
-    gap: 50px;
+  gap: 50px;
   width: 80%;
   display: flex;
   justify-content: space-between;

@@ -12,7 +12,8 @@ const{
     buyerChangePassword,
     sellerChangePassword,
     verifyOTP,
-    buyerWishList
+    buyerWishList,
+    buyerLogout
 
 }=require('../controllers/Auth')
 
@@ -79,5 +80,8 @@ router.post("/updateBuyerProfile",auth,isBuyer,updateBuyerProfile)
 router.delete("/deleteBuyerAccount",auth,isBuyer,deleteBuyerAccount)
 router.delete("/getPuchasedProducts",auth,isBuyer,getPuchasedProducts)
 
+
+//buyer lgout
+router.post("/buyerLogout",auth,isBuyer,buyerLogout)
 
 module.exports= router

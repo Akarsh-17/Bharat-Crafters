@@ -68,33 +68,33 @@ const ProductCategory = () => {
     }
 
 
-    const handle_add_to_wishlist = async(product) => {
-        if(CurrentUser ===null)
-        {
-           return toast.error("user not logged in")
-        }
-        console.log(product);
-        console.log("buyerWishlist ",buyerWishlist)
-        const productId= product._id;
-        dispatch(setWishlistProduct(product))
-        // if (Wishlist.includes(productId)) {
-        //     setWishlist(Wishlist.filter((id) => id !== productId));
-        //     dispatch(removeWishlistProduct(productId)); 
-        // }
-        // else {
-        //     setWishlist([...Wishlist, productId]);
-        //     dispatch(setWishlistProduct(product));
-        //     //saveWishlistedProduct(product);
-        // }
-        console.log("updating redux ",buyerWishlist)
-        await axios.post('http://localhost:4000/api/v1/auth/buyerWishList',{buyerWishlist},{withCredentials:true})
-        .then((res)=>{
-            console.log("wishilist for user ",res)
-        })
-        .catch((error)=>{
-            console.log("error for buyer wishlist",error)
-        })
-    }
+    // const handle_add_to_wishlist = async(product) => {
+    //     if(CurrentUser ===null)
+    //     {
+    //        return toast.error("user not logged in")
+    //     }
+    //     console.log(product);
+    //     console.log("buyerWishlist ",buyerWishlist)
+    //     const productId= product._id;
+    //     dispatch(setWishlistProduct(product))
+    //     // if (Wishlist.includes(productId)) {
+    //     //     setWishlist(Wishlist.filter((id) => id !== productId));
+    //     //     dispatch(removeWishlistProduct(productId)); 
+    //     // }
+    //     // else {
+    //     //     setWishlist([...Wishlist, productId]);
+    //     //     dispatch(setWishlistProduct(product));
+    //     //     //saveWishlistedProduct(product);
+    //     // }
+    //     console.log("updating redux ",buyerWishlist)
+    //     await axios.post('http://localhost:4000/api/v1/auth/buyerWishList',{buyerWishlist},{withCredentials:true})
+    //     .then((res)=>{
+    //         console.log("wishilist for user ",res)
+    //     })
+    //     .catch((error)=>{
+    //         console.log("error for buyer wishlist",error)
+    //     })
+    // }
 
     // const isWishlisted = (productId) => {
     //     return buyerWishlist.includes(productId);
@@ -107,6 +107,7 @@ const ProductCategory = () => {
 
 
     const handlePrice = (event, newPrice) => {
+        console.log("hello")
         setPrice(newPrice);
     };
 
@@ -128,6 +129,17 @@ const ProductCategory = () => {
         }));
     };
 
+    // const handleMouseUp = async (Price) => {
+    //     try {
+    //       const response = await axios.get(`http://localhost:4000/api/v1/category/filterPriceCategory/${categoryId}`,{
+    //         maxPrice:"600"
+    //       },{withCredentials:true});
+    
+    //       console.log(response.data);
+    //     } catch (error) {
+    //       console.error(error);
+    //     }
+    // };
 
 
     const getCategoryData = async () => {
@@ -171,17 +183,17 @@ const ProductCategory = () => {
         }
     }
 
-    const saveWishlistedProduct= async (product)=>{
-        try {
-            const response = await axios.post(`http://localhost:4000/api/v1/auth/buyerWishList`, product, {
-                withCredentials: true
-            });
-            console.log(response);
+    // const saveWishlistedProduct= async (product)=>{
+    //     try {
+    //         const response = await axios.post(`http://localhost:4000/api/v1/auth/buyerWishList`, product, {
+    //             withCredentials: true
+    //         });
+    //         console.log(response);
 
-        } catch (error) {
-            console.error(error);
-        }
-    }
+    //     } catch (error) {
+    //         console.error(error);
+    //     }
+    // }
 
     const handleRemoveFilter = () => {
         setFilter(false);
@@ -266,6 +278,7 @@ const ProductCategory = () => {
 
                                 </div>
                                 <PriceSlider value={Price} onChange={handlePrice} />
+                                {/* <PriceSlider value={Price} onChange={handlePrice} onMouseUp={handleMouseUp(Price)}/> */}
                             </div>
 
                             <hr></hr>

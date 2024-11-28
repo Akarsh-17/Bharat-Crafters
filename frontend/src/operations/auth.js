@@ -1,13 +1,22 @@
-import {setCurrentUser } from "../Components/store/slices/AuthSlice.js";
+import axios from "axios";
+import {clearInfo } from "../Components/store/slices/AuthSlice.js";
+import { clearCart } from "../Components/store/slices/cartSlice.js";
+import { clearWishlist } from "../Components/store/slices/WishlistSlice.js";
 
-export default function logout(dispatch,navigate)
 
-{
-//   dispatch(setLoading(true))
-  dispatch(setCurrentUser(null))
-  // dispatch(setUser(null))
-  // localStorage.removeItem("token");
-//   toast.success("Logout Successfully")
-//   dispatch(setLoading(false))
-  navigate('/');
-}
+export async function logout(dispatch,navigate, cartProduct, cartSummary) {
+  try {
+    await axios.post("http://localhost:4000/api/v1/auth/buyerLogout", {
+      cartProduct,
+      cartSummary,
+    },{withCredentials:true});
+    
+    dispatch(clearInfo());
+    dispatch(clearCart());
+    dispatch(clearWishlist());
+    navigate("/");
+  } catch (Error) {
+    console.log(`Logout Failure Error: ${Error}`);
+  }
+};
+

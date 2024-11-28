@@ -10,6 +10,7 @@ const Home = () => {
 
   return (
     <>
+      {/* {console.log("home page")} */}
       <Header />
       <BottomHeader />
       <Display />

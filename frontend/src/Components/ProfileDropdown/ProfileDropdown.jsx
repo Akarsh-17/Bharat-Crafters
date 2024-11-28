@@ -1,7 +1,7 @@
 import React, { useRef, useState , useEffect} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import logout from '../../operations/auth.js';
+import {logout} from '../../operations/auth.js';
 import './ProfileDropdown.css';
 import toast from 'react-hot-toast';
 import logoutIcon from '../../Images/logout.png'
@@ -10,11 +10,24 @@ import settingsICons from '../../Images/settings.png'
 
 const ProfileDropdown = () => {
   const user = useSelector((state) => state.CurrentUser.CurrentUser);
+  const Wishlist=useSelector((state)=>state.Wishlist)
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const cart=useSelector((state)=>state.Cart)
 
+  const cartProduct=cart?.products?.map((product)=>{
+    const obj={
+      productInfo:product?._id,
+      selectedOption:product?.selectedOption?._id,
+      selectedSize:product?.selectedSize,
+      selectedColor:product?.selectedColor,
+      selectedPrice:product?.selectedPrice,
+      selectedQuantity:product?.selectedQuantity
+    }
+    return obj;
+  })
 
 
   return (
@@ -42,7 +55,8 @@ const ProfileDropdown = () => {
           <div
             className="dropdown-item"
             onClick={() => {
-              logout(dispatch, navigate);
+        
+              logout(dispatch, navigate,cartProduct,cart?.cartSummary,Wishlist);
               setOpen(false);
               toast.success('User logged out successfully');
             }}

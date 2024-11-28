@@ -110,7 +110,7 @@ const productSchema=new mongoose.Schema({
     type: [String],
     required:true,
     trim:true,
-    validate: { // Validate tags (optional but recommended)
+    validate: { 
       validator: (specialFeatures) => specialFeatures.length >= 1,
       message: 'Please provide at least one special feature.'
     }

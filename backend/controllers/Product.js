@@ -606,7 +606,7 @@ exports.tribalArtAndCraft=async(req,res)=>{
           return "No products found for the given category";
         }
     
-        res.json(products); // Return the products found
+        res.json(products);
       } catch (error) {
         return res.status(500).json({
             success: false,
@@ -619,11 +619,11 @@ exports.tribalArtAndCraft=async(req,res)=>{
 
 exports.searchBar=async(req,res)=>{
     try {
-        const query = req.query.q; // Get the search query from request query parameters
-        const priceMin = req.query.minPrice; // Get the minimum price from query parameters
-        const priceMax = req.query.maxPrice; // Get the maximum price from query parameters
+        const query = req.query.q; 
+        const priceMin = req.query.minPrice; 
+        const priceMax = req.query.maxPrice; 
 
-        // Build the query object for Mongoose
+        //  query object for Mongoose
         const queryObject = { $text: { $search: query } };
         console.log("queryObject ",queryObject)
         // If price range is provided, add it to the query
@@ -638,12 +638,12 @@ exports.searchBar=async(req,res)=>{
         // Perform text search and price range search using Mongoose
         const results = await Product.find(queryObject)
             .select('name brand description options.size options.color options.price')
-            .limit(10); // Limit the number of results to 10 for example
+            .limit(10); 
         console.log(results)
         res.json({
             success:true,
             data:results
-        }); // Return search results as JSON
+        });
     } catch (error) {
         console.error('Error searching products:', error);
         res.status(500).json({ error: 'Internal server error' });

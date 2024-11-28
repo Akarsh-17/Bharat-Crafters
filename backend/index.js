@@ -16,7 +16,7 @@ const categoryRoutes=require('./routes/Category')
 const productRoutes=require('./routes/Product')
 const reviewRoutes=require('./routes/Review')
 const conversationRoutes=require('./routes/Conversation')
-
+const paymentRoutes=require('./routes/Payment')
 
 const app=express();
 // app.use(bodyParser.json({ limit: '50mb' }));
@@ -98,6 +98,7 @@ app.use('/api/v1/category',categoryRoutes);
 app.use('/api/v1/product',productRoutes);
 app.use('/api/v1/review',reviewRoutes);
 app.use('/api/v1/conversation',conversationRoutes);
+app.use('/api/v1/payment',paymentRoutes);
 
 
 app.listen(PORT,()=>{

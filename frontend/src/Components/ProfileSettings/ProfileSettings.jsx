@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './ProfileSettings.css';
 import Header from '../Header/Header.jsx'
 import editIcon from '../../Images/edit-text.png'
-import logout from '../../operations/auth.js';
+import {logout} from '../../operations/auth.js';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, matchPath, useLocation, useNavigate } from 'react-router-dom';
 import { sidebarLinks } from './link.js';

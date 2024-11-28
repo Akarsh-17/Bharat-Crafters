@@ -17,7 +17,7 @@ exports.createCategory=async(req,res)=>{
 
           const categoryDetails= await Category.create({name});
 
-          console.log(categoryDetails);
+          // console.log(categoryDetails);
 
           return res.status(200).json(
           {
@@ -46,7 +46,7 @@ exports.showAllCategories= async(req,res)=>{
                                           })
 
         
-        console.log("printing all categories ",allCategories)
+        // console.log("printing all categories ",allCategories)
         res.status(200).json({
         success:true,
         message:"All categories returned successfully",
@@ -77,7 +77,7 @@ exports.categoryPageDetails=async(req,res)=>{
     })
     .exec()
 
-    console.log("SELECTED CATEGORY", selectedCategory)
+    // console.log("SELECTED CATEGORY", selectedCategory)
     // Handle the case when the category is not found
     if (!selectedCategory) {
       console.log("Category not found.")
@@ -110,7 +110,7 @@ exports.categoryPageDetails=async(req,res)=>{
       }
     })
     .exec()
-    console.log(differentCategory)
+    // console.log(differentCategory)
     
     // Get top-selling Products across all categories
     const allCategories = await Category.find()
@@ -147,14 +147,14 @@ exports.categoryPageDetails=async(req,res)=>{
 
 exports.getMaxRangeProductsFromCategory=async(req,res)=>{
   try {
-    const { categoryId } = req.params;
+    const categoryId  = req.params.id;
     const { maxPrice } = req.body;
-
+    console.log(categoryId,maxPrice)
     if (!categoryId || !maxPrice) {
       return res.status(400).json({ message: 'Category ID and max price are required.' });
     }
 
-    // Validate maxPrice to ensure it is a number
+    //  to ensure it is a number
     const maxPriceNumber = parseFloat(maxPrice);
     if (isNaN(maxPriceNumber)) {
       return res.status(400).json({ message: 'Max price must be a number.' });

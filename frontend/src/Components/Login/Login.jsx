@@ -7,7 +7,7 @@ import { useDispatch, useSelector} from 'react-redux'
 import { setCurrentUser } from '../store/slices/AuthSlice.js';
 import toast from 'react-hot-toast';
 import { setWishlist } from '../store/slices/WishlistSlice.js';
-
+import {storeCart} from '../store/slices/cartSlice.js'
 
 
 
@@ -15,6 +15,8 @@ function Login() {
 
     const [loading, setLoading] = useState(false);
     const {Wishlist}=useSelector((state)=>state.Wishlist)
+    // const  {cart}=useSelector((state)=>state.cart)
+
     //API ROUTE
 
     const navigate= useNavigate();
@@ -25,29 +27,51 @@ function Login() {
         toast.loading('Loading...');
 
         console.log(formData)
-        axios.post(`http://localhost:4000/api/v1/auth/loginBuyer`, formData,
+        await axios.post(`http://localhost:4000/api/v1/auth/loginBuyer`, formData,
         {
             withCredentials: true
         }
         )
-            .then(response => {
-                console.log(response);
+        .then(response => {
+            console.log(response);
+            dispatch(setCurrentUser({...response.data.user}));
+            toast.success('User logged in successfully!');
+            const cartSummary=response.data?.user?.cartSummary
+            const cartInfo = response.data.user?.cart?.productList.map((product) => {
+                const { productInfo,
+                    selectedOption,
+                    selectedSize,
+                    selectedColor,
+                    selectedPrice,
+                    selectedQuantity,
+                    selectedOptionObject
+                } =  product;
+          
+                const obj = {
+                  selectedSize: selectedSize,
+                  selectedColor: selectedColor,
+                  selectedQuantity: selectedQuantity,
+                  selectedPrice:selectedPrice,
+                  selectedOption:selectedOptionObject,
+                  ...productInfo,
+                };
+          
+                return obj;
+              });
+            console.log("the  cart info is",cartInfo)
 
-       dispatch(setCurrentUser(response.data.user));
-       toast.success('User logged in successfully!');
-
-                navigate('/');
-                 dispatch(setWishlist(response.data?.user?.wishlist))
-                 console.log("wihlist after login ",Wishlist)
-            })
-            .catch(error => {
-                console.log(error)
-                toast.error('Error occured in login. Try again');
-
-            })
-
-            setLoading(false);
-            toast.dismiss();
+            dispatch(setWishlist(response.data?.user?.wishlist));
+            dispatch(storeCart({cartInfo, cartSummary}))
+            navigate('/');
+            console.log("wihlist after login ",Wishlist)
+            // console.log("cart fter login ",cart)
+        })
+        .catch(error => {
+            console.log(error)
+            toast.error('Error occured in login. Try again');
+        })
+        setLoading(false);
+        toast.dismiss();
     };
 
     //USESTATE FOR INPUT FIELDS

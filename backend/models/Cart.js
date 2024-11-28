@@ -8,12 +8,24 @@ const cartSchema=new mongoose.Schema({
             ref:"Product",
             required:true
         },
-        selectedQuantity:{
+        selectedOption:{
+            type:mongoose.Schema.Types.ObjectId,
+            required:true
+        },
+        selectedSize:{
+            type:String,
+            required:true
+        },
+        selectedColor:{
+            type:String,
+            required:true,
+        },
+        selectedPrice:{
             type:Number,
             required:true
         },
-        selectedOption:{
-            type:mongoose.Schema.Types.ObjectId,
+        selectedQuantity:{
+            type:Number,
             required:true
         },
        }

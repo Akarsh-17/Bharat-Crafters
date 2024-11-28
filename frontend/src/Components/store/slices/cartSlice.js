@@ -13,7 +13,7 @@ const cartSlice = createSlice({
           product._id === action.payload._id &&
           product.selectedOption?._id===action.payload.selectedOption?._id&&
           product.selectedSize === action.payload.selectedSize &&
-          product.selectedColour === action.payload.selectedColour&&
+          product.selectedColor === action.payload.selectedColor&&
           product.selectedPrice === action.payload.selectedPrice
       ));
 
@@ -22,7 +22,7 @@ const cartSlice = createSlice({
           return product._id === action.payload._id &&
           product.selectedOption?._id===action.payload.selectedOption?._id &&
           product.selectedSize === action.payload.selectedSize &&
-          product.selectedColour === action.payload.selectedColour&&
+          product.selectedColor === action.payload.selectedColor&&
           product.selectedPrice === action.payload.selectedPrice
             ? {
                 ...product,
@@ -39,32 +39,35 @@ const cartSlice = createSlice({
       }
     },
     increaseQuantity: (state, action) => {
-      if (action.payload.quantity === 10) {
+      if (action.payload.selectedQuantity === 10) {
         return state;
       }
-
       state.products = state.products.map((product) => {
         return product._id === action.payload._id &&
-          product.selectedSize === action.payload.size &&
-          product.selectedColour === action.payload.colour
+        product.selectedOption?._id===action.payload.selectedOption?._id &&
+        product.selectedSize === action.payload.selectedSize &&
+        product.selectedColor === action.payload.selectedColor&&
+        product.selectedPrice === action.payload.selectedPrice
           ? {
-              ...product,
-              selectedQuantity: product?.selectedQuantity + 1,
+            ...product,
+            selectedQuantity: product?.selectedQuantity + 1,
             }
           : { ...product };
       });
 
-      state.cartSummary += action?.payload?.cost;
+      state.cartSummary += action?.payload?.selectedPrice;
     },
     decreaseQuantity: (state, action) => {
-      if (action.payload.quantity === 1) {
+      if (action.payload.selectedQuantity === 1) {
         return state;
       }
 
       state.products = state.products.map((product) => {
         return product._id === action.payload._id &&
-          product.selectedSize === action.payload.size &&
-          product.selectedColour === action.payload.colour
+        product.selectedOption?._id===action.payload.selectedOption?._id &&
+        product.selectedSize === action.payload.selectedSize &&
+        product.selectedColor === action.payload.selectedColor&&
+        product.selectedPrice === action.payload.selectedPrice
           ? {
               ...product,
               selectedQuantity: product?.selectedQuantity - 1,
@@ -72,19 +75,21 @@ const cartSlice = createSlice({
           : { ...product };
       });
 
-      state.cartSummary -= action?.payload?.cost;
+      state.cartSummary -= action?.payload?.selectedPrice;
     },
     removeFromCart: (state, action) => {
       state.products = state.products.filter(
         (product) =>
           !(
-            product?._id === action?.payload?.id &&
-            product?.selectedSize === action?.payload?.size &&
-            product?.selectedColour === action?.payload?.colour
+            product._id === action.payload._id &&
+            product.selectedOption?._id===action.payload.selectedOption?._id &&
+            product.selectedSize === action.payload.selectedSize &&
+            product.selectedColor === action.payload.selectedColor&&
+            product.selectedPrice === action.payload.selectedPrice
           )
       );
 
-      state.cartSummary -= action?.payload?.quantity * action?.payload?.cost;
+      state.cartSummary -= action?.payload?.selectedQuantity * action?.payload?.selectedPrice;
     },
     clearCart: (state) => {
       state.products = [];
