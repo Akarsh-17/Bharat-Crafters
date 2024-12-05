@@ -4,11 +4,13 @@ import axios from 'axios';
 import './Signup.css'
 import Select from 'react-select';
 import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 
 function SignUp() {
 
     const [loading, setLoading] = useState(false);
+    const navigate= useNavigate();
 
     //API ROUTES
 
@@ -34,12 +36,11 @@ function SignUp() {
         const otp = sessionStorage.getItem('otp');
 
 
-                axios.post(`http://localhost:4000/api/v1/auth/verifyOTP`, { enteredOTP: formData.otp , otp: otp}, {
+                axios.post(`http://localhost:4000/api/v1/auth/verifyOTP`, { enteredOTP: formData.otp , email: formData.email}, {
                     withCredentials: true
                 })
                     .then(response => {
                         console.log(response.data);
-                        alert('verification successful!');
                     })
                     .catch(error => {
                         console.log(error);
@@ -54,6 +55,7 @@ function SignUp() {
                     .then(response => {
                         console.log(response.data);
                         toast.success('Registeration successfull!');
+                        navigate('/');
                         
                     })
                     .catch(error => {

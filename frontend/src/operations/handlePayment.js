@@ -33,6 +33,8 @@ export const handlePayment = async (
         selectedPrice: product?.selectedPrice,
         selectedQuantity: product?.selectedQuantity,
       };
+      console.log(obj);
+
       return obj;
     });
     let totalAmount = cart?.cartSummary + 99;
@@ -89,7 +91,7 @@ export const handlePayment = async (
               dispatch(clearCart());
               if (res.status === 200) {
                 //decrease the quantity of the product in the inventory in backend
-                navigate("/order");
+                navigate("/orders");
               } else {
                 toast.error("cart not cleared");
               }

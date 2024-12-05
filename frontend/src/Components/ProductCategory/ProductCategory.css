@@ -37,6 +37,7 @@
 
 .clear-all-filters {
     justify-self: end;
+    cursor: pointer;
 }
 
 .sub-category-heading-container {
@@ -348,4 +349,9 @@
     cursor: pointer;
     font-size: 0.7rem;
     margin-left: 0.8rem;
+}
+
+.submit-button{
+    max-width:fit-content;
+    margin-top: 8px;
 }

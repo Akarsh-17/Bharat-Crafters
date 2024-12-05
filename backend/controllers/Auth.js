@@ -64,8 +64,17 @@ exports.sendOTP= async(req,res)=>{
 
 exports.verifyOTP= async(req,res)=>{
 
-        const otp= req.body.otp;
         const enteredOTP= req.body.enteredOTP;
+        const otpfield= await OTP.findOne({email:req.body.email});
+        if(!otpfield)
+        {
+            return res.status(400).json({
+                success:false,
+                message:"OTP not found"
+            })
+        }
+        const otp= otpfield.otp;
+        console.log(otp,enteredOTP);
 
         if (enteredOTP === otp) {
             // OTP is valid
@@ -135,25 +144,6 @@ exports.signupBuyer=async (req,res)=>{
             })
         }
 
-
-        const recentOtp=await OTP.find({email}).sort({createdAt:-1}).limit(1);
-        
-        // scope of error 
-        if(recentOtp.length===0)
-        {
-            return res.status(400).json({
-                success:false,
-                message:'otp not found'
-            })
-        }
-        else if(otp!==recentOtp[0].otp)
-        {
-            return res.status(400).json({
-                success:false,
-                message:'otp invalid'
-            })
-        }
-
         const hashPass=await bcrypt.hash(password,10);
         const profileDetails=await BuyerProfile.create({
             gender:null,
@@ -179,11 +169,27 @@ exports.signupBuyer=async (req,res)=>{
         user.cart=newCart._id
         await user.save();
 
-        return res.status(200).json({
-            success:true,
-            message:'User is successfully registerd as BUYER',
-            user
-        })
+
+        const token = jwt.sign(payload, process.env.JWT_SECRET, {
+            expiresIn: '48h',
+          });
+    
+          console.log('Generated token:', token);
+          user.password = undefined;
+    
+          const options = {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'None',
+            domain: '.localhost',
+            maxAge: 172800000, // 2 days
+          };
+    
+          res.cookie("token", token, options).status(200).json({
+            success: true,
+            message: 'User is successfully registerd as BUYER',
+            user,
+          });
     }
     catch(error)
     {
@@ -206,114 +212,98 @@ exports.signupBuyer=async (req,res)=>{
 */
 
 
-exports.loginBuyer= async(req,res)=>{
-    try{
-        const {email,password}= req.body;
-
-        if(!email || !password)
-        {
-            return res.status(400).json({
-                success:false,
-                message:'Please fill all details'
-            })
-        }
-
-        const user=await Buyer.findOne({email})
-                    .populate("additionalDetail")
-                    .populate("wishlist")
-                    .populate({
-                        path:"cart",
-                        populate:{
-                            path:"productList.productInfo",
-                        }
-                    }).lean()
-                    .exec();
-
-        user?.cart?.productList?.forEach((item) => {
-            const selectedOptionId = item?.selectedOption; 
-            const productOptions = item?.productInfo?.options; 
-
-            const selectedOption = productOptions?.find(
-                (option) => option?._id.toString() === selectedOptionId.toString()
-              );
-            
-            if (selectedOption) {
-                // item['hii']="hello";
-                item["selectedOptionObject"]=selectedOption;
-            console.log(" aaa",selectedOption)
-                // Logging the new field with full option object
-                console.log("Printing selectedOptionObject", item.selectedOptionObject); // Full option object
-              }else {
-                console.log("Option not found for item", item);
-            }
-            console.log("Printing selectedOption (still ObjectId)", item); // ObjectId
-            console.log("inside user printing",user?.cart?.productList[0])
+exports.loginBuyer = async (req, res) => {
+    try {
+      const { email, password } = req.body;
+  
+      if (!email || !password) {
+        return res.status(400).json({
+          success: false,
+          message: 'Please fill all details',
         });
-
-        
-
-        console.log("Inside user printing after updates:", user.cart.productList[0]); // Should show updated object
-
-        if(!user)
-        {
-            return res.status(401).json({
-                success:false,
-                message:'user not found'
-            })
-        }
-
-
-        const payload={
-            email:user.email,
-            id:user._id,
-            accountType:user.accountType
-        }
-
-        if(await bcrypt.compare(password,user.password))
-        {
-            const token=jwt.sign(payload,
-                process.env.JWT_SECRET,{
-                    expiresIn:'48h'
-                }
-            )
-
-            console.log('printing token',token)
-            // review later
-            // user.token=token;
-            user.password=undefined
-
-            // plsease this article of more clearity
-            // https://gemini.google.com/app/9ab264853e8d2f45
-            const options = {
-                httpOnly: false,  
-                secure: true,  
-                sameSite: 'None',  
-                domain:'.localhost',
-                //  maxAge: 60000 //1 min
-                maxAge: 172800000 //2 days
-            };
-
-            res.cookie("token",token,options).status(200).json({
-                success:true,
-                message:'User looged in successfully',
-                user
-            })
-        }
-        else{
-            return res.status(401).json({
-                success:false,
-                message:"password incorrect"
-            })
-        }
-    }
-    catch(error){
-        console.log(error)
-        return res.status(500).json({
-            success:false,
-            message:'login failure'
+      }
+  
+      const user = await Buyer.findOne({ email })
+        .populate("additionalDetail")
+        .populate("wishlist")
+        .populate({
+          path: "cart",
+          populate: {
+            path: "productList.productInfo",
+          },
         })
+        .lean()
+        .exec();
+  
+      if (user?.cart?.productList && user.cart.productList.length > 0) {
+        user.cart.productList.forEach((item) => {
+          const selectedOptionId = item?.selectedOption;
+          const productOptions = item?.productInfo?.options;
+  
+          const selectedOption = productOptions?.find(
+            (option) => option?._id.toString() === selectedOptionId?.toString()
+          );
+  
+          if (selectedOption) {
+            item["selectedOptionObject"] = selectedOption;
+            console.log("Selected Option:", selectedOption);
+          } else {
+            console.log("Option not found for item:", item);
+          }
+        });
+      }
+  
+      console.log("User after processing:", user);
+  
+      if (!user) {
+        return res.status(401).json({
+          success: false,
+          message: 'User not found',
+        });
+      }
+  
+      const payload = {
+        email: user.email,
+        id: user._id,
+        accountType: user.accountType,
+      };
+  
+      if (await bcrypt.compare(password, user.password)) {
+        const token = jwt.sign(payload, process.env.JWT_SECRET, {
+          expiresIn: '48h',
+        });
+  
+        console.log('Generated token:', token);
+        user.password = undefined;
+  
+        const options = {
+          httpOnly: true,
+          secure: true,
+          sameSite: 'None',
+          domain: '.localhost',
+          maxAge: 172800000, // 2 days
+        };
+  
+        res.cookie("token", token, options).status(200).json({
+          success: true,
+          message: 'User logged in successfully',
+          user,
+        });
+      } else {
+        return res.status(401).json({
+          success: false,
+          message: "Password incorrect",
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({
+        success: false,
+        message: 'Login failure',
+      });
     }
-}
+  };
+  
 
 
 /*

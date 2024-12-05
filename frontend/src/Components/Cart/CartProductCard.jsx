@@ -1,14 +1,16 @@
 import React from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaCirclePlus } from "react-icons/fa6";
 import { FaCircleMinus } from "react-icons/fa6";
 import { PiTrashThin } from "react-icons/pi";
 import { useDispatch } from "react-redux";
 import { decreaseQuantity, increaseQuantity, removeFromCart } from "../store/slices/cartSlice";
+import { setProductId } from "../store/slices/ProductIdSlice";
 
 const CartProductCard = ({ info }) => {
   const dispatch=useDispatch()
+  const navigate= useNavigate()
   const productQuantity=(type,_id,selectedOption,selectedSize,selectedColor,selectedPrice,selectedQuantity)=>{
     type==="increase"
     ?dispatch(increaseQuantity({_id,selectedOption,selectedSize,selectedColor,selectedPrice,selectedQuantity}))
@@ -21,7 +23,10 @@ const CartProductCard = ({ info }) => {
   return (
     <React.Fragment>
       <Product>
-        <Image src={info?.images[0]} />
+        <Image src={info?.images[0]} onClick={() => {
+                              dispatch(setProductId(info._id));
+                              navigate(`/products/${info._id}`);
+                            }}/>
         <DetailWrapper>
           <Detail>
             <TopInfoWrapper>
@@ -32,7 +37,7 @@ const CartProductCard = ({ info }) => {
                   color: "inherit",
                 }}
               >
-                <HeadingWrapper>
+                <HeadingWrapper >
                   <ProductName>{info?.name}</ProductName>
                   {/* {width <= 660 ? null : ( */}
                   <ProductCost>MRP: {info?.selectedPrice}</ProductCost>

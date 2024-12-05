@@ -91,7 +91,7 @@ function App() {
 
               <Route
                 exact
-                path="/order"
+                path="/orders"
                 element={
                   <PrivateRoute>
                     <Order />

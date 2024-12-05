@@ -3,34 +3,24 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux'
 import './Header.css';
 import logo from '../../Images/logo9.png'
-import account from '../../Images/icons8-customer-50.png'
-import cart from '../../Images/icons8-cart-50 (1).png'
-import myorders from '../../Images/icons8-order-50 (1).png'
-import wishlist from '../../Images/icons8-heart-50 (1).png'
 import dropdownbutton from '../../Images/icons8-dropdown-30.png';
 import SearchBar from '../SearchBar/SearchBar.jsx';
 import ProfileDropdown from '../ProfileDropdown/ProfileDropdown.jsx';
 import { Badge } from "@mui/material";
 import {
-    // FavoriteBorder,
-    // Search,
-    // ShoppingBagOutlined,
+
     ShoppingCartOutlined,
-  } from "@mui/icons-material";
+    FavoriteBorderOutlined,
 
-
-// const showRightHeader = () => {
-
-//     const rightSlide = document.querySelector('.right-slide');
-//     rightSlide.style.visibility = "visible";
-// }
-
+} from "@mui/icons-material";
 
 const Header = () => {
     const navigate = useNavigate();
     const userLoggedIn = useSelector((state) => state.CurrentUser.CurrentUser)
     const [scrolled, setScrolled] = useState(false);
     const cart = useSelector((state) => state.Cart);
+    const Wishlist = useSelector((state) => state.Wishlist.Wishlist);
+
     useEffect(() => {
         const Scroll = () => {
             if (window.scrollY > 50) {
@@ -46,89 +36,75 @@ const Header = () => {
         };
     }, []);
 
-   useEffect(()=>{
-    if(cart?.length>=1)
-        {
-         console.log(cart?.length)
-        }     
+    useEffect(() => {
+        if (cart?.length >= 1) {
+            console.log(cart?.length)
+        }
 
-   },[cart])
+    }, [cart])
     return (
         <>
-        <div className="relative-navbar">
+            <div className="relative-navbar">
 
-        <nav className={`custom-nav-class ${scrolled ? 'scrolled' : ''}`}>
+                <nav className={`custom-nav-class ${scrolled ? 'scrolled' : ''}`}>
 
-<Link to="/" className='logo-link'><img src={logo} class="logo"></img></Link>
-<SearchBar/>
+                    <Link to="/" className='logo-link'><img src={logo} class="logo"></img></Link>
+                    <SearchBar />
 
-{/* <button class="navbar-toggler" type="button" onClick={showRightHeader} >
-    <span className="navbar-toggler-icon"></span>
-</button> */}
-
-<div className="right-header-container">
-    <div class="dropdown">
-        <button class="dropdown-button-header">En
-            <img src={dropdownbutton} class="dropdownicon"></img></button>
-        <div class="dropdown-content">
-            <a href="#" class="current-language">English - EN</a>
-            <hr class="language-section"></hr>
-            <a href="#" class="content">Hindi - HN</a>
-            <a href="#" class="content">Marathi - MR</a>
-            <a href="#" class="content">Bengali - BN</a>
-        </div>
-    </div>
+                    <div className="right-header-container">
+                        {/*<div class="dropdown">
+                            <button class="dropdown-button-header">En
+                                <img src={dropdownbutton} class="dropdownicon"></img></button>
+                            <div class="dropdown-content">
+                                <a href="#" class="current-language">English - EN</a>
+                                <hr class="language-section"></hr>
+                                <a href="#" class="content">Hindi - HN</a>
+                                <a href="#" class="content">Marathi - MR</a>
+                                <a href="#" class="content">Bengali - BN</a>
+                            </div>
+                        </div>*/}
 
 
-    {userLoggedIn ? (<>
-        <div className="right-header-links-container">
+                        {userLoggedIn ? (<>
+                            <div className="right-header-links-container">
+                            <Link
+                                    to="/orders"
+                                    className='right-header-links'>
+                                    <div className="right-header-button ">Orders & Returns</div>
+                                </Link>
 
-            <Link to="/wishlist" style={{ textDecoration: 'none' }}><div className="right-header-links" ><img className="right-header-icon" src={wishlist}></img><div className="right-header-button">Wishlist</div></div></Link>
-            {/* <Link to="/cart" style={{ textDecoration: 'none' }}>
-               <Badge badgeContent={Cart?.length} color="secondary">
-                <div className="right-header-links " >
-                    <img className="right-header-icon" src={cart}></img>
-                    <div className="right-header-button"></div>
-                    Cart
-                </div>
-                </Badge>
-            </Link> */}
-            <Link
-                to="/cart"
-                style={{ textDecoration: "none", color: "inherit" }}>
-                <Badge badgeContent={cart?.products?.length} color="secondary">
-                  <ShoppingCartOutlined />
-                </Badge>
-              </Link>
-            {<ProfileDropdown />}
-        </div>
+                                <Link to="/wishlist" style={{ textDecoration: 'none' }}
+                                className='right-header-links'>
+                                    
+                                    <Badge badgeContent={Wishlist?.length} color="secondary" className='right-header-icon'>
+                                    <FavoriteBorderOutlined/>
+                                    </Badge>
+                                    <div 
+                                    className="right-header-button">Wishlist</div>
+                                    </Link>
+                               
+                                <Link
+                                    to="/cart"
+                                    className='right-header-links'
+                                    style={{ textDecoration: "none", color: "inherit" }}>
+                                    <Badge badgeContent={cart?.products?.length} color="secondary"className='right-header-icon'>
+                                        <ShoppingCartOutlined />
+                                    </Badge>
+                                    <div className="right-header-button">Cart</div>
+                                </Link>
+                            
 
-    </>) : (<>
-        <Link to="/login" style={{ textDecoration: 'none' }}><div className="right-header-links header-login-button" >Login</div></Link>
-        <Link to="/signup" style={{ textDecoration: 'none' }}><div className="right-header-links header-signup-button" >Sign up</div></Link>
-        <Link to="https://bharat-crafters-seller.vercel.app" style={{ textDecoration: 'none' }}><div className="right-header-links header-signup-button" >Become Seller</div></Link>
-    </>)}
+                                {<ProfileDropdown />}
+                            </div>
 
-
-
-</div>
-{/* <div class="right-slide">
-    <ul class="right-nav-items">
-        <li type="none"><Link className="slide-in-text custom-small-font" to="/user-account">Account</Link></li>
-        <li type="none"><Link className="slide-in-text custom-small-font" to="/wishlist">Wishlist</Link></li>
-        <li type="none"><Link className="slide-in-text custom-small-font" to="/past-orders">Orders</Link></li>
-        <li type="none"><Link className="slide-in-text custom-small-font" to="/returns">Returns</Link></li>
-        <li type="none"><Link className="slide-in-text custom-small-font" to="/cart">Cart</Link></li>
-    </ul>
-
-</div> */}
-</nav>
-
-
-        </div>
-            
-
-
+                        </>) : (<>
+                            <Link to="/login" style={{ textDecoration: 'none' }}><div className="header-links header-login-button" >Login</div></Link>
+                            <Link to="/signup" style={{ textDecoration: 'none' }}><div className="header-links header-signup-button" >Sign up</div></Link>
+                            <Link to="https://bharat-crafters-seller.vercel.app" style={{ textDecoration: 'none' }}><div className="header-links header-signup-button" >Become Seller</div></Link>
+                        </>)}
+                    </div>
+                </nav>
+            </div>
         </>
     );
 

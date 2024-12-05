@@ -51,26 +51,42 @@
 
 .right-header-links-container{
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, auto);
+  justify-content: center;
+  align-items: center;
+  width: auto;
 }
 
 .right-header-links{
   font-weight: 600;
   color: black;
-  padding: 0.5rem 0;
   text-decoration: none;
+  margin-left: 1.8rem;
   font-size:0.8rem;
-  margin-left: 1.2rem;
   display:grid;
   grid-template-rows: 1fr auto;
-  align-items: center ;
+  align-items:center ;
+  justify-content: center;
+max-width: 3.6rem;
+}
+
+.header-links{
+  font-weight: 600;
+  color: black;
+  text-decoration: none;
+  margin-left: 1rem;
+  font-size:0.8rem;
+  display:grid;
+  grid-template-rows: 1fr auto;
+  align-items:center ;
   justify-content: center;
 }
 
 .right-header-icon{
-  height: 1.25rem;
-  width:1.25rem;
+  max-height: 1.5rem;
+  max-width:1.5rem;
   justify-self: center;
+  align-self: center;
   margin:0;
 }
 
@@ -79,8 +95,11 @@
 }
 
 .header-login-button{
+  color:#4d4d4d !important;
   padding: 0.5rem 1rem;
   border-radius: 5px;
+  border: 1px solid #4d4d4d;
+
 }
 
 .header-login-button:hover{

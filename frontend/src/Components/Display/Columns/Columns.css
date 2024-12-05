@@ -35,6 +35,7 @@
         object-fit: cover;
         display: block;
         padding:1rem 0;
+        cursor: pointer;
     }
     
     .box1 span, .box2 span, .box3 span, .box4 span, .box5 span, .product-box span, .box3-item span {

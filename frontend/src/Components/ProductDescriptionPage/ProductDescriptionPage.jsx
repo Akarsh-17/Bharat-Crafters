@@ -13,6 +13,7 @@ import { useNavigate } from 'react-router-dom';
 import sendMessageIcon from '../../Images/paper-plane (1).png'
 import toast from 'react-hot-toast'
 import { addToCart } from '../store/slices/cartSlice.js'
+import { setWishlistProduct } from '../store/slices/WishlistSlice.js'
 
 
 
@@ -30,11 +31,13 @@ const ProductDescriptionPage = () => {
     const [SelectedSize, setSelectedSize] = useState(null);
     const [SelectedColor, setSelectedColor] = useState(null);
     const loginCart = () => toast("Login to add product to Cart.");
+    const selectOption=()=>toast("Please select an option first.");
 
 
     const { productId } = useParams()
     const ProductId = useSelector((state) => state.ProductId.ProductId);
     const buyer=useSelector((state)=>state.CurrentUser.CurrentUser)
+    const CurrentUser = useSelector((state) => state.CurrentUser.CurrentUser);
 
     const handle_add_to_wishlist = (productId) => {
         if (Wishlist.includes(productId)) {
@@ -81,7 +84,12 @@ const ProductDescriptionPage = () => {
         }
     }
 
-
+    const handle_add_Towishlist = async (product) => {
+        if (CurrentUser === null) {
+          return toast.error("user not logged in");
+        }
+        dispatch(setWishlistProduct(product));
+          };
 
     useEffect(() => {
         if (ProductId !== undefined) {
@@ -125,7 +133,6 @@ const ProductDescriptionPage = () => {
         const container = e.currentTarget;
         const containerRect = container.getBoundingClientRect();
 
-        // Calculate the cursor position relative to the container
         const x = (e.clientX - containerRect.left) / containerRect.width;
         const y = (e.clientY - containerRect.top) / containerRect.height;
 
@@ -146,7 +153,6 @@ const ProductDescriptionPage = () => {
         const container = e.currentTarget;
         const containerRect = container.getBoundingClientRect();
 
-        // Calculate the cursor position relative to the container
         const y = (e.clientY - containerRect.top) / containerRect.height;
 
         const zoom = 1.2;
@@ -213,7 +219,7 @@ const ProductDescriptionPage = () => {
 
       if(!selectedOption)
       {
-        toast("Please an option");
+        selectOption();
         return;
       }
     //   const check={
@@ -346,13 +352,17 @@ const ProductDescriptionPage = () => {
 
                     <div className="product-buy-container">
                         <button className="add-product-to-bag" onClick={()=>addProductToCart(ProductDetails,selectedOption,SelectedColor,SelectedPrice,SelectedSize)}>Add to Bag</button>
-                        <button className="add-to-wishlist-button">Add to Wishlist</button>
+                        <button className="add-to-wishlist-button"
+                        onClick={() => {
+                            handle_add_Towishlist(ProductDetails);
+                          }}
+                        >Add to Wishlist</button>
                     </div>
                     <div className="product-seller-container">
                         <div>Seller - <span class="product-seller">{ProductDetails.seller && ProductDetails.seller.firstName} {ProductDetails.seller && ProductDetails.seller.lastName}</span></div>
                         <button className='send-a-message' onClick={()=>handleMessageSubmit(ProductDetails)}><img src={sendMessageIcon} className='send-message-icon'></img>Message</button>
                     </div>
-                    <div className="product-reaching-date">Get it by Wed, 15 May</div>
+                    {/* <div className="product-reaching-date">Get it by Wed, 15 May</div> */}
                 </div>
 
             </div>

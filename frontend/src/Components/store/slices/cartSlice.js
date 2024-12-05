@@ -11,7 +11,7 @@ const cartSlice = createSlice({
       const Exist = state.products.filter(
         (product) =>(
           product._id === action.payload._id &&
-          product.selectedOption?._id===action.payload.selectedOption?._id&&
+          product.selectedOption?._id===action.payload.selectedOption?._id &&
           product.selectedSize === action.payload.selectedSize &&
           product.selectedColor === action.payload.selectedColor&&
           product.selectedPrice === action.payload.selectedPrice

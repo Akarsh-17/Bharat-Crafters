@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import {logout} from '../../operations/auth.js';
 import './ProfileDropdown.css';
+import '../Header/Header.css'
 import toast from 'react-hot-toast';
 import logoutIcon from '../../Images/logout.png'
 import settingsICons from '../../Images/settings.png'
@@ -59,6 +60,7 @@ const ProfileDropdown = () => {
               logout(dispatch, navigate,cartProduct,cart?.cartSummary,Wishlist);
               setOpen(false);
               toast.success('User logged out successfully');
+              navigate('/login');
             }}
           >
             <img src={logoutIcon} className='profile-dropdown-icons'></img>

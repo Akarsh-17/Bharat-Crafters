@@ -78,7 +78,7 @@ router.post('/buyerWishList',auth,isBuyer,buyerWishList)
 // BUYER PROFILE
 router.post("/updateBuyerProfile",auth,isBuyer,updateBuyerProfile)
 router.delete("/deleteBuyerAccount",auth,isBuyer,deleteBuyerAccount)
-router.delete("/getPuchasedProducts",auth,isBuyer,getPuchasedProducts)
+router.get("/getPuchasedProducts",auth,isBuyer,getPuchasedProducts)
 
 
 //buyer lgout

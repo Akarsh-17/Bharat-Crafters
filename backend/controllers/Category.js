@@ -148,8 +148,8 @@ exports.categoryPageDetails=async(req,res)=>{
 exports.getMaxRangeProductsFromCategory=async(req,res)=>{
   try {
     const categoryId  = req.params.id;
-    const { maxPrice } = req.body;
-    console.log(categoryId,maxPrice)
+    const {maxPrice}= req.query;
+    console.log("category id", categoryId,"max price", maxPrice);
     if (!categoryId || !maxPrice) {
       return res.status(400).json({ message: 'Category ID and max price are required.' });
     }
