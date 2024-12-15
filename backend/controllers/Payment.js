@@ -52,7 +52,7 @@ exports.creatOrder = async (req, res) => {
       const productData = await Product.findById(product.productInfo);
       for (let option of productData.options) {
         if (
-          option._id.toString() === product.selectedOption &&
+          option._id.toString() === product.selectedOption.toString() &&
           product.selectedQuantity > option.noOfPieces
         ) {
           console.log(
@@ -65,6 +65,17 @@ exports.creatOrder = async (req, res) => {
         }
       }
     }
+    
+    const newCartProduct=cartProduct;
+    const sellerIds = new Set();
+    for (let product of newCartProduct) {
+      const productData = await Product.findById(product.productInfo);
+      const seller = productData.seller.toString();
+      product.seller = seller
+      sellerIds.add(seller)
+    }
+
+    console.log("newcartProdut", newCartProduct)
 
     const order = await razorpay.orders.create(options);
     console.log("order:", order);
@@ -74,17 +85,14 @@ exports.creatOrder = async (req, res) => {
         .json({ success: false, message: "Failed to create Razorpay order" });
     }
 
-    // const formattedProducts = parsedProducts.map(product => ({
-    //     quantity: product.quantity,
-    //     product: product.productId
-    // }));
 
     const newOrder = new Order({
       buyer: req.user.id,
-      productList: cartProduct,
+      productList: newCartProduct,
       totalAmount: amount,
       paymentStatus: "pending",
       orderId: order.id,
+      sellerIds: [...sellerIds]
     });
 
     console.log("newOreder", newOrder);
@@ -118,6 +126,7 @@ exports.paymentVerification = async (req, res) => {
       orderId: order.orderId,
       signature,
       amount: order.totalAmount,
+      sellerIds:order.sellerIds,
     });
 
     await newPayment.save();
@@ -127,9 +136,28 @@ exports.paymentVerification = async (req, res) => {
     for (let product of order.productList) {
       product.orderStatus = "processing";
     }
-
+    
     await order.save();
 
+    for(let product of order.productList)
+    {
+      const productData = await Product.findById(product.productInfo);
+      productData.sold = productData.sold + product.selectedQuantity;
+      for (let option of productData.options) {
+        // console.log(" vlaue is true or not ",(option._id.toString() === product.selectedOption.toString()))
+        if (
+          option._id.toString() === product.selectedOption.toString()
+        ) {
+          console.log(
+            `Please reduce the Quantity of ${productData.name} for the selected option`
+          );
+          option.soldOpt = option.soldOpt+product.selectedQuantity
+          option.noOfPieces = option.noOfPieces - product.selectedQuantity
+
+        }
+      }
+      await productData.save();
+    }
     res.status(200).json({
       success: true,
       message: "Payment verified successfully",

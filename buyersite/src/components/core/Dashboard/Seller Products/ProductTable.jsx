@@ -120,7 +120,7 @@ const ProductTable = ({products,setProducts}) => {
                               </button>
                             </Td>
                             <Td className="text-sm font-medium ">
-                              0
+                              {product.sold}
                             </Td>
                             <Td className="text-sm font-medium text-richblack-100 ">
                                 <button

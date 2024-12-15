@@ -80,7 +80,13 @@ const productSchema=new mongoose.Schema({
             type: Number,
             required: true,
             min:0,
-        }
+        },
+
+        soldOpt:{
+          type: Number,
+          default: 0,
+        },
+
     }
   ],
 
@@ -160,7 +166,11 @@ const productSchema=new mongoose.Schema({
     type: Number,
     default: 0,
   },
-
+  
+  sold:{
+    type: Number,
+    default: 0,
+  },
   review: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: "Review",

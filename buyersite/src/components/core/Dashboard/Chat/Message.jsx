@@ -10,7 +10,7 @@ import styles from './styles'
 import { format } from "timeago.js";
 import socketIO from "socket.io-client";
 // const ENDPOINT = "https://bharat-crafters.onrender.com";
-const ENDPOINT = "http://localhost:5000";
+const ENDPOINT = "http://localhost:5001";
 const socketId = socketIO(ENDPOINT, { transports: ["websocket"] })
 
 

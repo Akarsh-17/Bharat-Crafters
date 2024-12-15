@@ -113,7 +113,7 @@ export const getFullDetailsOfProduct= async(productId,url)=>
 export const deleteProduct= async(productId,url)=>{
   const toastId = toast.loading("Loading...")
   try {
-    const response = await apiConnector("DELETE", url, {}, {},{productId})
+    const response = await apiConnector("DELETE", url, {}, {},{})
     console.log("DELETE PRODUCT API RESPONSE............", response)
     if (!response?.data?.success) {
       throw new Error("Could Not Delete Product")

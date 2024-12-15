@@ -39,6 +39,11 @@ const orderSchema = new mongoose.Schema(
             enum: ['pending', 'processing', 'shipped', 'delivered'],
             default: 'pending'
         },
+        seller:{
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Seller",
+          required: true,
+        },
       },
     ],
     totalAmount: {
@@ -55,6 +60,11 @@ const orderSchema = new mongoose.Schema(
       type: String,
       required: true,
     }, //razorpay
+
+    sellerIds: {
+      type: [mongoose.Schema.Types.ObjectId],
+      ref: "seller",
+    },
   },
   { timestamps: true }
 );

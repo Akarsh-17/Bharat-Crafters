@@ -23,8 +23,8 @@ function Login() {
     const dispatch=useDispatch();
 
     const sendFormData = async (formData) => {
+        const toastId = toast.loading('Loading...');
         setLoading(true);
-        toast.loading('Loading...');
 
         console.log(formData)
         await axios.post(`http://localhost:4000/api/v1/auth/loginBuyer`, formData,
@@ -71,7 +71,7 @@ function Login() {
             toast.error('Error occured in login. Try again');
         })
         setLoading(false);
-        toast.dismiss();
+        toast.dismiss(toastId);
     };
 
     //USESTATE FOR INPUT FIELDS

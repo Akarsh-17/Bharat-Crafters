@@ -84,7 +84,7 @@ const ProductCategory = () => {
       addToCart({
         ...product,
         selectedOption,
-        selectedColor: selectedColor[0],
+        selectedColor,
         selectedPrice,
         selectedSize,
         selectedQuantity: 1,
@@ -300,7 +300,7 @@ const ProductCategory = () => {
                 <ul className="sub-category-name">
                   {SubCategoryDetailsArray.length > 0 &&
                     SubCategoryDetailsArray.map((subcategory, key) => (
-                      <li
+                      <li key={key}
                         onClick={() => {
                           getSubcategory(subcategory._id);
                         }}
@@ -496,7 +496,7 @@ const ProductCategory = () => {
                                   {product.options[0].price}
                                 </div>
                               </div>
-                              <button className="add-to-cart-icon" onClick={() => addProductToCart(product, product.options[0]._id, product.options[0].color, product.options[0].price, product.options[0].size)}>Add <ShoppingCartOutlined
+                              <button className="add-to-cart-icon" onClick={() => addProductToCart(product, product.options[0], product.options[0].color[0], product.options[0].price, product.options[0].size)}>Add <ShoppingCartOutlined
                                 className="cart-icon" /> </button>
                             </div>
                           </div>

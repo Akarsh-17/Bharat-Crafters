@@ -14,7 +14,7 @@ const { creatOrder, getKey, paymentVerification, onPaymentSuccess } = require('.
 router.get("/paymentKey", auth,isBuyer, getKey);
 router.post('/create-order', auth, isBuyer, creatOrder);
 router.post('/verify-payment',auth,isBuyer,paymentVerification);
-router.post('/on-paymentSuccess',auth, isBuyer,onPaymentSuccess);
+// router.post('/on-paymentSuccess',auth, isBuyer,onPaymentSuccess); not to be used
 router.post('/clearCartOnpaymentSuccess',auth,isBuyer,onPaymentSuccess)
 
 module.exports= router

@@ -1,0 +1,149 @@
+.orders-outer-container {
+    width: 80%;
+    margin:50px auto;
+  }
+  
+  .orders-heading-container {
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .orders-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .order-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px 30px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .order-details-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    font-size: 14px;
+    color: #555;
+  }
+
+  .order-details-section{
+    display: flex;
+  }
+  
+  .order-price, .order-date, .payment-status {
+    margin-right: 20px;
+  }
+  
+  .order-products-container {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .order-product {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+  }
+  
+  .order-product-image {
+    width: auto;
+    height: 120px;
+    border-radius: 8px;
+    object-fit: cover;
+    cursor: pointer;
+  }
+
+  .order-product-group{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.order-product-status{
+    margin-left: auto;
+    color: #888;
+    font-size: 14px;
+}
+  
+  .order-product-info {
+    flex: 1;
+  }
+  
+  .order-product-name {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+    margin-bottom: 8px;
+  }
+
+  .order-product-brand{
+    color: #888;
+    font-weight: normal;
+    font-size: 16px;
+    margin-left: 10px;
+  }
+
+  .order-product-details{
+    display: flex;
+    gap:20px;
+    width: max-content;
+  }
+
+  .order-product-price {
+    font-size: 18px;
+    color: black;
+  }
+  
+  .order-product-detail {
+    font-size: 14px;
+    color: #888;
+  }
+  
+  .reorder-button {
+    background-color: #c15b3c;
+    border: 1px solid #c15b3c;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight:500;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+    margin-left: auto;
+    max-width: fit-content;
+  }
+  
+  .reorder-button:hover {
+    background-color: #d05834;
+  }
+  
+  /* @media (max-width: 768px) {
+    .order-details-container {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .order-product {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .order-product-image {
+      width: 100%;
+      height: auto;
+    }
+  }
+   */

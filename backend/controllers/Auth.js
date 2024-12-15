@@ -64,25 +64,25 @@ exports.sendOTP= async(req,res)=>{
 
 exports.verifyOTP= async(req,res)=>{
 
-        const enteredOTP= req.body.enteredOTP;
-        const otpfield= await OTP.findOne({email:req.body.email});
-        if(!otpfield)
-        {
-            return res.status(400).json({
-                success:false,
-                message:"OTP not found"
-            })
-        }
-        const otp= otpfield.otp;
-        console.log(otp,enteredOTP);
-
-        if (enteredOTP === otp) {
-            // OTP is valid
-            
-            return res.json({ message: 'OTP verified successfully' });
-        } else {
-            return res.status(400).json({ message: 'Invalid OTP' });
-        }
+    const enteredOTP= req.body.enteredOTP;
+    const otpfield= await OTP.findOne({email:req.body.email}).sort({createdAt:-1}).limit(1);
+    console.log("recent otp ", otpfield);
+    if(!otpfield)
+    {
+        return res.status(400).json({
+            success:false,
+            message:"OTP not found"
+        })
+    }
+    const otp= otpfield.otp;
+    console.log(otp,enteredOTP);
+    if (enteredOTP === otp) {
+        // OTP is valid
+        
+        return res.json({ success:true, message: 'OTP verified successfully' });
+    } else {
+        return res.status(500).json({ succes:false,message: 'Invalid OTP' });
+    }
 }
 
 /*
@@ -163,12 +163,24 @@ exports.signupBuyer=async (req,res)=>{
             image:`https://api.dicebear.com/5.x/initials/svg?seed=${firstName}${lastName}`
         })
 
+        if(!user)
+        {
+            return res.status(401).json({
+                success:false,
+                message:'user can not be registered'
+            })
+        }
         const newCart=new Cart();
         await newCart.save()
         user.cartSummary=0;
         user.cart=newCart._id
         await user.save();
 
+        const payload = {
+            email: user.email,
+            id: user._id,
+            accountType: user.accountType,
+        };
 
         const token = jwt.sign(payload, process.env.JWT_SECRET, {
             expiresIn: '48h',
@@ -178,7 +190,7 @@ exports.signupBuyer=async (req,res)=>{
           user.password = undefined;
     
           const options = {
-            httpOnly: true,
+            httpOnly: false,
             secure: true,
             sameSite: 'None',
             domain: '.localhost',
@@ -189,6 +201,7 @@ exports.signupBuyer=async (req,res)=>{
             success: true,
             message: 'User is successfully registerd as BUYER',
             user,
+            token
           });
     }
     catch(error)
@@ -277,7 +290,7 @@ exports.loginBuyer = async (req, res) => {
         user.password = undefined;
   
         const options = {
-          httpOnly: true,
+          httpOnly: false,
           secure: true,
           sameSite: 'None',
           domain: '.localhost',
@@ -824,7 +837,7 @@ exports.loginAdmin= async(req,res)=>{
             // plsease this article of more clearity
             // https://gemini.google.com/app/9ab264853e8d2f45
             const options={
-                httpOnly:true,
+                httpOnly:false,
                 expiresIN:new Date(Date.now()+3*24*60*60*1000)
             }
 

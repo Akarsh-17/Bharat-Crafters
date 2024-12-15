@@ -31,6 +31,10 @@ const paymentSchema = new mongoose.Schema({
         type: String,
         enum: ['success', 'failure'],
         default: 'success'
-    }
+    },
+    sellerIds: {
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: "seller",
+    },
 }, { timestamps: true });
 module.exports = mongoose.model("Payment", paymentSchema);

@@ -27,7 +27,11 @@ const {
     updateBuyerProfile,
     deleteBuyerAccount,
     getPuchasedProducts
-}=require('../controllers/BuyerProfile')
+}=require('../controllers/BuyerProfile');
+
+const { getSellerOrders } = require('../controllers/SellerProfile');
+
+
 
 // ********************************************************************************************************
 //                                      Authentication routes
@@ -80,6 +84,9 @@ router.post("/updateBuyerProfile",auth,isBuyer,updateBuyerProfile)
 router.delete("/deleteBuyerAccount",auth,isBuyer,deleteBuyerAccount)
 router.get("/getPuchasedProducts",auth,isBuyer,getPuchasedProducts)
 
+
+//seller profile
+router.get("/getSellerOrders",auth,isSeller,getSellerOrders)
 
 //buyer lgout
 router.post("/buyerLogout",auth,isBuyer,buyerLogout)

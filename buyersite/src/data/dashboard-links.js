@@ -17,13 +17,13 @@ export const sidebarLinks = [
   //   icon: "FiGrid",
   // },
   
-  // {
-  //   id: 3,
-  //   name: "All Orders",
-  //   path: "/dashboard/my-orders",
-  //   acc_type: "seller",
-  //   icon: "FiShoppingBag",
-  // },
+  {
+    id: 3,
+    name: "All Orders",
+    path: "/dashboard/my-orders",
+    acc_type: "seller",
+    icon: "FiShoppingBag",
+  },
   {
     id: 4,
     name: "My Products",

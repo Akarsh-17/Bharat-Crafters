@@ -29,6 +29,7 @@ function validateProduct(product)
             price: Joi.number().required().min(0),
             color: Joi.array().items(Joi.string()).required().min(1),
             noOfPieces: Joi.number().required().min(0),
+            soldOpt: Joi.number().optional().allow(null).default(0)
           })
         ),
         weight: Joi.number().required(),
@@ -43,6 +44,7 @@ function validateProduct(product)
         pattern: Joi.string().trim().optional().allow(''),
         // productId: Joi.string().required().trim().unique(),
         status: Joi.string().valid(...['Draft', 'Published']),
+        sold: Joi.number().optional().allow(null).default(0)
     });
 
     //return Joi.validate(product, schema);
@@ -425,9 +427,11 @@ exports.getFullProductDetails=async(req,res)=>{
 
 exports.deleteProduct=async(req,res)=>{
     try{
-       const {productId}=req.params.id
+       
+       const productId=req.params.id
+       console.log(productId)
        const userId=req.user.id
-       const product=await Product.findById(productId)
+       const product=await Product.findById(productId);
 
        if(userId!==product.seller.toString())
         {
