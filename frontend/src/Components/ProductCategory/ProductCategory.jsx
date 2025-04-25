@@ -39,7 +39,7 @@ const ProductCategory = () => {
   const CurrentUser = useSelector((state) => state.CurrentUser.CurrentUser);
   const loginCart = () => toast("Login to add product to Cart.");
   const buyer = useSelector((state) => state.CurrentUser.CurrentUser)
-
+  const BASE_URL = process.env.REACT_APP_API_URL
   // changes
   useEffect(() => {
     dispatch(setCategoryId(categoryId));
@@ -52,7 +52,7 @@ const ProductCategory = () => {
     const backendupdate = async () => {
       await axios
         .post(
-          "http://localhost:4000/api/v1/auth/buyerWishList",
+          `${BASE_URL}/auth/buyerWishList`,
           { buyerWishlist },
           { withCredentials: true }
         )
@@ -107,7 +107,7 @@ const ProductCategory = () => {
     try {
       console.log("Price to filter:", Price);
       const response = await axios.get(
-        `http://localhost:4000/api/v1/category/filterPriceCategory/${categoryId}`,
+        `${BASE_URL}/category/filterPriceCategory/${categoryId}`,
         {
           params: { maxPrice: Price },
           withCredentials: true,
@@ -139,7 +139,7 @@ const ProductCategory = () => {
   //     setShowSubmit(false);
   //     setIsEditable(false);
   //     const response = await axios.get(
-  //       `http://localhost:4000/api/v1/category/filterPriceSubCategory/${subcategoryId}`,
+  //       `${BASE_URL}/category/filterPriceSubCategory/${subcategoryId}`,
   //       {
   //         params: { maxPrice: Price },
   //         withCredentials: true,
@@ -185,7 +185,7 @@ const ProductCategory = () => {
   const getCategoryData = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:4000/api/v1/category/categoryPageDetails/${CategoryIdForAPI}`,
+        `${BASE_URL}/category/categoryPageDetails/${CategoryIdForAPI}`,
         {
           withCredentials: true,
         }
@@ -208,7 +208,7 @@ const ProductCategory = () => {
   const getSubcategory = async (SubCategoryIdForAPI) => {
     try {
       const response = await axios.get(
-        `http://localhost:4000/api/v1/category/subCategoryPageDetails/${SubCategoryIdForAPI}`,
+        `${BASE_URL}/category/subCategoryPageDetails/${SubCategoryIdForAPI}`,
         {
           withCredentials: true,
         }
@@ -226,17 +226,6 @@ const ProductCategory = () => {
     }
   };
 
-  // const saveWishlistedProduct= async (product)=>{
-  //     try {
-  //         const response = await axios.post(`http://localhost:4000/api/v1/auth/buyerWishList`, product, {
-  //             withCredentials: true
-  //         });
-  //         console.log(response);
-
-  //     } catch (error) {
-  //         console.error(error);
-  //     }
-  // }
 
   const handleRemoveFilter = () => {
     setFilter(false);

@@ -13,11 +13,11 @@ const Sections = () => {
   const [sectionData, setsectionData] = useState({});
   const [loading, setLoading] = useState(true);
 
-
+  const BASE_URL=process.env.REACT_APP_API_URL;
 
   const getnewArrivalsData = async () => {
     try {
-      const Data = await axios.get(`http://localhost:4000/api/v1/product/newArrivals`,
+      const Data = await axios.get(`${BASE_URL}/product/newArrivals`,
         { withCredentials: true });
       console.log(Data);
 
@@ -33,7 +33,7 @@ const Sections = () => {
 
   const getMenData = async () => {
     try {
-      const Data = await axios.get(`http://localhost:4000/api/v1/product/newMensArrivals`,
+      const Data = await axios.get(`${BASE_URL}/product/newMensArrivals`,
         { withCredentials: true });
       console.log("mens",Data);
 
@@ -50,7 +50,7 @@ const Sections = () => {
 
   const getWomenData = async () => {
     try {
-      const Data = await axios.get(`http://localhost:4000/api/v1/product/newWomensArrivals`,
+      const Data = await axios.get(`${BASE_URL}/product/newWomensArrivals`,
         { withCredentials: true });
       console.log("womens",Data);
 

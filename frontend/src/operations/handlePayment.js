@@ -13,10 +13,10 @@ export const handlePayment = async (
     loginPayment();
     return;
   }
-
+  const BASE_URL=process.env.REACT_APP_API_URL;
   try {
     const key = await axios.get(
-      `http://localhost:4000/api/v1/payment/paymentKey`,
+      `${BASE_URL}/payment/paymentKey`,
       {
         withCredentials: true,
       }
@@ -39,7 +39,7 @@ export const handlePayment = async (
     });
     let totalAmount = cart?.cartSummary + 99;
     const response = await axios.post(
-      "http://localhost:4000/api/v1/payment/create-order",
+      "${BASE_URL}/payment/create-order",
       {
         amount: totalAmount,
         currency: "INR",
@@ -69,7 +69,7 @@ export const handlePayment = async (
         try {
           // const verifyUrl =;
           const verifyResponse = await axios.post(
-            `http://localhost:4000/api/v1/payment/verify-payment`,
+            `${BASE_URL}/payment/verify-payment`,
             {
               order_id: orderId,
               payment_id: response.razorpay_payment_id,
@@ -82,7 +82,7 @@ export const handlePayment = async (
           if (verifyResponse.data.success) {
             orderSuccessful();
             const res = await axios.post(
-              `http://localhost:4000/api/v1/payment/clearCartOnpaymentSuccess`,
+              `${BASE_URL}/payment/clearCartOnpaymentSuccess`,
               {}, // empty object as data if no data is being sent
               { withCredentials: true } // config object with withCredentials
             );

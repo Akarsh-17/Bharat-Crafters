@@ -9,10 +9,10 @@ import { TfiGallery } from "react-icons/tfi";
 import styles from './style'
 import { format } from "timeago.js";
 import socketIO from "socket.io-client";
-// const ENDPOINT = "https://bharat-crafters.onrender.com";
-const ENDPOINT = "http://localhost:5001";
+const ENDPOINT = "https://bharat-crafters.onrender.com";
+// const ENDPOINT = "http://localhost:5001";
 const socketId = socketIO(ENDPOINT, { transports: ["websocket"] })
-
+const BASE_URL = process.env.REACT_APP_API_URL
 
 const Message = () => {
   const buyer=useSelector((state)=>state.CurrentUser.CurrentUser)
@@ -45,7 +45,7 @@ const Message = () => {
   }, [arrivalMessage, currentChat]);
 
   useEffect(()=>{
-   axios.get(`http://localhost:4000/api/v1/conversation/get-buyer-conversation`,{withCredentials:true})
+   axios.get(`${BASE_URL}/conversation/get-buyer-conversation`,{withCredentials:true})
    .then((res)=>{
     console.log(res)
     setConversation(res?.data?.conversation)
@@ -78,7 +78,7 @@ const Message = () => {
     const getMessage = async () => {
       try {
         const id = currentChat?._id;
-        const response = await axios.get(`http://localhost:4000/api/v1/conversation/buyer-getAllMessages/${id}`,{withCredentials:true})
+        const response = await axios.get(`${BASE_URL}/conversation/buyer-getAllMessages/${id}`,{withCredentials:true})
         console.log(" h1 ",response)
         setMessages(response.data.messages);
       } catch (error) {
@@ -96,7 +96,7 @@ const Message = () => {
     const id = currentChat._id;
     await axios
       .put(
-        `http://localhost:4000/api/v1/conversation/get-buyer-updatedLastMessage/${id}`,
+        `${BASE_URL}/conversation/get-buyer-updatedLastMessage/${id}`,
         {
           lastMessage: newMessage,
           lastMessageId: buyer._id,
@@ -134,7 +134,7 @@ const Message = () => {
     try {
       if (newMessage !== "") {
         await axios
-          .post(`http://localhost:4000/api/v1/conversation/buyer-createNewMessage`,message,{withCredentials:true})
+          .post(`${BASE_URL}/conversation/buyer-createNewMessage`,message,{withCredentials:true})
           .then((res) => {
             console.log(res)
             setMessages([...messages, res?.data?.message]);
@@ -177,7 +177,7 @@ const Message = () => {
 
     try {
       await axios
-      .post(`http://localhost:4000/api/v1/conversation/buyer-createNewMessage`, {
+      .post(`${BASE_URL}/conversation/buyer-createNewMessage`, {
           images: e,
           sender: buyer._id,
           text: newMessage,
@@ -197,7 +197,7 @@ const Message = () => {
     const id = currentChat._id;
     await axios
       .put(
-        `http://localhost:4000/api/v1/conversation/get-buyer-updatedLastMessage/${id}`,
+        `${BASE_URL}/conversation/get-buyer-updatedLastMessage/${id}`,
       {
         lastMessage: "Photo",
         lastMessageId: buyer._id,
@@ -265,7 +265,7 @@ const Messagelist = ({ data, index, setOpen, setCurrentChat,me,setSeller,online,
 
     const getSeller=async()=>{
       try{
-         const res=await axios.get(`http://localhost:4000/api/v1/conversation/sellerInfo/${userId}`,{withCredentials:true})
+         const res=await axios.get(`${BASE_URL}/conversation/sellerInfo/${userId}`,{withCredentials:true})
          setUser(res.data.user)
       }
       catch(error)

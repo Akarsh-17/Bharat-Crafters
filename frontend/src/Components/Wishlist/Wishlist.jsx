@@ -26,12 +26,12 @@ const Wishlist = () => {
   console.log(Wishlist);
   const loginCart = () => toast("Login to add product to Cart.");
   const buyer = useSelector((state) => state.CurrentUser.CurrentUser);
-
+  const BASE_URL = process.env.REACT_APP_API_URL
   useEffect(() => {
     const backendupdate = async () => {
       await axios
         .post(
-          "http://localhost:4000/api/v1/auth/buyerWishList",
+          `${BASE_URL}/auth/buyerWishList`,
           { buyerWishlist: Wishlist },
           { withCredentials: true }
         )
@@ -52,7 +52,7 @@ const Wishlist = () => {
   const updateWishlist = async () => {
     await axios
       .post(
-        "http://localhost:4000/api/v1/auth/buyerWishList",
+        `${BASE_URL}/auth/buyerWishList`,
         { buyerWishlist: Wishlist },
         { withCredentials: true }
       )

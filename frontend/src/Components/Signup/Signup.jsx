@@ -9,6 +9,7 @@ import { setCurrentUser } from '../store/slices/AuthSlice.js';
 import { useDispatch } from "react-redux";
 
 function SignUp() {
+  const BASE_URL = process.env.REACT_APP_API_URL
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const dispatch=useDispatch();
@@ -19,7 +20,7 @@ function SignUp() {
     toast.loading("Loading...");
     try {
       const sendOtpResponse = await axios.post(
-        `http://localhost:4000/api/v1/auth/sendOTP`,
+        `${BASE_URL}/auth/sendOTP`,
         { email: formData.email },
         {
           withCredentials: true,
@@ -39,7 +40,7 @@ function SignUp() {
   const verifyOTP = async () => {
     await axios
       .post(
-        `http://localhost:4000/api/v1/auth/verifyOTP`,
+        `${BASE_URL}/auth/verifyOTP`,
         { enteredOTP: formData.otp, email: formData.email },
         {
           withCredentials: true,
@@ -50,7 +51,7 @@ function SignUp() {
         console.log("otp verified");
         console.log(formData);
         await axios
-          .post(`http://localhost:4000/api/v1/auth/signupBuyer`, formData, {
+          .post(`${BASE_URL}/auth/signupBuyer`, formData, {
             withCredentials: true,
           })
           .then((response) => {

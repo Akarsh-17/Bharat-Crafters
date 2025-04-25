@@ -18,7 +18,7 @@ import { setWishlistProduct } from "../store/slices/WishlistSlice.js";
 const ProductDescriptionPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const BASE_URL = process.env.REACT_APP_API_URL
   const [ProductIdForAPI, setProductIdForAPI] = useState(0);
   const [ProductDetails, setProductDetails] = useState({});
   const [MainImage, setMainImage] = useState("");
@@ -56,7 +56,7 @@ const ProductDescriptionPage = () => {
   const getProductData = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:4000/api/v1/product/getFullProductDetails/${ProductIdForAPI}`,
+        `${BASE_URL}/product/getFullProductDetails/${ProductIdForAPI}`,
         {
           withCredentials: true,
         }
@@ -196,7 +196,7 @@ const ProductDescriptionPage = () => {
       const sellerId = product.seller._id;
       axios
         .post(
-          `http://localhost:4000/api/v1/conversation/create-new-conversation`,
+          `${BASE_URL}/conversation/create-new-conversation`,
           { groupTitle, sellerId },
           {
             withCredentials: true,

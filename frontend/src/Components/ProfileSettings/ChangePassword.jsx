@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom'
 
 const ChangePassword = () => {
 
-
+    const BASE_URL = process.env.REACT_APP_API_URL
     const [passwordData, setpasswordData] = useState({
         oldPassword: '',
         newPassword: '',
@@ -16,7 +16,7 @@ const ChangePassword = () => {
 
     const setNewPassword =async(passwordData)=>{
         try {
-            const response = await axios.post(`http://localhost:4000/api/v1/auth/buyerChangePassword`, 
+            const response = await axios.post(`${BASE_URL}/auth/buyerChangePassword`, 
              passwordData 
             , {
                 withCredentials: true

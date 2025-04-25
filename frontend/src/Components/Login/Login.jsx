@@ -12,7 +12,7 @@ import {storeCart} from '../store/slices/cartSlice.js'
 
 
 function Login() {
-
+    const BASE_URL = process.env.REACT_APP_API_URL
     const [loading, setLoading] = useState(false);
     const {Wishlist}=useSelector((state)=>state.Wishlist)
     // const  {cart}=useSelector((state)=>state.cart)
@@ -27,7 +27,7 @@ function Login() {
         setLoading(true);
 
         console.log(formData)
-        await axios.post(`http://localhost:4000/api/v1/auth/loginBuyer`, formData,
+        await axios.post(`${BASE_URL}/auth/loginBuyer`, formData,
         {
             withCredentials: true
         }

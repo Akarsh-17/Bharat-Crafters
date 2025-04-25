@@ -5,8 +5,9 @@ import { clearWishlist } from "../Components/store/slices/WishlistSlice.js";
 
 
 export async function logout(dispatch,navigate, cartProduct, cartSummary) {
+  const BASE_URL=process.env.REACT_APP_API_URL;
   try {
-    await axios.post("http://localhost:4000/api/v1/auth/buyerLogout", {
+    await axios.post(`${BASE_URL}/auth/buyerLogout`, {
       cartProduct,
       cartSummary,
     },{withCredentials:true});

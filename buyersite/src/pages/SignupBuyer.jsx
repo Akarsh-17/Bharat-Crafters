@@ -328,12 +328,13 @@ import axios from 'axios';
 import './Signup.css'
 import Select from 'react-select';
 
+const BASE_URL = process.env.BASE_URL;
 function SignupBuyer() {
     //API ROUTES
 
     const sendFormData = async (formData) => {
         try {
-            const sendOtpResponse = await axios.post(`http://localhost:4000/api/v1/auth/sendOTP`, 
+            const sendOtpResponse = await axios.post(`${BASE_URL}/auth/sendOTP`, 
             { email: formData.email });
             toggleOverlay(true);
 
@@ -346,7 +347,7 @@ function SignupBuyer() {
     const verifyOTP =()=>{
         const otp = sessionStorage.getItem('otp');
             
-                axios.post(`http://localhost:4000/api/v1/auth/verifyOTP`, { enteredOTP: formData.otp , otp: otp})
+                axios.post(`${BASE_URL}/auth/verifyOTP`, { enteredOTP: formData.otp , otp: otp})
                     .then(response => {
                         console.log(response.data);
                         alert('verification successful!');
@@ -358,7 +359,7 @@ function SignupBuyer() {
 
                     console.log("otp verified")
                     console.log(formData)
-                    axios.post(`http://localhost:4000/api/v1/auth/signupSeller`, formData)
+                    axios.post(`${BASE_URL}/auth/signupSeller`, formData)
                     .then(response => {
                         console.log(response.data);
                         alert('registeration successful!');

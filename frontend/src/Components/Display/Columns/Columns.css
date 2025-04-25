@@ -1,7 +1,8 @@
 .asymetrical-columns{
     display: grid;
     gap:0.8rem;
-    margin: 0 3rem;
+    /* margin: 5 3rem; */
+    margin-top: 35px;
     }
     
     .section1{

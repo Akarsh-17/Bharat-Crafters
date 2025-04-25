@@ -16,11 +16,11 @@ const Order = () => {
   const dispatch= useDispatch();
   const buyer=useSelector((state)=>state.CurrentUser.CurrentUser);
   const loginCart = () => toast("Login to add product to Cart.");
-
+  const BASE_URL = process.env.REACT_APP_API_URL
   useEffect(() => {
     const getOrders = async () => {
       try {
-        const res = await axios.get('http://localhost:4000/api/v1/auth/getPuchasedProducts', { withCredentials: true })
+        const res = await axios.get(`${BASE_URL}/auth/getPuchasedProducts`, { withCredentials: true })
         console.log(res.data.data);
         setPastOrders(res.data.data);
       }

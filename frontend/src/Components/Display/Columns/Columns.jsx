@@ -14,10 +14,10 @@ const Columns = () => {
   const [Box3Data, setBox3Data] = useState([]);
   const [Box4Data, setBox4Data] = useState([]);
   const [Box5Data, setBox5Data] = useState([]);
-
+  const BASE_URL = process.env.REACT_APP_API_URL
   const getKhadiProducts = async () => {
     try {
-      const Data = await axios.get(`http://localhost:4000/api/v1/product/khadiProduct`, { withCredentials: true });
+      const Data = await axios.get(`${BASE_URL}/product/khadiProduct`, { withCredentials: true });
       setBox2Data(Data.data);
     } catch (error) {
       console.log(error.message);
@@ -26,7 +26,7 @@ const Columns = () => {
 
   const getWoodworkProducts = async () => {
     try {
-      const Data = await axios.get(`http://localhost:4000/api/v1/product/woodworkProduct`, { withCredentials: true });
+      const Data = await axios.get(`${BASE_URL}/product/woodworkProduct`, { withCredentials: true });
       setBox1Data(Data.data);
     } catch (error) {
       console.log(error.message);
@@ -35,7 +35,7 @@ const Columns = () => {
 
   const getBambooProducts = async () => {
     try {
-      const Data = await axios.get(`http://localhost:4000/api/v1/product/bambooCraftProduct`, { withCredentials: true });
+      const Data = await axios.get(`${BASE_URL}/product/bambooCraftProduct`, { withCredentials: true });
       setBox3Data(Data.data);
     } catch (error) {
       console.log(error.message);
@@ -44,7 +44,7 @@ const Columns = () => {
 
   const getKurtaPyjamas = async () => {
     try {
-      const Data = await axios.get(`http://localhost:4000/api/v1/product/kurtaPyjamas`, { withCredentials: true });
+      const Data = await axios.get(`${BASE_URL}/product/kurtaPyjamas`, { withCredentials: true });
       setBox4Data(Data.data);
     } catch (error) {
       console.log(error.message);
@@ -53,7 +53,7 @@ const Columns = () => {
 
   const getDresses = async () => {
     try {
-      const Data = await axios.get(`http://localhost:4000/api/v1/product/Dresses`, { withCredentials: true });
+      const Data = await axios.get(`${BASE_URL}/product/Dresses`, { withCredentials: true });
       setBox5Data(Data.data);
     } catch (error) {
       console.log(error.message);
